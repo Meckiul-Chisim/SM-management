@@ -6,6 +6,7 @@ import Card from '../components/ui/Card.jsx'
 import Modal from '../components/ui/Modal.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
 import { PLATFORMS, useWorkspace } from '../context/WorkspaceContext.jsx'
+import { createPlatformDraft } from '../utils/contentDrafts.js'
 
 const statuses = ['Draft', 'Ready', 'Planned', 'Published']
 const blankForm = {
@@ -34,6 +35,17 @@ function ContentStudio() {
   const [filter, setFilter] = useState('All')
   const [error, setError] = useState('')
   const [copiedId, setCopiedId] = useState('')
+  const [ideaForm, setIdeaForm] = useState({
+    topic: '',
+    audience: '',
+    goal: 'Engagement',
+    tone: 'Friendly',
+    cta: '',
+    platform: 'Instagram',
+    brandId: '',
+  })
+  const [generated, setGenerated] = useState(null)
+  const [ideaError, setIdeaError] = useState('')
 
   useEffect(() => {
     setSearch(searchParams.get('search') || '')
@@ -51,6 +63,63 @@ function ContentStudio() {
   function openCreate() {
     setEditingId(null)
     setForm({ ...blankForm, brandId: data.brands[0]?.id || '' })
+    setError('')
+    setIsOpen(true)
+  }
+
+  function generateStarter(event) {
+    event.preventDefault()
+    try {
+      const brand = data.brands.find((item) => item.id === ideaForm.brandId)
+      setGenerated(createPlatformDraft({
+        ...ideaForm,
+        brandName: brand?.name || '',
+      }))
+      setIdeaError('')
+    } catch (generateError) {
+      setGenerated(null)
+      setIdeaError(generateError.message || 'Add a topic to generate a starter draft.')
+    }
+  }
+
+  async function copyGenerated() {
+    if (!generated) return
+    try {
+      await navigator.clipboard.writeText(`${generated.title}\n\n${generated.caption}`)
+      setCopiedId('generated')
+      window.setTimeout(() => setCopiedId(''), 1800)
+    } catch {
+      window.alert('Clipboard access is unavailable. Select and copy the generated text manually.')
+    }
+  }
+
+  function useGenerated() {
+    if (!generated) return
+    setEditingId(null)
+    setForm({
+      ...blankForm,
+      title: generated.title,
+      caption: generated.caption,
+      brandId: ideaForm.brandId,
+      platform: ideaForm.platform,
+      status: 'Draft',
+    })
+    setError('')
+    setIsOpen(true)
+  }
+
+  function startRepurpose(post) {
+    const currentIndex = PLATFORMS.indexOf(post.platform)
+    const nextPlatform = PLATFORMS[(currentIndex + 1 + PLATFORMS.length) % PLATFORMS.length] || 'Instagram'
+    setEditingId(null)
+    setForm({
+      ...blankForm,
+      title: `${post.title || 'Untitled post'} — ${nextPlatform} version`,
+      caption: post.caption || '',
+      brandId: post.brandId || '',
+      platform: nextPlatform,
+      status: 'Draft',
+    })
     setError('')
     setIsOpen(true)
   }
@@ -107,8 +176,83 @@ function ContentStudio() {
         <Button onClick={openCreate} className="mb-7 self-start sm:self-auto"><Plus size={17} /> New post</Button>
       </div>
 
+      <Card className="mb-5 overflow-hidden">
+        <div className="flex items-start gap-3 border-b border-line bg-[#faf9ff] px-5 py-4 sm:px-6">
+          <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-white text-brand-800"><Sparkles size={19} /></span>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="font-semibold tracking-tight text-ink">Idea-to-draft helper</h2>
+              <span className="rounded-full border border-brand-100 bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-800">No API needed</span>
+            </div>
+            <p className="mt-1 text-sm leading-5 text-muted">Turn a topic into a platform-shaped starting point using built-in templates. Edit the result before saving or publishing.</p>
+          </div>
+        </div>
+        <form onSubmit={generateStarter} className="p-5 sm:p-6">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="sm:col-span-2 xl:col-span-2">
+              <label className="field-label" htmlFor="idea-topic">What do you want to post about? *</label>
+              <input id="idea-topic" className="field" value={ideaForm.topic} onChange={(event) => setIdeaForm({ ...ideaForm, topic: event.target.value })} placeholder="e.g. how we plan a week of content" />
+            </div>
+            <div>
+              <label className="field-label" htmlFor="idea-brand">Brand</label>
+              <select id="idea-brand" className="field" value={ideaForm.brandId} onChange={(event) => setIdeaForm({ ...ideaForm, brandId: event.target.value })}>
+                <option value="">General workspace</option>
+                {data.brands.map((brand) => <option key={brand.id} value={brand.id}>{brand.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="field-label" htmlFor="idea-platform">Target platform</label>
+              <select id="idea-platform" className="field" value={ideaForm.platform} onChange={(event) => setIdeaForm({ ...ideaForm, platform: event.target.value })}>
+                {PLATFORMS.map((platform) => <option key={platform} value={platform}>{platform}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="field-label" htmlFor="idea-audience">Audience</label>
+              <input id="idea-audience" className="field" value={ideaForm.audience} onChange={(event) => setIdeaForm({ ...ideaForm, audience: event.target.value })} placeholder="e.g. early-stage founders" />
+            </div>
+            <div>
+              <label className="field-label" htmlFor="idea-goal">Post goal</label>
+              <select id="idea-goal" className="field" value={ideaForm.goal} onChange={(event) => setIdeaForm({ ...ideaForm, goal: event.target.value })}>
+                {['Awareness', 'Engagement', 'Traffic', 'Leads', 'Sales'].map((goal) => <option key={goal} value={goal}>{goal}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="field-label" htmlFor="idea-tone">Writing tone</label>
+              <select id="idea-tone" className="field" value={ideaForm.tone} onChange={(event) => setIdeaForm({ ...ideaForm, tone: event.target.value })}>
+                {['Friendly', 'Professional', 'Direct', 'Bold', 'Educational'].map((tone) => <option key={tone} value={tone}>{tone}</option>)}
+              </select>
+            </div>
+            <div className="sm:col-span-2 xl:col-span-4">
+              <label className="field-label" htmlFor="idea-cta">Call to action (optional)</label>
+              <input id="idea-cta" className="field" value={ideaForm.cta} onChange={(event) => setIdeaForm({ ...ideaForm, cta: event.target.value })} placeholder="e.g. Send us a message to get started" />
+            </div>
+          </div>
+          {ideaError && <p role="alert" className="mt-3 text-sm text-rose-700">{ideaError}</p>}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+            <p className="max-w-xl text-xs leading-5 text-muted">Template-based helper, not AI. It makes no external API calls and does not invent performance statistics.</p>
+            <Button type="submit"><Sparkles size={16} /> Generate starter draft</Button>
+          </div>
+        </form>
+        {generated && (
+          <div className="border-t border-line bg-surface/60 p-5 sm:p-6">
+            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+              <div className="min-w-0">
+                <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-800">Starter preview · {generated.platform}</p>
+                <h3 className="break-words font-semibold text-ink">{generated.title}</h3>
+              </div>
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <Button variant="secondary" className="min-h-9 px-3" onClick={copyGenerated}>{copiedId === 'generated' ? <Check size={15} /> : <Copy size={15} />}{copiedId === 'generated' ? 'Copied' : 'Copy preview'}</Button>
+                <Button className="min-h-9 px-3" onClick={useGenerated}>Edit & save <Plus size={15} /></Button>
+              </div>
+            </div>
+            <pre className="mt-4 whitespace-pre-wrap break-words rounded-xl border border-line bg-white p-4 font-sans text-sm leading-6 text-ink">{generated.caption}</pre>
+            <p className="mt-3 text-xs leading-5 text-muted">{generated.disclosure}</p>
+          </div>
+        )}
+      </Card>
+
       <div className="mb-5 rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm leading-5 text-sky-900">
-        This studio stores drafts and in-app plans. It does not publish directly to social accounts yet. Use Copy to move text into your chosen platform.
+        Drafts and in-app plans are stored locally. Publishing to social accounts is not connected yet. Use Copy to move text into your chosen platform.
       </div>
 
       <div className="mb-5 flex flex-col gap-3 sm:flex-row">
@@ -146,6 +290,7 @@ function ContentStudio() {
                       {copiedId === post.id ? 'Copied' : 'Copy text'}
                     </Button>
                     <Button variant="ghost" className="min-h-9 px-3" onClick={() => openEdit(post)}><Pencil size={15} /> Edit</Button>
+                    <Button variant="ghost" className="min-h-9 px-3" onClick={() => startRepurpose(post)}><Sparkles size={15} /> Repurpose</Button>
                     <button type="button" aria-label={`Delete ${post.title}`} onClick={() => removePost(post)} className="ml-auto flex size-9 items-center justify-center rounded-lg text-muted hover:bg-rose-50 hover:text-rose-700"><Trash2 size={16} /></button>
                   </div>
                 </div>
