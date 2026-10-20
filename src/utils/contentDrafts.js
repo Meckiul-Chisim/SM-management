@@ -48,8 +48,8 @@ export function createPlatformDraft({
   const opener = (toneOpeners[tone] || toneOpeners.Friendly)(input)
   const action = clean(cta) || (
     goal === 'Awareness' ? 'Save this idea for later.' :
-      goal === 'Traffic' ? 'Explore the next step when you're ready.' :
-        goal === 'Leads' ? 'Send a message if you'd like to discuss your needs.' :
+      goal === 'Traffic' ? "Explore the next step when you're ready." :
+        goal === 'Leads' ? "Send a message if you'd like to discuss your needs." :
           goal === 'Sales' ? 'Take a look at your options and choose what fits.' :
             'What would you add? Share your thoughts.'
   )
