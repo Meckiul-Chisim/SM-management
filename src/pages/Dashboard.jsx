@@ -20,13 +20,6 @@ function formatDate(value) {
   return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(date)
 }
 
-function statusTone(status) {
-  if (status === 'Published') return 'bg-emerald-50 text-emerald-700'
-  if (status === 'Planned') return 'bg-sky-50 text-sky-700'
-  if (status === 'Ready') return 'bg-amber-50 text-amber-700'
-  if (status === 'Follow up') return 'bg-amber-50 text-amber-700'
-  return 'bg-brand-50 text-brand-800'
-}
 
 function Dashboard() {
   const { data } = useWorkspace()

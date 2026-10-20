@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Check, Copy, FileText, Pencil, Plus, Search, Sparkles, Trash2 } from 'lucide-react'
 import Button from '../components/ui/Button.jsx'
 import Card from '../components/ui/Card.jsx'
@@ -25,13 +26,18 @@ function statusClass(status) {
 
 function ContentStudio() {
   const { data, addPost, updatePost, deletePost } = useWorkspace()
+  const [searchParams] = useSearchParams()
   const [isOpen, setIsOpen] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [form, setForm] = useState(blankForm)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(() => searchParams.get('search') || '')
   const [filter, setFilter] = useState('All')
   const [error, setError] = useState('')
   const [copiedId, setCopiedId] = useState('')
+
+  useEffect(() => {
+    setSearch(searchParams.get('search') || '')
+  }, [searchParams])
 
   const filteredPosts = useMemo(() => data.posts
     .filter((post) => {
