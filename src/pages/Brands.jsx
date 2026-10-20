@@ -8,7 +8,7 @@ import PageHeader from '../components/ui/PageHeader.jsx'
 import { PLATFORMS, useWorkspace } from '../context/WorkspaceContext.jsx'
 
 const platformIcon = { Instagram, LinkedIn: Linkedin }
-const emptyForm = { name: '', industry: '', color: '#32645f', accounts: [] }
+const emptyForm = { name: '', industry: '', color: '#8172f5', accounts: [] }
 
 function Brands() {
   const { data, addBrand, updateBrand, deleteBrand } = useWorkspace()
@@ -29,7 +29,7 @@ function Brands() {
     setForm({
       name: brand.name,
       industry: brand.industry || '',
-      color: brand.color || '#32645f',
+      color: brand.color || '#8172f5',
       accounts: (brand.accounts || []).map((account) => ({ ...account })),
     })
     setError('')
@@ -80,7 +80,7 @@ function Brands() {
         <Button onClick={openCreate} className="mb-7 self-start sm:self-auto"><Plus size={17} /> Add brand</Button>
       </div>
 
-      <div className="mb-5 rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm leading-5 text-sky-900">
+      <div className="mb-5 notice notice-info">
         Social handles are saved as workspace notes only. Connecting accounts, verifying access, and publishing through social platforms are not enabled in this prototype.
       </div>
 
@@ -89,7 +89,7 @@ function Brands() {
           {data.brands.map((brand) => (
             <Card key={brand.id} className="overflow-hidden">
               <div className="flex items-start gap-4 p-5 sm:p-6">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl text-white" style={{ backgroundColor: brand.color || '#32645f' }}>
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl text-white" style={{ backgroundColor: brand.color || '#8172f5' }}>
                   <UsersRound size={22} />
                 </span>
                 <div className="min-w-0 flex-1">
@@ -101,7 +101,7 @@ function Brands() {
                 </div>
                 <div className="flex gap-1">
                   <Button variant="ghost" className="min-h-9 px-3" onClick={() => openEdit(brand)}><MoreHorizontal size={17} /> Edit</Button>
-                  <button type="button" aria-label={`Delete ${brand.name}`} onClick={() => removeBrand(brand)} className="flex size-9 items-center justify-center rounded-lg text-muted hover:bg-rose-50 hover:text-rose-700"><Trash2 size={16} /></button>
+                  <button type="button" aria-label={`Delete ${brand.name}`} onClick={() => removeBrand(brand)} className="flex size-9 items-center justify-center rounded-lg text-muted hover:bg-danger-bg hover:text-danger"><Trash2 size={16} /></button>
                 </div>
               </div>
               <div className="border-t border-line bg-surface/60 p-5 sm:p-6">
@@ -110,7 +110,7 @@ function Brands() {
                     {brand.accounts.map((account) => {
                       const Icon = platformIcon[account.platform]
                       return (
-                        <div key={account.platform} className="flex items-center gap-3 rounded-xl bg-white px-3 py-3">
+                        <div key={account.platform} className="flex items-center gap-3 rounded-xl bg-panel-raised px-3 py-3">
                           <span className="flex size-9 items-center justify-center rounded-lg border border-line text-muted">
                             {Icon ? <Icon size={17} /> : <span className="text-[10px] font-bold">{account.platform.slice(0, 2).toUpperCase()}</span>}
                           </span>
@@ -124,7 +124,7 @@ function Brands() {
                     })}
                   </div>
                 ) : (
-                  <p className="rounded-xl bg-white px-3 py-4 text-sm text-muted">No social profile references yet. Edit this brand to add some.</p>
+                  <p className="rounded-xl bg-panel-raised px-3 py-4 text-sm text-muted">No social profile references yet. Edit this brand to add some.</p>
                 )}
               </div>
             </Card>
@@ -176,7 +176,7 @@ function Brands() {
                 })}
               </div>
             </div>
-            {error && <p role="alert" className="text-sm text-rose-700">{error}</p>}
+            {error && <p role="alert" className="text-sm text-danger">{error}</p>}
             <div className="flex justify-end gap-2 border-t border-line pt-4">
               <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button type="submit">{editingId ? 'Save changes' : 'Create brand'}</Button>

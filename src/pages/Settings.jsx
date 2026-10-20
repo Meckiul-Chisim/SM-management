@@ -80,7 +80,7 @@ function Settings() {
     <>
       <PageHeader title="Settings" description="Personalise this workspace and keep a backup of the records stored in your browser." />
 
-      <div className="mb-5 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm leading-5 text-amber-950">
+      <div className="mb-5 notice notice-warning">
         <WifiOff size={17} className="mr-2 inline" />
         <strong>Local prototype:</strong> records are stored in this browser only. There is no sign-in, shared team sync, or live social account connection yet.
       </div>
@@ -97,10 +97,10 @@ function Settings() {
           <form onSubmit={saveName}>
             <label className="field-label" htmlFor="workspace-name">Workspace name</label>
             <input id="workspace-name" className="field" value={name} onChange={(event) => setName(event.target.value)} maxLength={60} />
-            {error && <p role="alert" className="mt-2 text-sm text-rose-700">{error}</p>}
+            {error && <p role="alert" className="mt-2 text-sm text-danger">{error}</p>}
             <div className="mt-4 flex items-center gap-3">
               <Button type="submit">Save workspace name</Button>
-              {saved && <span className="text-sm font-medium text-emerald-700">Saved</span>}
+              {saved && <span className="text-sm font-medium text-success">Saved</span>}
             </div>
           </form>
         </Card>
@@ -115,14 +115,14 @@ function Settings() {
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button onClick={exportData}><Download size={16} /> Export JSON</Button>
-            <label className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface">
+            <label className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-line bg-panel-raised px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface">
               <Upload size={16} /> Import backup
               <input type="file" accept="application/json,.json" onChange={importData} className="sr-only" />
             </label>
           </div>
           <p className="mt-4 text-xs leading-5 text-muted">Importing replaces the current workspace records. Only import a backup you trust.</p>
-          {notice && <p role="status" className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{notice}</p>}
-          {error && <p role="alert" className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
+          {notice && <p role="status" className="mt-3 notice notice-success">{notice}</p>}
+          {error && <p role="alert" className="mt-3 notice notice-danger">{error}</p>}
         </Card>
 
         <Card className="p-5 xl:col-span-2 sm:p-6">
