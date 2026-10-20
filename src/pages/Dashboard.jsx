@@ -9,7 +9,6 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Badge from '../components/ui/Badge.jsx'
-import Button from '../components/ui/Button.jsx'
 import Card from '../components/ui/Card.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
 import { useWorkspace } from '../context/WorkspaceContext.jsx'
