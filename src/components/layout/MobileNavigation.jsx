@@ -9,7 +9,7 @@ function MobileNavigation({ open, onNavigate }) {
         id="mobile-navigation"
         aria-label="Mobile navigation"
         hidden={!open}
-        className="fixed inset-x-0 top-[73px] z-30 border-b border-line bg-white px-4 py-3 shadow-xl md:hidden"
+        className="fixed inset-x-0 top-[73px] z-30 border-b border-line bg-panel px-4 py-3 shadow-2xl md:hidden"
       >
         {navigationItems.map(({ label, to, icon: Icon }) => (
           <NavLink

@@ -7,7 +7,7 @@ function Sidebar() {
   const { data } = useWorkspace()
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-white/[0.07] bg-[#191923] px-4 py-5 text-white md:flex">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-line bg-canvas px-4 py-5 text-white md:flex">
       <Link to="/dashboard" className="mb-9 flex items-center gap-3 px-2">
         <span className="flex size-10 items-center justify-center rounded-xl bg-brand-700 text-white shadow-sm">
           <Layers3 size={21} aria-hidden="true" />
@@ -20,7 +20,7 @@ function Sidebar() {
 
       <div className="mb-3 flex items-center justify-between px-3">
         <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">Workspace</p>
-        <span className="size-1.5 rounded-full bg-[#a89cff]" aria-hidden="true" />
+        <span className="size-1.5 rounded-full bg-brand-800" aria-hidden="true" />
       </div>
       <nav aria-label="Main navigation" className="space-y-1">
         {navigationItems.map(({ label, to, icon: Icon }) => (
@@ -46,7 +46,7 @@ function Sidebar() {
           <Plus size={16} /> Create new post
         </Link>
         <div className="rounded-2xl border border-white/[0.07] bg-white/[0.04] p-4">
-          <div className="mb-3 flex size-8 items-center justify-center rounded-xl bg-brand-700/20 text-[#bcb2ff]">
+          <div className="mb-3 flex size-8 items-center justify-center rounded-xl bg-brand-700/20 text-brand-800">
             <Layers3 size={16} aria-hidden="true" />
           </div>
           <p className="text-sm font-semibold text-white">Your content, in one place</p>

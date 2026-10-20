@@ -58,13 +58,13 @@ function Engagement() {
         <Button onClick={openCreate} className="mb-7 self-start sm:self-auto"><Plus size={17} /> Log interaction</Button>
       </div>
 
-      <div className="mb-5 rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm leading-5 text-sky-900">
+      <div className="mb-5 notice notice-info">
         This is a manual follow-up tracker, not a live social inbox. Messages and notes are entered by you; platform messages are not imported.
       </div>
 
       <div className="mb-5 flex flex-wrap gap-2">
         {['Open', 'Follow up', 'Unread', 'Done', 'All'].map((status) => (
-          <button key={status} type="button" onClick={() => setFilter(status)} className={`rounded-full px-4 py-2 text-sm font-semibold transition ${filter === status ? 'bg-brand-700 text-white' : 'border border-line bg-white text-muted hover:bg-surface'}`}>
+          <button key={status} type="button" onClick={() => setFilter(status)} className={`rounded-full px-4 py-2 text-sm font-semibold transition ${filter === status ? 'bg-brand-700 text-white' : 'border border-line bg-panel-raised text-muted hover:bg-surface'}`}>
             {status}
           </button>
         ))}
@@ -82,13 +82,13 @@ function Engagement() {
                     <div className="flex flex-wrap items-center gap-2">
                       <h2 className="font-semibold text-ink">{item.person}</h2>
                       <Badge>{item.platform}</Badge>
-                      <Badge className={item.status === 'Done' ? 'bg-emerald-50 text-emerald-700' : item.status === 'Unread' ? 'bg-sky-50 text-sky-700' : ''}>{item.status}</Badge>
+                      <Badge className={item.status === 'Done' ? 'bg-success-bg text-success' : item.status === 'Unread' ? 'bg-info-bg text-info' : ''}>{item.status}</Badge>
                     </div>
                     <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-ink">{item.message}</p>
                     <p className="mt-2 text-xs text-muted">{brand?.name || 'General workspace'}{item.followUpDate ? ` · Follow up by ${new Date(`${item.followUpDate}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}` : ''}</p>
                     {item.notes && <p className="mt-3 rounded-lg bg-surface px-3 py-2 text-xs leading-5 text-muted">{item.notes}</p>}
                   </div>
-                  <button type="button" aria-label={`Delete follow-up for ${item.person}`} onClick={() => deleteItem(item)} className="flex size-9 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-rose-50 hover:text-rose-700"><Trash2 size={16} /></button>
+                  <button type="button" aria-label={`Delete follow-up for ${item.person}`} onClick={() => deleteItem(item)} className="flex size-9 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-danger-bg hover:text-danger"><Trash2 size={16} /></button>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
                   {item.status !== 'Done' ? (
@@ -153,7 +153,7 @@ function Engagement() {
                 <input id="interaction-notes" className="field" value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} placeholder="Optional next step" />
               </div>
             </div>
-            {error && <p role="alert" className="text-sm text-rose-700">{error}</p>}
+            {error && <p role="alert" className="text-sm text-danger">{error}</p>}
             <div className="flex justify-end gap-2 border-t border-line pt-4">
               <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button type="submit">Save interaction</Button>

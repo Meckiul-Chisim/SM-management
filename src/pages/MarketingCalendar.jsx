@@ -53,7 +53,7 @@ function MarketingCalendar() {
         </Link>
       </div>
 
-      <div className="mb-5 rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm leading-5 text-sky-900">
+      <div className="mb-5 notice notice-info">
         The calendar displays dates saved in your workspace. It does not mean a platform has accepted or scheduled the post.
       </div>
 
@@ -79,13 +79,13 @@ function MarketingCalendar() {
             const isToday = key === keyForDate(new Date())
             const dayPosts = postsByDate.get(key) || []
             return (
-              <div key={key} className={`min-h-24 border-b border-r border-line p-1.5 sm:min-h-32 sm:p-2 ${inMonth ? 'bg-white' : 'bg-surface/60'}`}>
+              <div key={key} className={`min-h-24 border-b border-r border-line p-1.5 sm:min-h-32 sm:p-2 ${inMonth ? 'bg-panel' : 'bg-surface/60'}`}>
                 <div className="mb-1 flex justify-center sm:justify-start">
                   <span className={`flex size-6 items-center justify-center rounded-full text-xs ${isToday ? 'bg-brand-700 font-bold text-white' : inMonth ? 'text-ink' : 'text-faint'}`}>{day.getDate()}</span>
                 </div>
                 <div className="space-y-1">
                   {dayPosts.slice(0, 2).map((post) => (
-                    <Link key={post.id} to="/content" title={post.title} className={`block truncate rounded-md px-1.5 py-1 text-[10px] leading-4 sm:text-xs ${post.status === 'Published' ? 'bg-emerald-50 text-emerald-800' : 'bg-brand-50 text-brand-800'}`}>
+                    <Link key={post.id} to="/content" title={post.title} className={`block truncate rounded-md px-1.5 py-1 text-[10px] leading-4 sm:text-xs ${post.status === 'Published' ? 'bg-success-bg text-success' : 'bg-brand-50 text-brand-800'}`}>
                       {post.title || post.platform}
                     </Link>
                   ))}

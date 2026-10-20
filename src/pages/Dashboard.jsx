@@ -57,7 +57,7 @@ function Dashboard() {
               Keep brand details, drafts, content dates, and manual follow-ups together. Start small and build a consistent workflow.
             </p>
           </div>
-          <Link to="/content" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-brand-900 transition hover:bg-brand-50">
+          <Link to="/content" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-brand-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-800">
             <Plus size={17} /> Create a post
           </Link>
         </div>

@@ -1,8 +1,8 @@
 const variants = {
   primary:
-    'bg-brand-700 text-white shadow-sm hover:bg-brand-800 hover:shadow-md focus-visible:outline-brand-700',
+    'bg-brand-700 text-white shadow-sm hover:bg-brand-800 hover:shadow-[0_6px_18px_rgba(129,114,245,0.18)] focus-visible:outline-brand-700',
   secondary:
-    'border border-line bg-white text-ink shadow-sm hover:border-[#d3d0e5] hover:bg-[#faf9ff] focus-visible:outline-brand-700',
+    'border border-line bg-panel-raised text-ink hover:border-brand-100 hover:bg-brand-50 focus-visible:outline-brand-700',
   ghost:
     'text-muted hover:bg-surface hover:text-ink focus-visible:outline-brand-700',
 }

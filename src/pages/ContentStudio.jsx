@@ -19,9 +19,9 @@ const blankForm = {
 }
 
 function statusClass(status) {
-  if (status === 'Published') return 'bg-emerald-50 text-emerald-700'
-  if (status === 'Planned') return 'bg-sky-50 text-sky-700'
-  if (status === 'Ready') return 'bg-amber-50 text-amber-700'
+  if (status === 'Published') return 'bg-success-bg text-success'
+  if (status === 'Planned') return 'bg-info-bg text-info'
+  if (status === 'Ready') return 'bg-warning-bg text-warning'
   return 'bg-brand-50 text-brand-800'
 }
 
@@ -177,12 +177,12 @@ function ContentStudio() {
       </div>
 
       <Card className="mb-5 overflow-hidden">
-        <div className="flex items-start gap-3 border-b border-line bg-[#faf9ff] px-5 py-4 sm:px-6">
-          <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-white text-brand-800"><Sparkles size={19} /></span>
+        <div className="flex items-start gap-3 border-b border-line bg-surface px-5 py-4 sm:px-6">
+          <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-panel-raised text-brand-800"><Sparkles size={19} /></span>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="font-semibold tracking-tight text-ink">Idea-to-draft helper</h2>
-              <span className="rounded-full border border-brand-100 bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-800">No API needed</span>
+              <span className="rounded-full border border-brand-100 bg-panel-raised px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-800">No API needed</span>
             </div>
             <p className="mt-1 text-sm leading-5 text-muted">Turn a topic into a platform-shaped starting point using built-in templates. Edit the result before saving or publishing.</p>
           </div>
@@ -227,7 +227,7 @@ function ContentStudio() {
               <input id="idea-cta" className="field" value={ideaForm.cta} onChange={(event) => setIdeaForm({ ...ideaForm, cta: event.target.value })} placeholder="e.g. Send us a message to get started" />
             </div>
           </div>
-          {ideaError && <p role="alert" className="mt-3 text-sm text-rose-700">{ideaError}</p>}
+          {ideaError && <p role="alert" className="mt-3 text-sm text-danger">{ideaError}</p>}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <p className="max-w-xl text-xs leading-5 text-muted">Template-based helper, not AI. It makes no external API calls and does not invent performance statistics.</p>
             <Button type="submit"><Sparkles size={16} /> Generate starter draft</Button>
@@ -245,13 +245,13 @@ function ContentStudio() {
                 <Button className="min-h-9 px-3" onClick={useGenerated}>Edit & save <Plus size={15} /></Button>
               </div>
             </div>
-            <pre className="mt-4 whitespace-pre-wrap break-words rounded-xl border border-line bg-white p-4 font-sans text-sm leading-6 text-ink">{generated.caption}</pre>
+            <pre className="mt-4 whitespace-pre-wrap break-words rounded-xl border border-line bg-panel-raised p-4 font-sans text-sm leading-6 text-ink">{generated.caption}</pre>
             <p className="mt-3 text-xs leading-5 text-muted">{generated.disclosure}</p>
           </div>
         )}
       </Card>
 
-      <div className="mb-5 rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm leading-5 text-sky-900">
+      <div className="mb-5 notice notice-info">
         Drafts and in-app plans are stored locally. Publishing to social accounts is not connected yet. Use Copy to move text into your chosen platform.
       </div>
 
@@ -291,7 +291,7 @@ function ContentStudio() {
                     </Button>
                     <Button variant="ghost" className="min-h-9 px-3" onClick={() => openEdit(post)}><Pencil size={15} /> Edit</Button>
                     <Button variant="ghost" className="min-h-9 px-3" onClick={() => startRepurpose(post)}><Sparkles size={15} /> Repurpose</Button>
-                    <button type="button" aria-label={`Delete ${post.title}`} onClick={() => removePost(post)} className="ml-auto flex size-9 items-center justify-center rounded-lg text-muted hover:bg-rose-50 hover:text-rose-700"><Trash2 size={16} /></button>
+                    <button type="button" aria-label={`Delete ${post.title}`} onClick={() => removePost(post)} className="ml-auto flex size-9 items-center justify-center rounded-lg text-muted hover:bg-danger-bg hover:text-danger"><Trash2 size={16} /></button>
                   </div>
                 </div>
               </Card>
@@ -345,7 +345,7 @@ function ContentStudio() {
                 <p className="field-help">Required for the Planned status. This is an in-app plan only.</p>
               </div>
             </div>
-            {error && <p role="alert" className="text-sm text-rose-700">{error}</p>}
+            {error && <p role="alert" className="text-sm text-danger">{error}</p>}
             <div className="flex justify-end gap-2 border-t border-line pt-4">
               <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button type="submit">{editingId ? 'Save changes' : 'Save post'}</Button>
