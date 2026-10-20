@@ -125,7 +125,7 @@ function Settings() {
           {error && <p role="alert" className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
         </Card>
 
-        <Card className="p-5 sm:col-span-2 sm:p-6">
+        <Card className="p-5 xl:col-span-2 sm:p-6">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <h2 className="font-semibold text-ink">Reset sample workspace</h2>
