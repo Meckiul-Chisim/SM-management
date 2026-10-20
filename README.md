@@ -1,109 +1,52 @@
-# Haven — Real estate workspace
+# Haven — Social media workspace
 
-A responsive React foundation for a real estate agent or small agency
-workspace. This phase provides the application shell, navigation, design
-foundation, and honest placeholder pages. It does not manage business data.
+A responsive React/Vite social media management prototype. It helps a small team organise multiple brands, draft platform-specific content, plan a calendar, and track engagement follow-ups.
 
-## Technology stack
+## Current MVP
 
-- React and JavaScript (JSX)
-- Vite
-- Tailwind CSS v4 with the official `@tailwindcss/vite` plugin
-- React Router
-- Lucide React
-- ESLint
+- Dashboard metrics derived from saved workspace records.
+- Brand management with social profile names/handles.
+- Content studio for creating, editing, searching, copying, and managing post drafts/plans.
+- Monthly content calendar.
+- Manually logged engagement and follow-up records.
+- Workspace rename, JSON export/import, and reset.
+- Local persistence using the current browser's localStorage.
+- Responsive navigation and legacy redirects from `/properties` and `/inquiries`.
 
-## Prerequisites
+## Important limitations
 
-- Node.js 20.19+ or 22.12+ (or a newer compatible release)
-- npm
+This is a local-first prototype, not yet a connected social media publishing platform. It does not authenticate users, synchronise between devices, connect real Instagram/Facebook/TikTok/LinkedIn accounts, publish posts to platforms, receive live messages, or pull analytics. Social account handles are organisational references only. Calendar items marked **Planned** are in-app plans, not confirmed platform schedules.
 
-## Install and run
+The initial workspace contains clearly illustrative sample records to demonstrate the workflows. Add your own records or reset the workspace from Settings. Data is stored in the browser that you use; clearing browser storage will remove it unless you export a backup first.
 
-From PowerShell in the project folder:
+## Run locally
 
-```powershell
+Requires Node.js 20.19+ or 22.12+ and npm.
+
+```bash
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite. To create and locally preview a production
-build:
+Build and lint:
 
-```powershell
+```bash
 npm run build
-npm run preview
-```
-
-Run ESLint with:
-
-```powershell
 npm run lint
 ```
 
-## Placeholder pages
+## Tech stack
 
-| Route | Purpose |
-| --- | --- |
-| `/dashboard` | Workspace introduction and future-area placeholders |
-| `/properties` | Future property management |
-| `/content` | Future content creation workspace |
-| `/calendar` | Future marketing schedule |
-| `/inquiries` | Future customer inquiries |
-| `/settings` | Future workspace and account preferences |
+- React and JavaScript (JSX)
+- Vite
+- Tailwind CSS v4 via `@tailwindcss/vite`
+- React Router
+- Lucide React
 
-The root route redirects to `/dashboard`. Unknown routes show a not-found page.
-All routes use the shared responsive application shell.
+## Suggested next engineering phases
 
-## Project structure
-
-```text
-src/
-├── app/                 # App entry and React Router configuration
-├── assets/              # Local application assets
-├── components/
-│   ├── layout/          # Shared shell, sidebar, header, mobile navigation
-│   └── ui/              # Reusable buttons, cards, badges, page headers
-├── hooks/               # Future reusable React hooks
-├── lib/                 # Future shared library setup
-├── pages/               # Route-level placeholder pages
-├── services/            # Future backend and external-service boundary
-├── styles/              # Tailwind entry and global design tokens
-└── utils/               # Future framework-independent helpers
-```
-
-## Tailwind CSS
-
-Tailwind CSS v4 is integrated through the official Vite plugin in
-`vite.config.js`. Global styles import Tailwind with `@import "tailwindcss";`
-in `src/styles/index.css`; the small palette is defined there with `@theme`.
-No separate Tailwind config file is required for this setup.
-
-## Planned shared-backend architecture
-
-Desktop and mobile browsers will need a shared backend and authenticated access
-to use the same account and synchronized data. Future backend communication
-belongs in `src/services/`, with client setup kept separate from UI components.
-This app currently has no database client, authentication, or local business
-record storage. `.env.example` only documents placeholder variable names for a
-future Supabase setup. Never expose a Supabase service-role key in frontend
-code; it belongs only in a trusted server environment.
-
-## Future phases
-
-1. Agree on data ownership, roles, and the shared backend design.
-2. Add secure authentication and the initial data model.
-3. Build property, content, calendar, and inquiry workflows.
-4. Add selected integrations and prepare the shared web app for Android
-   packaging with Capacitor, if needed.
-
-These are planning notes only; none of those features are implemented here.
-
-## Current limitations
-
-- All business screens are placeholders; there are no forms or saved records.
-- There is no authentication, backend, synchronization, AI, or social
-  publishing integration.
-- The profile/account control is a visual placeholder.
-- Capacitor is not installed or configured.
-- No deployment or release process is configured.
+1. Add authentication and a secure shared backend so data syncs across devices and collaborators.
+2. Add roles, workspace membership, server-side validation, and auditability.
+3. Connect social platforms using their approved OAuth and publishing APIs, with per-platform capability checks.
+4. Add real analytics, media upload/storage, and approval workflows only after validating user demand.
+5. Add automated tests and deployment checks before a public launch.
