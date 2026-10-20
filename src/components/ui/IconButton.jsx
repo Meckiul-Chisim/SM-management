@@ -3,7 +3,7 @@ function IconButton({ label, children, className = '', ...props }) {
     <button
       type="button"
       aria-label={label}
-      className={`inline-flex size-11 shrink-0 items-center justify-center rounded-xl text-muted transition-colors hover:bg-surface hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 ${className}`}
+      className={`inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-transparent text-muted transition-colors hover:border-line hover:bg-white hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 ${className}`}
       {...props}
     >
       {children}
