@@ -2,16 +2,16 @@ const goalHooks = {
   Awareness: ({ topic }) => `A clearer way to think about ${topic}.`,
   Engagement: ({ topic }) => `Let's talk about ${topic}.`,
   Traffic: ({ topic }) => `Want to explore ${topic} further?`,
-  Leads: ({ topic, audience }) => `Working on ${topic}? Here's a useful place to start.`,
+  Leads: ({ topic }) => `Working on ${topic}? Here's a useful place to start.`,
   Sales: ({ topic }) => `Considering your options for ${topic}?`,
 }
 
 const toneOpeners = {
-  Friendly: ({ topic, audience }) => `If ${topic} has been on your mind, you're in the right place. Here's a simple idea to get started.`,
+  Friendly: ({ topic }) => `If ${topic} has been on your mind, you're in the right place. Here's a simple idea to get started.`,
   Professional: ({ topic, audience }) => `For ${audience}, a considered approach to ${topic} starts with a clear goal and a practical next step.`,
-  Direct: ({ topic, audience }) => `Start with the outcome you want from ${topic}. Keep the next step specific, useful, and easy to act on.`,
-  Bold: ({ topic, audience }) => `You don't need to overcomplicate ${topic}. Start with one clear idea, make it useful, and build from there.`,
-  Educational: ({ topic, audience }) => `Break ${topic} into three parts: the goal, the action, and how you'll know it worked. That makes the next step easier to see.`,
+  Direct: ({ topic }) => `Start with the outcome you want from ${topic}. Keep the next step specific, useful, and easy to act on.`,
+  Bold: ({ topic }) => `You don't need to overcomplicate ${topic}. Start with one clear idea, make it useful, and build from there.`,
+  Educational: ({ topic }) => `Break ${topic} into three parts: the goal, the action, and how you'll know it worked. That makes the next step easier to see.`,
 }
 
 function clean(value) {
