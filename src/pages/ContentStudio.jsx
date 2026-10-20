@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { Check, Copy, FileText, Pencil, Plus, Search, Sparkles, Trash2 } from 'lucide-react'
-import Badge from '../components/ui/Badge.jsx'
 import Button from '../components/ui/Button.jsx'
 import Card from '../components/ui/Card.jsx'
 import Modal from '../components/ui/Modal.jsx'
