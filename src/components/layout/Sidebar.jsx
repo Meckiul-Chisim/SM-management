@@ -1,19 +1,20 @@
-import { Building2 } from 'lucide-react'
+import { Layers3 } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { navigationItems } from '../../app/navigation.js'
+import { useWorkspace } from '../../context/WorkspaceContext.jsx'
 
 function Sidebar() {
+  const { data } = useWorkspace()
+
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-line bg-white px-4 py-6 md:flex">
-      <Link to="/dashboard" className="mb-10 flex items-center gap-3 px-2">
+      <Link to="/dashboard" className="mb-9 flex items-center gap-3 px-2">
         <span className="flex size-10 items-center justify-center rounded-xl bg-brand-700 text-white">
-          <Building2 size={21} aria-hidden="true" />
+          <Layers3 size={21} aria-hidden="true" />
         </span>
-        <span>
-          <span className="block text-base font-bold tracking-tight text-ink">
-            Haven
-          </span>
-          <span className="block text-xs text-muted">Real estate workspace</span>
+        <span className="min-w-0">
+          <span className="block truncate text-base font-bold tracking-tight text-ink">{data.workspaceName || 'Haven'}</span>
+          <span className="block text-xs text-muted">Social media workspace</span>
         </span>
       </Link>
 
@@ -40,9 +41,9 @@ function Sidebar() {
       </nav>
 
       <div className="mt-auto rounded-2xl bg-surface p-4">
-        <p className="text-sm font-semibold text-ink">A clear space to grow</p>
+        <p className="text-sm font-semibold text-ink">Your content, in one place</p>
         <p className="mt-1 text-xs leading-5 text-muted">
-          Your workspace foundation is ready for future phases.
+          Organise brands, plan posts, and keep follow-ups moving.
         </p>
       </div>
     </aside>
