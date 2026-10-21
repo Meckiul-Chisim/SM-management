@@ -1,12 +1,15 @@
 const tones = {
-  default: 'border border-brand-100 bg-brand-50 text-brand-800',
-  inverse: 'border border-white/10 bg-white/10 text-white',
+  default: 'bg-brand-50 text-brand-800',
+  neutral: 'bg-surface text-muted',
+  info: 'bg-info-bg text-info',
+  success: 'bg-success-bg text-success',
+  warning: 'bg-warning-bg text-warning',
 }
 
 function Badge({ children, className = '', tone = 'default' }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold tracking-[0.01em] ${tones[tone]} ${className}`}
+      className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${tones[tone] || tones.default} ${className}`}
     >
       {children}
     </span>

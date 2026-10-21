@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react'
-import { CalendarDays, ChevronLeft, ChevronRight, Clock3, Plus } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Clock3, Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Badge from '../components/ui/Badge.jsx'
 import Button from '../components/ui/Button.jsx'
 import Card from '../components/ui/Card.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
 import { useWorkspace } from '../context/WorkspaceContext.jsx'
+import { DEFAULT_BRAND_COLOUR } from '../utils/colour.js'
 
 const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const pad = (value) => String(value).padStart(2, '0')
@@ -48,7 +49,7 @@ function MarketingCalendar() {
     <>
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <PageHeader title="Content calendar" description="See what is planned and keep your posting rhythm visible." />
-        <Link to="/content" className="mb-7 inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-xl bg-brand-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-800 sm:self-auto">
+        <Link to="/content" className="mb-7 inline-flex min-h-10 items-center justify-center gap-2 self-start rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-on-brand transition-colors hover:bg-brand-800 sm:self-auto">
           <Plus size={17} /> Plan a post
         </Link>
       </div>
@@ -70,7 +71,7 @@ function MarketingCalendar() {
           </div>
         </div>
         <div className="grid grid-cols-7 border-b border-line bg-surface/70">
-          {weekdayNames.map((day) => <div key={day} className="px-1 py-2 text-center text-[11px] font-bold uppercase tracking-wide text-muted sm:px-2 sm:text-xs">{day}</div>)}
+          {weekdayNames.map((day) => <div key={day} className="px-1 py-2 text-center text-xs font-medium text-muted sm:px-2">{day}</div>)}
         </div>
         <div className="grid grid-cols-7">
           {days.map((day) => {
@@ -81,11 +82,17 @@ function MarketingCalendar() {
             return (
               <div key={key} className={`min-h-24 border-b border-r border-line p-1.5 sm:min-h-32 sm:p-2 ${inMonth ? 'bg-panel' : 'bg-surface/60'}`}>
                 <div className="mb-1 flex justify-center sm:justify-start">
-                  <span className={`flex size-6 items-center justify-center rounded-full text-xs ${isToday ? 'bg-brand-700 font-bold text-white' : inMonth ? 'text-ink' : 'text-faint'}`}>{day.getDate()}</span>
+                  <span className={`flex size-6 items-center justify-center rounded-full text-xs ${isToday ? 'bg-brand-700 font-semibold text-on-brand' : inMonth ? 'text-ink' : 'text-faint'}`}>{day.getDate()}</span>
                 </div>
                 <div className="space-y-1">
                   {dayPosts.slice(0, 2).map((post) => (
-                    <Link key={post.id} to="/content" title={post.title} className={`block truncate rounded-md px-1.5 py-1 text-[10px] leading-4 sm:text-xs ${post.status === 'Published' ? 'bg-success-bg text-success' : 'bg-brand-50 text-brand-800'}`}>
+                    <Link
+                      key={post.id}
+                      to="/content"
+                      title={post.title}
+                      style={{ '--spine-colour': data.brands.find((item) => item.id === post.brandId)?.color || DEFAULT_BRAND_COLOUR }}
+                      className={`spine block truncate rounded-r-md px-1.5 py-1 text-[10px] leading-4 sm:text-xs ${post.status === 'Published' ? 'bg-success-bg text-success' : 'bg-surface text-ink'}`}
+                    >
                       {post.title || post.platform}
                     </Link>
                   ))}
@@ -106,11 +113,10 @@ function MarketingCalendar() {
           {currentMonthPosts.map((post) => {
             const brand = data.brands.find((item) => item.id === post.brandId)
             return (
-              <Card key={post.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:p-5">
-                <div className="flex items-center gap-3 sm:w-48">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-800"><CalendarDays size={18} /></span>
+              <Card key={post.id} className="spine flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:p-5" style={{ '--spine-colour': brand?.color || DEFAULT_BRAND_COLOUR }}>
+                <div className="sm:w-40">
                   <div>
-                    <p className="text-sm font-semibold text-ink">{new Date(post.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</p>
+                    <p className="font-display text-base font-semibold tracking-tight text-ink">{new Date(post.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</p>
                     <p className="text-xs text-muted">{new Date(post.scheduledAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</p>
                   </div>
                 </div>

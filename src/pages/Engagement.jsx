@@ -6,6 +6,7 @@ import Card from '../components/ui/Card.jsx'
 import Modal from '../components/ui/Modal.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
 import { PLATFORMS, useWorkspace } from '../context/WorkspaceContext.jsx'
+import { DEFAULT_BRAND_COLOUR } from '../utils/colour.js'
 
 const blankForm = {
   person: '',
@@ -64,7 +65,7 @@ function Engagement() {
 
       <div className="mb-5 flex flex-wrap gap-2">
         {['Open', 'Follow up', 'Unread', 'Done', 'All'].map((status) => (
-          <button key={status} type="button" onClick={() => setFilter(status)} className={`rounded-full px-4 py-2 text-sm font-semibold transition ${filter === status ? 'bg-brand-700 text-white' : 'border border-line bg-panel-raised text-muted hover:bg-surface'}`}>
+          <button key={status} type="button" onClick={() => setFilter(status)} className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors ${filter === status ? 'bg-brand-700 text-on-brand' : 'border border-line bg-panel text-muted hover:bg-surface'}`}>
             {status}
           </button>
         ))}
@@ -75,14 +76,14 @@ function Engagement() {
           {visibleItems.map((item) => {
             const brand = data.brands.find((entry) => entry.id === item.brandId)
             return (
-              <Card key={item.id} className="p-4 sm:p-5">
+              <Card key={item.id} className="spine p-4 sm:p-5" style={{ '--spine-colour': brand?.color || DEFAULT_BRAND_COLOUR }}>
                 <div className="flex items-start gap-3">
                   <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-800"><UserRound size={18} /></span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h2 className="font-semibold text-ink">{item.person}</h2>
-                      <Badge>{item.platform}</Badge>
-                      <Badge className={item.status === 'Done' ? 'bg-success-bg text-success' : item.status === 'Unread' ? 'bg-info-bg text-info' : ''}>{item.status}</Badge>
+                      <Badge tone="neutral">{item.platform}</Badge>
+                      <Badge tone={item.status === 'Done' ? 'success' : item.status === 'Unread' ? 'info' : 'default'}>{item.status}</Badge>
                     </div>
                     <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-ink">{item.message}</p>
                     <p className="mt-2 text-xs text-muted">{brand?.name || 'General workspace'}{item.followUpDate ? ` · Follow up by ${new Date(`${item.followUpDate}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}` : ''}</p>

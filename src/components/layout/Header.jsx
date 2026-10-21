@@ -1,11 +1,11 @@
-import { Command, Menu, Search, X } from 'lucide-react'
+import { Menu, Search, X } from 'lucide-react'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import IconButton from '../ui/IconButton.jsx'
 import { useWorkspace } from '../../context/WorkspaceContext.jsx'
 
 const pageNames = {
-  '/dashboard': 'Overview',
+  '/dashboard': 'Dashboard',
   '/brands': 'Brands & accounts',
   '/properties': 'Brands & accounts',
   '/content': 'Content studio',
@@ -19,66 +19,78 @@ function Header({ onMenuClick, menuExpanded }) {
   const { data } = useWorkspace()
   const location = useLocation()
   const navigate = useNavigate()
-  const [searchOpen, setSearchOpen] = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
-  const initials = (data.workspaceName || 'H').trim().slice(0, 1).toUpperCase()
+  const initial = (data.workspaceName || 'H').trim().slice(0, 1).toUpperCase()
 
   function submitSearch(event) {
     event.preventDefault()
     if (!query.trim()) return
     navigate(`/content?search=${encodeURIComponent(query.trim())}`)
-    setSearchOpen(false)
+    setMobileSearchOpen(false)
     setQuery('')
   }
 
-  return (
-    <header className="sticky top-0 z-10 flex h-[73px] items-center justify-between border-b border-line/80 bg-canvas/90 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
-      <div className="flex min-w-0 items-center gap-3">
-        <IconButton
-          label={menuExpanded ? 'Close navigation menu' : 'Open navigation menu'}
-          onClick={onMenuClick}
-          aria-expanded={menuExpanded}
-          aria-controls="mobile-navigation"
-          className="md:hidden"
-        >
-          {menuExpanded ? <X size={20} /> : <Menu size={20} />}
-        </IconButton>
-        <div className="hidden items-center gap-2 text-sm sm:flex">
-          <span className="text-muted/60">Workspace</span>
-          <span className="text-faint">/</span>
-          <span className="font-semibold text-ink">{pageNames[location.pathname] || 'Workspace'}</span>
-        </div>
-        <span className="text-sm font-semibold text-ink sm:hidden">{pageNames[location.pathname] || 'Workspace'}</span>
-      </div>
+  function closeSearch() {
+    setMobileSearchOpen(false)
+    setQuery('')
+  }
 
-      <div className="flex items-center gap-1.5 sm:gap-2">
-        {searchOpen ? (
-          <form onSubmit={submitSearch} className="flex items-center gap-2">
-            <input
-              autoFocus
-              className="field !min-h-10 w-36 !py-2 text-sm sm:w-56"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              onKeyDown={(event) => { if (event.key === 'Escape') { setSearchOpen(false); setQuery('') } }}
-              placeholder="Search your content"
-              aria-label="Search content"
-            />
-            <IconButton label="Close search" onClick={() => { setSearchOpen(false); setQuery('') }}><X size={18} /></IconButton>
-          </form>
-        ) : (
-          <IconButton label="Search content" onClick={() => setSearchOpen(true)} className="hidden sm:inline-flex">
+  const searchField = (
+    <label className="relative block w-full">
+      <Search size={16} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint" />
+      <input
+        autoFocus={mobileSearchOpen}
+        className="field !min-h-10 !bg-surface !py-2 !pl-9 text-sm"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        onKeyDown={(event) => { if (event.key === 'Escape') closeSearch() }}
+        placeholder="Search posts"
+        aria-label="Search posts"
+      />
+    </label>
+  )
+
+  return (
+    <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-line bg-canvas/95 px-4 backdrop-blur sm:px-6 lg:px-10">
+      <IconButton
+        label={menuExpanded ? 'Close navigation menu' : 'Open navigation menu'}
+        onClick={onMenuClick}
+        aria-expanded={menuExpanded}
+        aria-controls="mobile-navigation"
+        className="md:hidden"
+      >
+        {menuExpanded ? <X size={20} /> : <Menu size={20} />}
+      </IconButton>
+
+      {mobileSearchOpen ? (
+        <form onSubmit={submitSearch} className="flex flex-1 items-center gap-2 sm:hidden">
+          {searchField}
+          <IconButton label="Close search" onClick={closeSearch}><X size={18} /></IconButton>
+        </form>
+      ) : (
+        <span className="font-display text-base font-semibold tracking-tight text-ink sm:hidden">
+          {pageNames[location.pathname] || 'Haven'}
+        </span>
+      )}
+
+      <form onSubmit={submitSearch} className="hidden w-full max-w-sm sm:block">
+        {searchField}
+      </form>
+
+      <div className="ml-auto flex items-center gap-2">
+        {!mobileSearchOpen && (
+          <IconButton label="Search posts" onClick={() => setMobileSearchOpen(true)} className="sm:hidden">
             <Search size={18} />
           </IconButton>
         )}
-        <IconButton label="Open content search" onClick={() => { setSearchOpen(true); if (window.innerWidth < 640) setQuery('') }} className="sm:hidden">
-          <Search size={18} />
-        </IconButton>
-        <div className="mx-1 hidden h-7 w-px bg-line sm:block" />
-        <span className="hidden items-center gap-2 rounded-lg border border-line bg-surface/70 px-2.5 py-1.5 text-xs font-medium text-muted md:inline-flex">
-          <Command size={13} /> Local mode
-        </span>
-        <button type="button" onClick={() => navigate('/settings')} aria-label="Workspace settings" className="flex size-10 items-center justify-center rounded-full border border-brand-100 bg-brand-50 text-sm font-bold text-brand-800 transition hover:border-brand-100 hover:bg-brand-100">
-          {initials}
+        <button
+          type="button"
+          onClick={() => navigate('/settings')}
+          aria-label="Workspace settings"
+          className="flex size-9 items-center justify-center rounded-full bg-brand-50 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-100"
+        >
+          {initial}
         </button>
       </div>
     </header>

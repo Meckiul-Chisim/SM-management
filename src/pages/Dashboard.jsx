@@ -1,147 +1,177 @@
-import {
-  ArrowRight,
-  CalendarClock,
-  CheckCircle2,
-  Layers3,
-  Plus,
-  Sparkles,
-  UsersRound,
-} from 'lucide-react'
+import { useMemo } from 'react'
+import { Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import Badge from '../components/ui/Badge.jsx'
 import Card from '../components/ui/Card.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
 import { useWorkspace } from '../context/WorkspaceContext.jsx'
+import { DEFAULT_BRAND_COLOUR } from '../utils/colour.js'
 
-function formatDate(value) {
-  if (!value) return 'No date set'
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'No date set'
-  return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(date)
-}
-
+const pad = (value) => String(value).padStart(2, '0')
+const keyForDate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+const shortDate = (date) => date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
 
 function Dashboard() {
   const { data } = useWorkspace()
-  const drafts = data.posts.filter((post) => post.status === 'Draft').length
-  const planned = data.posts.filter((post) => post.status === 'Planned').length
-  const followUps = data.interactions.filter((item) => item.status !== 'Done').length
-  const upcoming = data.posts
-    .filter((post) => post.status === 'Planned' && post.scheduledAt)
-    .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
-    .slice(0, 4)
 
-  const metrics = [
-    { label: 'Brands', value: data.brands.length, detail: 'Workspaces you manage', icon: Layers3 },
-    { label: 'Drafts', value: drafts, detail: 'Still being worked on', icon: Sparkles },
-    { label: 'Planned posts', value: planned, detail: 'In your content calendar', icon: CalendarClock },
-    { label: 'Open follow-ups', value: followUps, detail: 'Engagement to revisit', icon: UsersRound },
-  ]
+  // The next seven days, starting today.
+  const week = useMemo(() => {
+    const start = new Date()
+    start.setHours(0, 0, 0, 0)
+    return Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(start)
+      date.setDate(start.getDate() + index)
+      return { date, key: keyForDate(date) }
+    })
+  }, [])
+
+  const postsByDay = useMemo(() => {
+    const map = new Map()
+    for (const post of data.posts) {
+      if (!post.scheduledAt) continue
+      const key = post.scheduledAt.slice(0, 10)
+      map.set(key, [...(map.get(key) || []), post])
+    }
+    for (const posts of map.values()) posts.sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
+    return map
+  }, [data.posts])
+
+  const brandFor = (id) => data.brands.find((brand) => brand.id === id)
+  const colourFor = (id) => brandFor(id)?.color || DEFAULT_BRAND_COLOUR
+
+  const drafts = data.posts
+    .filter((post) => post.status === 'Draft' || post.status === 'Ready')
+    .sort((a, b) => (b.updatedAt || b.createdAt || '').localeCompare(a.updatedAt || a.createdAt || ''))
+
+  const todayKey = week[0].key
+  const followUps = data.interactions
+    .filter((item) => item.status !== 'Done')
+    .sort((a, b) => (a.followUpDate || '9999').localeCompare(b.followUpDate || '9999'))
 
   return (
     <>
-      <PageHeader
-        eyebrow="Workspace overview"
-        title={`Welcome back to ${data.workspaceName || 'your workspace'}`}
-        description="A calmer way to organise the content your brands publish."
-      />
-
-      <Card tone="brand" className="mb-6 overflow-hidden p-6 sm:p-8">
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <div className="max-w-xl">
-            <Badge tone="inverse">Your workspace</Badge>
-            <h2 className="mt-5 text-xl font-semibold tracking-tight sm:text-2xl">
-              From idea to planned post, without the loose ends.
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-white/75">
-              Keep brand details, drafts, content dates, and manual follow-ups together. Start small and build a consistent workflow.
-            </p>
-          </div>
-          <Link to="/content" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-brand-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-800">
-            <Plus size={17} /> Create a post
-          </Link>
-        </div>
-      </Card>
-
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {metrics.map(({ label, value, detail, icon: Icon }) => (
-          <Card key={label} className="p-4 sm:p-5">
-            <div className="flex items-start justify-between gap-3">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-800">
-                <Icon size={19} aria-hidden="true" />
-              </span>
-              <span className="text-3xl font-semibold tracking-tight text-ink">{value}</span>
-            </div>
-            <p className="mt-4 text-sm font-semibold text-ink">{label}</p>
-            <p className="mt-1 text-xs text-muted">{detail}</p>
-          </Card>
-        ))}
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <PageHeader
+          title="Next 7 days"
+          description={`Posts planned from ${shortDate(week[0].date)} to ${shortDate(week[6].date)}.`}
+        />
+        <Link
+          to="/content"
+          className="mb-8 inline-flex min-h-10 items-center justify-center gap-2 self-start rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-on-brand transition-colors hover:bg-brand-800 sm:self-auto"
+        >
+          <Plus size={16} aria-hidden="true" /> New post
+        </Link>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[1.35fr_1fr]">
-        <Card className="overflow-hidden">
-          <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4">
-            <div>
-              <h2 className="font-semibold text-ink">Upcoming content</h2>
-              <p className="mt-1 text-xs text-muted">Your next planned posts</p>
+      <Card className="divide-y divide-line overflow-hidden lg:grid lg:grid-cols-7 lg:divide-x lg:divide-y-0">
+        {week.map(({ date, key }, index) => {
+          const posts = postsByDay.get(key) || []
+          const isToday = index === 0
+          return (
+            <div key={key} className="min-w-0 p-4 lg:min-h-48">
+              <div className="mb-3 flex items-baseline gap-2 lg:block">
+                <p className={`text-xs font-medium ${isToday ? 'text-brand-800' : 'text-muted'}`}>
+                  {isToday ? 'Today' : date.toLocaleDateString(undefined, { weekday: 'short' })}
+                </p>
+                <p className="font-display text-2xl font-semibold leading-none tracking-tight text-ink lg:mt-1">
+                  {date.getDate()}
+                  <span className="ml-1.5 text-xs font-medium text-faint lg:hidden">
+                    {date.toLocaleDateString(undefined, { month: 'short' })}
+                  </span>
+                </p>
+              </div>
+
+              {posts.length ? (
+                <ul className="space-y-2">
+                  {posts.map((post) => (
+                    <li key={post.id}>
+                      <Link
+                        to={`/content?search=${encodeURIComponent(post.title || post.platform)}`}
+                        className="spine block rounded-r-md bg-surface px-2.5 py-2 transition-colors hover:bg-brand-50"
+                        style={{ '--spine-colour': colourFor(post.brandId) }}
+                      >
+                        <span className="block text-sm font-medium leading-snug text-ink">{post.title || 'Untitled post'}</span>
+                        <span className="mt-0.5 block text-xs text-muted">
+                          {new Date(post.scheduledAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })} on {post.platform}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-faint">Free</p>
+              )}
             </div>
-            <Link to="/calendar" className="inline-flex items-center gap-1 text-sm font-semibold text-brand-800 hover:underline">
-              View calendar <ArrowRight size={15} />
-            </Link>
+          )
+        })}
+      </Card>
+
+      <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
+        <section aria-labelledby="drafts-heading">
+          <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-line pb-3">
+            <h2 id="drafts-heading" className="text-lg font-semibold text-ink">
+              Drafts <span className="ml-1 font-sans text-sm font-medium text-muted">{drafts.length}</span>
+            </h2>
+            <Link to="/content" className="text-sm font-semibold text-brand-800 underline-offset-4 hover:underline">Open content studio</Link>
           </div>
-          {upcoming.length ? (
-            <div className="divide-y divide-line">
-              {upcoming.map((post) => {
-                const brand = data.brands.find((item) => item.id === post.brandId)
+          {drafts.length ? (
+            <ul className="divide-y divide-line">
+              {drafts.slice(0, 5).map((post) => (
+                <li key={post.id}>
+                  <Link
+                    to={`/content?search=${encodeURIComponent(post.title || post.platform)}`}
+                    className="spine my-2 flex items-center gap-3 rounded-r-md py-2 pl-3 pr-2 transition-colors hover:bg-surface"
+                    style={{ '--spine-colour': colourFor(post.brandId) }}
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium text-ink">{post.title || 'Untitled post'}</span>
+                      <span className="block truncate text-xs text-muted">{brandFor(post.brandId)?.name || 'General workspace'}, {post.platform}</span>
+                    </span>
+                    <span className="text-xs font-medium text-muted">{post.status}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="py-4 text-sm text-muted">No drafts right now. Start one in the content studio.</p>
+          )}
+        </section>
+
+        <section aria-labelledby="followups-heading">
+          <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-line pb-3">
+            <h2 id="followups-heading" className="text-lg font-semibold text-ink">
+              Follow-ups <span className="ml-1 font-sans text-sm font-medium text-muted">{followUps.length}</span>
+            </h2>
+            <Link to="/engagement" className="text-sm font-semibold text-brand-800 underline-offset-4 hover:underline">Open engagement</Link>
+          </div>
+          {followUps.length ? (
+            <ul className="divide-y divide-line">
+              {followUps.slice(0, 5).map((item) => {
+                const overdue = item.followUpDate && item.followUpDate < todayKey
                 return (
-                  <div key={post.id} className="flex items-center gap-3 px-5 py-4">
-                    <div className="flex size-11 shrink-0 flex-col items-center justify-center rounded-xl bg-surface text-center">
-                      <span className="text-[10px] font-bold uppercase text-muted">{formatDate(post.scheduledAt).split(' ')[0]}</span>
-                      <span className="text-sm font-semibold text-ink">{formatDate(post.scheduledAt).split(' ').slice(1).join(' ')}</span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold text-ink">{post.title || 'Untitled post'}</p>
-                      <p className="mt-1 truncate text-xs text-muted">{brand?.name || 'General'} · {post.platform}</p>
-                    </div>
-                    <Badge>{post.status}</Badge>
-                  </div>
+                  <li key={item.id}>
+                    <Link
+                      to="/engagement"
+                      className="spine my-2 flex items-center gap-3 rounded-r-md py-2 pl-3 pr-2 transition-colors hover:bg-surface"
+                      style={{ '--spine-colour': colourFor(item.brandId) }}
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-ink">{item.person}</span>
+                        <span className="block truncate text-xs text-muted">{item.message}</span>
+                      </span>
+                      <span className={`text-xs font-medium ${overdue ? 'text-danger' : 'text-muted'}`}>
+                        {item.followUpDate
+                          ? `${overdue ? 'Overdue, ' : 'By '}${shortDate(new Date(`${item.followUpDate}T12:00:00`))}`
+                          : 'No date'}
+                      </span>
+                    </Link>
+                  </li>
                 )
               })}
-            </div>
+            </ul>
           ) : (
-            <div className="px-5 py-10 text-center">
-              <CalendarClock className="mx-auto text-faint" size={24} />
-              <p className="mt-3 text-sm font-semibold text-ink">Nothing planned yet</p>
-              <p className="mt-1 text-sm text-muted">Schedule a draft to see it here.</p>
-            </div>
+            <p className="py-4 text-sm text-muted">Nothing waiting for a reply.</p>
           )}
-        </Card>
-
-        <Card className="p-5 sm:p-6">
-          <h2 className="font-semibold text-ink">Quick actions</h2>
-          <p className="mt-1 text-sm text-muted">Go straight to your next task.</p>
-          <div className="mt-5 space-y-3">
-            <Link to="/content" className="flex items-center gap-3 rounded-xl border border-line p-3 transition hover:border-brand-100 hover:bg-brand-50">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-800"><Sparkles size={18} /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-ink">Write content</span><span className="block text-xs text-muted">Create a caption or post draft</span></span>
-              <ArrowRight size={16} className="text-muted" />
-            </Link>
-            <Link to="/brands" className="flex items-center gap-3 rounded-xl border border-line p-3 transition hover:border-brand-100 hover:bg-brand-50">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-800"><Layers3 size={18} /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-ink">Manage brands</span><span className="block text-xs text-muted">Organise your brand profiles</span></span>
-              <ArrowRight size={16} className="text-muted" />
-            </Link>
-            <Link to="/engagement" className="flex items-center gap-3 rounded-xl border border-line p-3 transition hover:border-brand-100 hover:bg-brand-50">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-800"><UsersRound size={18} /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-ink">Log a follow-up</span><span className="block text-xs text-muted">Keep important conversations visible</span></span>
-              <ArrowRight size={16} className="text-muted" />
-            </Link>
-          </div>
-          <div className="mt-5 rounded-xl bg-surface p-3 text-xs leading-5 text-muted">
-            <CheckCircle2 size={15} className="mr-1 inline text-brand-700" />
-            Changes save in this browser automatically. Social publishing and account sync are not connected yet.
-          </div>
-        </Card>
+        </section>
       </div>
     </>
   )

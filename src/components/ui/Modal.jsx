@@ -4,7 +4,7 @@ import IconButton from './IconButton.jsx'
 function Modal({ title, description, onClose, children, wide = false }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 backdrop-blur-[2px] sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 sm:items-center sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
@@ -13,7 +13,7 @@ function Modal({ title, description, onClose, children, wide = false }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className={`max-h-[92vh] w-full overflow-y-auto rounded-t-2xl border border-line bg-panel p-5 shadow-2xl sm:rounded-2xl sm:p-6 ${wide ? 'sm:max-w-2xl' : 'sm:max-w-lg'}`}
+        className={`max-h-[92vh] w-full overflow-y-auto rounded-t-xl border border-line bg-panel p-5 shadow-2xl sm:rounded-xl sm:p-6 ${wide ? 'sm:max-w-2xl' : 'sm:max-w-lg'}`}
       >
         <div className="mb-5 flex items-start justify-between gap-4">
           <div>

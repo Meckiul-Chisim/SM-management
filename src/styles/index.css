@@ -1,28 +1,74 @@
 @import "tailwindcss";
 
+/*
+  Design tokens
+  -------------
+  Light is the default. Dark follows the system setting and only redefines
+  the same variables, so no component needs to know which theme is active.
+
+  Naming is by role, not by colour:
+    canvas / surface / panel   page, quiet fills, raised surfaces
+    ink / muted / faint        text, from strongest to weakest
+    brand-*                    the moss green used for actions and selection
+    on-brand                   text that sits on a brand-700 fill
+*/
 @theme {
-  --color-canvas: #121219;
-  --color-surface: #191922;
-  --color-panel: #1e1e29;
-  --color-panel-raised: #262633;
-  --color-line: #353545;
-  --color-ink: #f3f2fa;
-  --color-muted: #aaa8bd;
-  --color-faint: #807e94;
-  --color-brand-50: #292641;
-  --color-brand-100: #3b365c;
-  --color-brand-700: #8172f5;
-  --color-brand-800: #b8afff;
-  --color-brand-900: #242236;
-  --color-info-bg: #172b3b;
-  --color-info: #a5d7f7;
-  --color-success-bg: #18352d;
-  --color-success: #9bdfc0;
-  --color-warning-bg: #3b2d19;
-  --color-warning: #f3cc88;
-  --color-danger-bg: #3b2229;
-  --color-danger: #ffb4c0;
-  --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --color-canvas: #f6f7f3;
+  --color-surface: #eff2ec;
+  --color-panel: #ffffff;
+  --color-panel-raised: #ffffff;
+  --color-line: #e2e7e0;
+  --color-ink: #17231e;
+  --color-muted: #576a61;
+  --color-faint: #5f7167;
+
+  --color-brand-50: #e3efe7;
+  --color-brand-100: #c3d9ca;
+  --color-brand-700: #2e6b4f;
+  --color-brand-800: #245640;
+  --color-brand-900: #17231e;
+  --color-on-brand: #ffffff;
+
+  --color-info-bg: #e4edf5;
+  --color-info: #285a80;
+  --color-success-bg: #dcefe3;
+  --color-success: #1f6b45;
+  --color-warning-bg: #f8ecd0;
+  --color-warning: #75500f;
+  --color-danger-bg: #f8e3e3;
+  --color-danger: #a02f3b;
+
+  --font-sans: "Instrument Sans Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-canvas: #0f1613;
+    --color-surface: #141d19;
+    --color-panel: #17211c;
+    --color-panel-raised: #1c2822;
+    --color-line: #26342d;
+    --color-ink: #eaf1ec;
+    --color-muted: #9db0a5;
+    --color-faint: #71857a;
+
+    --color-brand-50: #1d3329;
+    --color-brand-100: #2c4a3c;
+    --color-brand-700: #7cc6a0;
+    --color-brand-800: #a6dbc0;
+    --color-brand-900: #eaf1ec;
+    --color-on-brand: #0f1613;
+
+    --color-info-bg: #172a39;
+    --color-info: #a5d0ee;
+    --color-success-bg: #18352a;
+    --color-success: #9bdfbc;
+    --color-warning-bg: #3a2e18;
+    --color-warning: #f1cd8c;
+    --color-danger-bg: #3a2127;
+    --color-danger: #ffb4bf;
+  }
 }
 
 :root {
@@ -35,7 +81,7 @@
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   font-weight: 400;
-  color-scheme: dark;
+  color-scheme: light dark;
 }
 
 * { box-sizing: border-box; }
@@ -44,7 +90,7 @@ html {
   min-width: 320px;
   min-height: 100%;
   background: var(--color-canvas);
-  scrollbar-color: #48465d #121219;
+  scrollbar-color: var(--color-line) transparent;
 }
 
 body {
@@ -52,14 +98,22 @@ body {
   min-height: 100vh;
   margin: 0;
   background: var(--color-canvas);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* Headings carry the personality: one display face, tight and confident. */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; }
 
 ::selection {
-  color: #ffffff;
-  background: #6655dc;
+  color: var(--color-on-brand);
+  background: var(--color-brand-700);
 }
 
 :focus-visible {
@@ -71,51 +125,61 @@ button { font: inherit; }
   display: block;
   margin-bottom: 0.4rem;
   color: var(--color-ink);
-  font-size: 0.82rem;
-  font-weight: 650;
+  font-size: 0.8125rem;
+  font-weight: 600;
 }
 
 .field {
   width: 100%;
   min-height: 2.75rem;
   border: 1px solid var(--color-line);
-  border-radius: 0.75rem;
-  background: var(--color-panel-raised);
-  padding: 0.65rem 0.8rem;
+  border-radius: 0.5rem;
+  background: var(--color-panel);
+  padding: 0.6rem 0.8rem;
   color: var(--color-ink);
   font-size: 0.9rem;
-  color-scheme: dark;
-  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
 }
 
 .field::placeholder { color: var(--color-faint); }
+.field:hover { border-color: var(--color-brand-100); }
 .field:focus {
   border-color: var(--color-brand-700);
   outline: none;
-  box-shadow: 0 0 0 3px rgb(129 114 245 / 16%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-700) 18%, transparent);
 }
 
 textarea.field { min-height: 7rem; resize: vertical; }
 .field-help { margin-top: 0.35rem; color: var(--color-muted); font-size: 0.75rem; line-height: 1.4; }
 
+/*
+  Notices. Information recedes (it repeats on several pages);
+  only warnings, successes and errors carry colour.
+*/
 .notice {
   border: 1px solid var(--color-line);
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.8125rem;
   line-height: 1.5;
 }
-.notice-info { border-color: #294358; background: var(--color-info-bg); color: var(--color-info); }
-.notice-warning { border-color: #514026; background: var(--color-warning-bg); color: var(--color-warning); }
-.notice-success { border-color: #2a5144; background: var(--color-success-bg); color: var(--color-success); }
-.notice-danger { border-color: #5a303b; background: var(--color-danger-bg); color: var(--color-danger); }
+.notice-info { background: transparent; color: var(--color-muted); }
+.notice-warning { border-color: transparent; background: var(--color-warning-bg); color: var(--color-warning); }
+.notice-success { border-color: transparent; background: var(--color-success-bg); color: var(--color-success); }
+.notice-danger { border-color: transparent; background: var(--color-danger-bg); color: var(--color-danger); }
 
-@keyframes workspace-enter {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Brand spine: the thin vertical line that carries a brand's colour. */
+.spine {
+  border-left: 3px solid var(--spine-colour, var(--color-line));
 }
 
-.workspace-enter { animation: workspace-enter 220ms ease-out both; }
+/* Subtle page entrance: opacity only, no sliding. */
+@keyframes workspace-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.workspace-enter { animation: workspace-enter 180ms ease-out both; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

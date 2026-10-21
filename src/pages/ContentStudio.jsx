@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Check, Copy, FileText, Pencil, Plus, Search, Sparkles, Trash2 } from 'lucide-react'
+import { Check, Copy, Pencil, Plus, Search, Sparkles, Trash2 } from 'lucide-react'
 import Button from '../components/ui/Button.jsx'
 import Card from '../components/ui/Card.jsx'
 import Modal from '../components/ui/Modal.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
 import { PLATFORMS, useWorkspace } from '../context/WorkspaceContext.jsx'
 import { createPlatformDraft } from '../utils/contentDrafts.js'
+import { DEFAULT_BRAND_COLOUR } from '../utils/colour.js'
 
 const statuses = ['Draft', 'Ready', 'Planned', 'Published']
 const blankForm = {
@@ -22,7 +23,7 @@ function statusClass(status) {
   if (status === 'Published') return 'bg-success-bg text-success'
   if (status === 'Planned') return 'bg-info-bg text-info'
   if (status === 'Ready') return 'bg-warning-bg text-warning'
-  return 'bg-brand-50 text-brand-800'
+  return 'bg-surface text-muted'
 }
 
 function ContentStudio() {
@@ -178,11 +179,11 @@ function ContentStudio() {
 
       <Card className="mb-5 overflow-hidden">
         <div className="flex items-start gap-3 border-b border-line bg-surface px-5 py-4 sm:px-6">
-          <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-panel-raised text-brand-800"><Sparkles size={19} /></span>
+          <span className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-800"><Sparkles size={19} /></span>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="font-semibold tracking-tight text-ink">Idea-to-draft helper</h2>
-              <span className="rounded-full border border-brand-100 bg-panel-raised px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-800">No API needed</span>
+              <span className="rounded-md bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-800">No API needed</span>
             </div>
             <p className="mt-1 text-sm leading-5 text-muted">Turn a topic into a platform-shaped starting point using built-in templates. Edit the result before saving or publishing.</p>
           </div>
@@ -237,7 +238,7 @@ function ContentStudio() {
           <div className="border-t border-line bg-surface/60 p-5 sm:p-6">
             <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
               <div className="min-w-0">
-                <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-800">Starter preview · {generated.platform}</p>
+                <p className="mb-1 text-xs font-medium text-brand-800">Starter preview for {generated.platform}</p>
                 <h3 className="break-words font-semibold text-ink">{generated.title}</h3>
               </div>
               <div className="flex shrink-0 flex-wrap gap-2">
@@ -245,7 +246,7 @@ function ContentStudio() {
                 <Button className="min-h-9 px-3" onClick={useGenerated}>Edit & save <Plus size={15} /></Button>
               </div>
             </div>
-            <pre className="mt-4 whitespace-pre-wrap break-words rounded-xl border border-line bg-panel-raised p-4 font-sans text-sm leading-6 text-ink">{generated.caption}</pre>
+            <pre className="mt-4 whitespace-pre-wrap break-words rounded-lg border border-line bg-panel p-4 font-sans text-sm leading-6 text-ink">{generated.caption}</pre>
             <p className="mt-3 text-xs leading-5 text-muted">{generated.disclosure}</p>
           </div>
         )}
@@ -270,14 +271,13 @@ function ContentStudio() {
           {filteredPosts.map((post) => {
             const brand = data.brands.find((item) => item.id === post.brandId)
             return (
-              <Card key={post.id} className="flex min-w-0 flex-col p-5 sm:p-6">
+              <Card key={post.id} className="spine flex min-w-0 flex-col p-5 sm:p-6" style={{ '--spine-colour': brand?.color || DEFAULT_BRAND_COLOUR }}>
                 <div className="flex items-start gap-3">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-800"><FileText size={19} /></span>
                   <div className="min-w-0 flex-1">
                     <h2 className="break-words font-semibold text-ink">{post.title || 'Untitled post'}</h2>
                     <p className="mt-1 truncate text-xs text-muted">{brand?.name || 'General workspace'} · {post.platform}</p>
                   </div>
-                  <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass(post.status)}`}>{post.status}</span>
+                  <span className={`rounded-md px-2 py-0.5 text-xs font-medium ${statusClass(post.status)}`}>{post.status}</span>
                 </div>
                 <p className="mt-4 line-clamp-4 whitespace-pre-wrap text-sm leading-6 text-muted">{post.caption || 'No caption added yet.'}</p>
                 <div className="mt-auto pt-5">

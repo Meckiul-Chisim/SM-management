@@ -11,7 +11,7 @@ function AppLayout() {
   return (
     <div className="min-h-screen bg-canvas text-ink">
       <Sidebar />
-      <div className="min-h-screen min-w-0 md:pl-64">
+      <div className="min-h-screen min-w-0 md:pl-60">
         <Header
           onMenuClick={() => setMobileNavigationOpen((open) => !open)}
           menuExpanded={mobileNavigationOpen}

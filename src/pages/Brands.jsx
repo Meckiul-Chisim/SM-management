@@ -6,9 +6,10 @@ import Card from '../components/ui/Card.jsx'
 import Modal from '../components/ui/Modal.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
 import { PLATFORMS, useWorkspace } from '../context/WorkspaceContext.jsx'
+import { DEFAULT_BRAND_COLOUR, readableTextColour } from '../utils/colour.js'
 
 const platformIcon = { Instagram, LinkedIn: Linkedin }
-const emptyForm = { name: '', industry: '', color: '#8172f5', accounts: [] }
+const emptyForm = { name: '', industry: '', color: DEFAULT_BRAND_COLOUR, accounts: [] }
 
 function Brands() {
   const { data, addBrand, updateBrand, deleteBrand } = useWorkspace()
@@ -29,7 +30,7 @@ function Brands() {
     setForm({
       name: brand.name,
       industry: brand.industry || '',
-      color: brand.color || '#8172f5',
+      color: brand.color || DEFAULT_BRAND_COLOUR,
       accounts: (brand.accounts || []).map((account) => ({ ...account })),
     })
     setError('')
@@ -89,8 +90,12 @@ function Brands() {
           {data.brands.map((brand) => (
             <Card key={brand.id} className="overflow-hidden">
               <div className="flex items-start gap-4 p-5 sm:p-6">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl text-white" style={{ backgroundColor: brand.color || '#8172f5' }}>
-                  <UsersRound size={22} />
+                <span
+                  className="flex size-11 shrink-0 items-center justify-center rounded-lg font-display text-lg font-semibold"
+                  style={{ backgroundColor: brand.color || DEFAULT_BRAND_COLOUR, color: readableTextColour(brand.color) }}
+                  aria-hidden="true"
+                >
+                  {brand.name.trim().slice(0, 1).toUpperCase()}
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -110,7 +115,7 @@ function Brands() {
                     {brand.accounts.map((account) => {
                       const Icon = platformIcon[account.platform]
                       return (
-                        <div key={account.platform} className="flex items-center gap-3 rounded-xl bg-panel-raised px-3 py-3">
+                        <div key={account.platform} className="flex items-center gap-3 rounded-lg bg-panel px-3 py-3">
                           <span className="flex size-9 items-center justify-center rounded-lg border border-line text-muted">
                             {Icon ? <Icon size={17} /> : <span className="text-[10px] font-bold">{account.platform.slice(0, 2).toUpperCase()}</span>}
                           </span>
@@ -118,13 +123,13 @@ function Brands() {
                             <p className="text-sm font-medium text-ink">{account.platform}</p>
                             <p className="truncate text-xs text-muted">{account.handle || 'No handle added'}</p>
                           </div>
-                          <Badge>Not connected</Badge>
+                          <Badge tone="neutral">Not connected</Badge>
                         </div>
                       )
                     })}
                   </div>
                 ) : (
-                  <p className="rounded-xl bg-panel-raised px-3 py-4 text-sm text-muted">No social profile references yet. Edit this brand to add some.</p>
+                  <p className="rounded-lg bg-panel px-3 py-4 text-sm text-muted">No social profile references yet. Edit this brand to add some.</p>
                 )}
               </div>
             </Card>
