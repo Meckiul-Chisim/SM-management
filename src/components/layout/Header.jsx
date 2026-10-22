@@ -2,6 +2,7 @@ import { Menu, Search, X } from 'lucide-react'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import IconButton from '../ui/IconButton.jsx'
+import ThemeToggle from './ThemeToggle.jsx'
 import { useWorkspace } from '../../context/WorkspaceContext.jsx'
 
 const pageNames = {
@@ -84,6 +85,7 @@ function Header({ onMenuClick, menuExpanded }) {
             <Search size={18} />
           </IconButton>
         )}
+        <ThemeToggle />
         <button
           type="button"
           onClick={() => navigate('/settings')}

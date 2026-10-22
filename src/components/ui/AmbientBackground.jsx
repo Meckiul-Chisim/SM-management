@@ -8,7 +8,7 @@ function readPalette() {
   return {
     accent: styles.getPropertyValue('--color-brand-700').trim() || '#2e6b4f',
     star: styles.getPropertyValue('--color-ink').trim() || '#eaf1ec',
-    dark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    dark: document.documentElement.dataset.theme === 'dark',
   }
 }
 
@@ -32,7 +32,6 @@ function AmbientBackground({ className = '' }) {
 
     const scene = createScene()
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
     let width = 0
     let height = 0
@@ -110,6 +109,10 @@ function AmbientBackground({ className = '' }) {
       pointer.y = (event.clientY / window.innerHeight) * 2 - 1
     }
 
+    // Redraw with the new colours whenever the theme is switched (data-theme changes).
+    const themeObserver = new MutationObserver(handleThemeChange)
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
     const observer = new ResizeObserver(resize)
     observer.observe(canvas)
     resize()
@@ -118,15 +121,14 @@ function AmbientBackground({ className = '' }) {
     document.addEventListener('visibilitychange', handleVisibility)
     window.addEventListener('pointermove', handlePointer, { passive: true })
     reducedMotionQuery.addEventListener('change', handleMotionChange)
-    darkQuery.addEventListener('change', handleThemeChange)
 
     return () => {
       stop()
       observer.disconnect()
+      themeObserver.disconnect()
       document.removeEventListener('visibilitychange', handleVisibility)
       window.removeEventListener('pointermove', handlePointer)
       reducedMotionQuery.removeEventListener('change', handleMotionChange)
-      darkQuery.removeEventListener('change', handleThemeChange)
     }
   }, [])
 

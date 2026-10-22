@@ -3,8 +3,9 @@
 /*
   Design tokens
   -------------
-  Light is the default. Dark follows the system setting and only redefines
-  the same variables, so no component needs to know which theme is active.
+  Light is the default. Dark is switched on with data-theme="dark" on <html>
+  (see utils/theme.js) and only redefines the same variables, so no component
+  needs to know which theme is active.
 
   Naming is by role, not by colour:
     canvas / surface / panel   page, quiet fills, raised surfaces
@@ -42,33 +43,33 @@
   --font-display: "Bricolage Grotesque Variable", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-canvas: #0f1613;
-    --color-surface: #141d19;
-    --color-panel: #17211c;
-    --color-panel-raised: #1c2822;
-    --color-line: #26342d;
-    --color-ink: #eaf1ec;
-    --color-muted: #9db0a5;
-    --color-faint: #71857a;
+:root[data-theme="dark"] {
+  color-scheme: dark;
 
-    --color-brand-50: #1d3329;
-    --color-brand-100: #2c4a3c;
-    --color-brand-700: #7cc6a0;
-    --color-brand-800: #a6dbc0;
-    --color-brand-900: #eaf1ec;
-    --color-on-brand: #0f1613;
+  --color-canvas: #0f1613;
+  --color-surface: #141d19;
+  --color-panel: #17211c;
+  --color-panel-raised: #1c2822;
+  --color-line: #26342d;
+  --color-ink: #eaf1ec;
+  --color-muted: #9db0a5;
+  --color-faint: #71857a;
 
-    --color-info-bg: #172a39;
-    --color-info: #a5d0ee;
-    --color-success-bg: #18352a;
-    --color-success: #9bdfbc;
-    --color-warning-bg: #3a2e18;
-    --color-warning: #f1cd8c;
-    --color-danger-bg: #3a2127;
-    --color-danger: #ffb4bf;
-  }
+  --color-brand-50: #1d3329;
+  --color-brand-100: #2c4a3c;
+  --color-brand-700: #7cc6a0;
+  --color-brand-800: #a6dbc0;
+  --color-brand-900: #eaf1ec;
+  --color-on-brand: #0f1613;
+
+  --color-info-bg: #172a39;
+  --color-info: #a5d0ee;
+  --color-success-bg: #18352a;
+  --color-success: #9bdfbc;
+  --color-warning-bg: #3a2e18;
+  --color-warning: #f1cd8c;
+  --color-danger-bg: #3a2127;
+  --color-danger: #ffb4bf;
 }
 
 :root {
@@ -81,7 +82,7 @@
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   font-weight: 400;
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -177,6 +178,19 @@ button { font: inherit; }
   .spine {
     border-left: 3px solid var(--spine-colour, var(--color-line));
   }
+}
+
+/* Added briefly by applyTheme() so colours fade when the theme is switched. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease,
+    fill 220ms ease,
+    stroke 220ms ease !important;
 }
 
 /* Subtle page entrance: opacity only, no sliding. */

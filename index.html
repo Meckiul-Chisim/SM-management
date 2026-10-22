@@ -7,8 +7,20 @@
       name="description"
       content="Plan social content, organise brands, and keep publishing workflows moving in one workspace."
     />
-    <meta name="theme-color" content="#f6f7f3" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0f1613" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f7f3" />
+    <script>
+      // Sets the theme before the first paint, so there is no flash.
+      // Keep in sync with src/utils/theme.js (same storage key and rules).
+      (function () {
+        var theme = null;
+        try { theme = localStorage.getItem("haven-theme"); } catch (error) {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", theme === "dark" ? "#0f1613" : "#f6f7f3");
+      })();
+    </script>
     <title>Haven — Social media workspace</title>
   </head>
   <body>
