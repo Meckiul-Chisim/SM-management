@@ -7,6 +7,11 @@ import {
   UsersRound,
 } from 'lucide-react'
 
+// The product name is used for the sidebar, tab titles and the page metadata.
+// "Haven" is the current working name; renaming it is an owner decision.
+export const PRODUCT_NAME = 'Haven'
+
+// One list drives the sidebar, the mobile menu, the header title and the page title.
 export const navigationItems = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Brands & accounts', to: '/brands', icon: UsersRound },

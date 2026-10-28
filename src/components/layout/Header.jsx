@@ -3,18 +3,8 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import IconButton from '../ui/IconButton.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
-import { useWorkspace } from '../../context/WorkspaceContext.jsx'
-
-const pageNames = {
-  '/dashboard': 'Dashboard',
-  '/brands': 'Brands & accounts',
-  '/properties': 'Brands & accounts',
-  '/content': 'Content studio',
-  '/calendar': 'Content calendar',
-  '/engagement': 'Engagement',
-  '/inquiries': 'Engagement',
-  '/settings': 'Settings',
-}
+import { useWorkspace } from '../../hooks/useWorkspace.js'
+import { navigationItems, PRODUCT_NAME } from '../../app/navigation.js'
 
 function Header({ onMenuClick, menuExpanded }) {
   const { data } = useWorkspace()
@@ -53,36 +43,37 @@ function Header({ onMenuClick, menuExpanded }) {
   )
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-line bg-canvas/95 px-4 backdrop-blur sm:px-6 lg:px-10">
+    <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-line bg-canvas/85 px-4 backdrop-blur-md sm:px-6 lg:px-10">
       <IconButton
+        id="menu-button"
         label={menuExpanded ? 'Close navigation menu' : 'Open navigation menu'}
         onClick={onMenuClick}
         aria-expanded={menuExpanded}
         aria-controls="mobile-navigation"
         className="md:hidden"
       >
-        {menuExpanded ? <X size={20} /> : <Menu size={20} />}
+        {menuExpanded ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
       </IconButton>
 
       {mobileSearchOpen ? (
-        <form onSubmit={submitSearch} className="flex flex-1 items-center gap-2 sm:hidden">
+        <form role="search" onSubmit={submitSearch} className="flex flex-1 items-center gap-2 sm:hidden">
           {searchField}
-          <IconButton label="Close search" onClick={closeSearch}><X size={18} /></IconButton>
+          <IconButton label="Close search" onClick={closeSearch}><X size={18} aria-hidden="true" /></IconButton>
         </form>
       ) : (
         <span className="font-display text-base font-semibold tracking-tight text-ink sm:hidden">
-          {pageNames[location.pathname] || 'Haven'}
+          {navigationItems.find((item) => location.pathname.startsWith(item.to))?.label || PRODUCT_NAME}
         </span>
       )}
 
-      <form onSubmit={submitSearch} className="hidden w-full max-w-sm sm:block">
+      <form role="search" onSubmit={submitSearch} className="hidden w-full max-w-sm sm:block">
         {searchField}
       </form>
 
       <div className="ml-auto flex items-center gap-2">
         {!mobileSearchOpen && (
           <IconButton label="Search posts" onClick={() => setMobileSearchOpen(true)} className="sm:hidden">
-            <Search size={18} />
+            <Search size={18} aria-hidden="true" />
           </IconButton>
         )}
         <ThemeToggle />
@@ -90,7 +81,8 @@ function Header({ onMenuClick, menuExpanded }) {
           type="button"
           onClick={() => navigate('/settings')}
           aria-label="Workspace settings"
-          className="flex size-9 items-center justify-center rounded-full bg-brand-50 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-100"
+          title="Workspace settings"
+          className="flex size-11 items-center justify-center rounded-full sm:size-9 bg-brand-50 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-100"
         >
           {initial}
         </button>

@@ -1,11 +1,14 @@
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router.jsx'
-import { WorkspaceProvider } from '../context/WorkspaceContext.jsx'
+import { ToastProvider } from '../context/ToastProvider.jsx'
+import { WorkspaceProvider } from '../context/WorkspaceProvider.jsx'
 
 function App() {
   return (
     <WorkspaceProvider>
-      <RouterProvider router={router} />
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
     </WorkspaceProvider>
   )
 }

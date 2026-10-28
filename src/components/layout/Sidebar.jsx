@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
-import { navigationItems } from '../../app/navigation.js'
-import { useWorkspace } from '../../context/WorkspaceContext.jsx'
+import { navigationItems, PRODUCT_NAME } from '../../app/navigation.js'
+import { useWorkspace } from '../../hooks/useWorkspace.js'
 import Wordmark from './Wordmark.jsx'
 
 function Sidebar() {
@@ -10,7 +10,7 @@ function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-canvas px-4 py-6 md:flex">
       <Link to="/dashboard" className="mb-8 block rounded-lg px-2 py-1" aria-label="Go to dashboard">
-        <Wordmark name={data.workspaceName || 'Haven'} />
+        <Wordmark name={data.workspaceName || PRODUCT_NAME} />
       </Link>
 
       <nav aria-label="Main navigation" className="space-y-0.5">
@@ -38,12 +38,12 @@ function Sidebar() {
 
       <div className="mt-auto">
         <Link
-          to="/content"
+          to="/content?new=1"
           className="flex min-h-10 items-center justify-center gap-2 rounded-lg bg-brand-700 px-3 text-sm font-semibold text-on-brand transition-colors hover:bg-brand-800"
         >
           <Plus size={16} aria-hidden="true" /> New post
         </Link>
-        <p className="mt-4 px-1 text-xs leading-5 text-faint">Saved in this browser</p>
+        <p className="mt-4 px-1 text-xs leading-5 text-faint">Saved in this browser only. Use Settings to back up.</p>
       </div>
     </aside>
   )

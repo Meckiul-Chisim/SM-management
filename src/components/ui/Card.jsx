@@ -1,17 +1,12 @@
-// A flat, bordered surface. No shadow and no hover effect: structure comes from
-// spacing and hairlines, so cards only exist where content truly needs a container.
-function Card({ children, className = '', tone = 'default', ...props }) {
-  const toneClass = tone === 'brand'
-    ? 'border-brand-100 bg-brand-50 text-ink'
-    : 'border-line bg-panel'
-
+// A frosted-glass surface (see .glass in styles/index.css): a soft border, light
+// inner edge and gentle blur. Cards only exist where content needs a container.
+// Pass glass={false} for a flat, opaque surface (e.g. inside lists).
+function Card({ as: Tag = 'section', children, className = '', tone = 'default', glass = true, ...props }) {
+  const toneClass = tone === 'brand' ? 'border-brand-100 bg-brand-50 text-ink' : glass ? 'glass' : 'border-line bg-panel'
   return (
-    <section
-      className={`rounded-xl border ${toneClass} ${className}`}
-      {...props}
-    >
+    <Tag className={`rounded-2xl border ${toneClass} ${className}`} {...props}>
       {children}
-    </section>
+    </Tag>
   )
 }
 

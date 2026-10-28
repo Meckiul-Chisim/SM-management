@@ -7,11 +7,14 @@ import Engagement from '../pages/Engagement.jsx'
 import NotFound from '../pages/NotFound.jsx'
 import Brands from '../pages/Brands.jsx'
 import Settings from '../pages/Settings.jsx'
+import RouteError from '../pages/RouteError.jsx'
 
-export const router = createBrowserRouter([
+// Old addresses from earlier versions still work and redirect to the current pages.
+export const routes = [
   {
     path: '/',
     element: <AppLayout />,
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: 'dashboard', element: <Dashboard /> },
@@ -25,4 +28,6 @@ export const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
     ],
   },
-])
+]
+
+export const router = createBrowserRouter(routes)

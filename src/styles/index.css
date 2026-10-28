@@ -38,6 +38,12 @@
   --color-warning: #75500f;
   --color-danger-bg: #f8e3e3;
   --color-danger: #a02f3b;
+  --color-scrim: rgb(23 35 30 / 0.45);
+  --color-glass: rgb(255 255 255 / 0.74);
+  --color-glass-line: rgb(255 255 255 / 0.9);
+  --shadow-soft: 0 1px 2px rgb(23 35 30 / 0.04), 0 12px 32px -12px rgb(23 35 30 / 0.12);
+  --glass-highlight: rgb(255 255 255 / 0.7);
+  --glass-shadow: rgb(23 35 30 / 0.16);
 
   --font-sans: "Instrument Sans Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque Variable", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
@@ -70,6 +76,12 @@
   --color-warning: #f1cd8c;
   --color-danger-bg: #3a2127;
   --color-danger: #ffb4bf;
+  --color-scrim: rgb(0 0 0 / 0.6);
+  --color-glass: rgb(23 33 28 / 0.66);
+  --color-glass-line: rgb(255 255 255 / 0.07);
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 16px 36px -16px rgb(0 0 0 / 0.55);
+  --glass-highlight: rgb(255 255 255 / 0.06);
+  --glass-shadow: rgb(0 0 0 / 0.5);
 }
 
 :root {
@@ -139,7 +151,7 @@ button { font: inherit; }
     width: 100%;
     min-height: 2.75rem;
     border: 1px solid var(--color-line);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     background: var(--color-panel);
     padding: 0.6rem 0.8rem;
     color: var(--color-ink);
@@ -174,6 +186,49 @@ button { font: inherit; }
   .notice-success { border-color: transparent; background: var(--color-success-bg); color: var(--color-success); }
   .notice-danger { border-color: transparent; background: var(--color-danger-bg); color: var(--color-danger); }
 
+  /*
+    Frosted surface. The panel colour is mostly opaque (so text keeps 4.5:1 contrast
+    over the animated scene) with a light blur and a 1px inner highlight.
+    Falls back to a solid panel where backdrop-filter is not supported.
+  */
+  .glass {
+    background: var(--color-panel);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), 0 10px 30px -22px var(--glass-shadow);
+  }
+  @supports (backdrop-filter: blur(1px)) {
+    .glass {
+      background: color-mix(in srgb, var(--color-panel) 86%, transparent);
+      backdrop-filter: blur(14px) saturate(1.1);
+    }
+  }
+
+
+  /*
+    Frosted glass surface (from the saved 3D-glass style): translucent panel, blur,
+    a 1px light inner edge and one soft shadow. Falls back to a solid panel when the
+    browser has no backdrop-filter, and text sits on a 66-74% fill to stay readable.
+  */
+  .glass {
+    border: 1px solid var(--color-line);
+    background: var(--color-panel);
+    box-shadow: var(--shadow-soft), inset 0 1px 0 var(--color-glass-line);
+  }
+  @supports (backdrop-filter: blur(1px)) {
+    .glass {
+      background: var(--color-glass);
+      -webkit-backdrop-filter: blur(18px) saturate(1.15);
+      backdrop-filter: blur(18px) saturate(1.15);
+    }
+  }
+
+  .eyebrow {
+    color: var(--color-muted);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   /* Brand spine: the thin vertical line that carries a brand's colour. */
   .spine {
     border-left: 3px solid var(--spine-colour, var(--color-line));
@@ -199,7 +254,19 @@ html.theme-transition *::after {
   to { opacity: 1; }
 }
 
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
 .workspace-enter { animation: workspace-enter 180ms ease-out both; }
+
+/* Children of .stagger fade up one after another (60ms apart). Disabled by reduced motion below. */
+.stagger > * { animation: rise-in 360ms ease-out both; }
+.stagger > :nth-child(2) { animation-delay: 60ms; }
+.stagger > :nth-child(3) { animation-delay: 120ms; }
+.stagger > :nth-child(4) { animation-delay: 180ms; }
+.stagger > :nth-child(n+5) { animation-delay: 240ms; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

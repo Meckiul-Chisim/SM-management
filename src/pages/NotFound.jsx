@@ -1,20 +1,17 @@
+import { Compass } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import PageHeader from '../components/ui/PageHeader.jsx'
+import EmptyState from '../components/ui/EmptyState.jsx'
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js'
 
 function NotFound() {
+  useDocumentTitle('Page not found')
   return (
-    <div className="mx-auto max-w-xl py-12 text-center sm:py-20">
-      <PageHeader
-        title="This page isn't here"
-        description="The address may be incorrect, or the page may have moved."
-      />
-      <Link
-        to="/dashboard"
-        className="inline-flex min-h-10 items-center justify-center rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-on-brand transition-colors hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
-      >
-        Go to dashboard
-      </Link>
-    </div>
+    <EmptyState
+      icon={Compass}
+      title="Page not found"
+      description="This address does not match a page in the workspace."
+      action={<Link to="/dashboard" className="text-sm font-semibold text-brand-800 underline underline-offset-4">Go to dashboard</Link>}
+    />
   )
 }
 
