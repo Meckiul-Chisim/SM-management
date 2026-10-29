@@ -240,3 +240,86 @@ h2 { line-height: 1.16; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+
+/* Shared page system: carry the updater's tokens through every routed screen. */
+:root {
+  --color-canvas: var(--haven-bg);
+  --color-surface: color-mix(in srgb, var(--haven-panel-solid) 72%, var(--haven-bg));
+  --color-panel: var(--haven-panel-solid);
+  --color-panel-raised: var(--haven-panel-solid);
+  --color-line: var(--haven-line);
+  --color-ink: var(--haven-text);
+  --color-muted: var(--haven-muted);
+  --color-faint: color-mix(in srgb, var(--haven-muted) 68%, transparent);
+  --color-brand-50: var(--haven-accent-soft);
+  --color-brand-100: color-mix(in srgb, var(--haven-accent) 20%, transparent);
+  --color-brand-700: var(--haven-accent);
+  --color-brand-800: color-mix(in srgb, var(--haven-accent) 84%, #111827);
+  --color-brand-900: var(--haven-accent);
+  --color-on-brand: #fffaf5;
+  --shadow-soft: 0 1px 2px var(--haven-shadow), 0 18px 42px -26px var(--haven-shadow);
+  --glass-highlight: var(--haven-glass-edge);
+  --glass-shadow: var(--haven-shadow);
+}
+:root[data-theme="dark"] { --color-on-brand: #211713; }
+
+body { background-color: var(--haven-bg); }
+#root { min-height: 100vh; }
+#root > * { min-height: 100vh; }
+
+/* Shared page headings, section spacing and data-entry layouts. */
+.haven-page-content > * + * { margin-top: 1.35rem; }
+.haven-page-content h1 { margin-bottom: .45rem; }
+.haven-page-content h2 { letter-spacing: -.03em; }
+.haven-page-content p { text-wrap: pretty; }
+.haven-page-content .text-muted { color: var(--haven-muted) !important; }
+.haven-page-content .text-faint { color: color-mix(in srgb, var(--haven-muted) 68%, transparent) !important; }
+
+/* Card and list patterns used by content, calendar, engagement, brands and settings. */
+.haven-page-content .rounded-xl,
+.haven-page-content .rounded-2xl {
+  border-color: var(--haven-line);
+}
+.haven-page-content .divide-line > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--haven-line);
+}
+.haven-page-content table { border-collapse: separate; border-spacing: 0; }
+.haven-page-content thead th {
+  color: var(--haven-muted);
+  font-size: .7rem;
+  font-weight: 750;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.haven-page-content tbody tr { transition: background .16s ease; }
+.haven-page-content tbody tr:hover { background: var(--haven-accent-soft); }
+.haven-page-content input[type="checkbox"],
+.haven-page-content input[type="radio"] { accent-color: var(--haven-accent); }
+.haven-page-content select.field { cursor: pointer; }
+.haven-page-content textarea.field { line-height: 1.6; }
+
+/* Status pills remain readable but avoid competing with primary actions. */
+.haven-page-content [class*="bg-success"],
+.haven-page-content [class*="bg-green"] {
+  border-color: color-mix(in srgb, #27845a 18%, transparent);
+}
+.haven-page-content [class*="bg-danger"],
+.haven-page-content [class*="bg-red"] {
+  border-color: color-mix(in srgb, #c84b4b 18%, transparent);
+}
+
+/* Dialogs, popovers and mobile navigation share the same surface language. */
+[role="dialog"],
+[role="alertdialog"] {
+  border-color: var(--haven-line);
+  border-radius: var(--haven-radius-lg);
+  background: var(--haven-panel-solid);
+  box-shadow: 0 32px 90px -36px var(--haven-shadow);
+}
+.haven-sidebar [role="dialog"] { background: var(--haven-panel-solid); }
+@media (max-width: 767px) {
+  .haven-page-content > * + * { margin-top: 1rem; }
+  .haven-page-content .rounded-xl,
+  .haven-page-content .rounded-2xl { border-radius: var(--haven-radius-md); }
+}
