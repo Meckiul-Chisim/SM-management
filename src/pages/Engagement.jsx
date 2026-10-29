@@ -96,7 +96,7 @@ function Engagement() {
   }
 
   return (
-    <>
+    <div className="haven-route haven-route--engagement">
       <PageHeader
         title="Engagement"
         description="Keep comments, messages and follow-ups from slipping through the cracks."
@@ -236,7 +236,7 @@ function Engagement() {
           onCancel={() => setDeleting(null)}
         />
       )}
-    </>
+    </div>
   )
 }
 
