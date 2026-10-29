@@ -68,7 +68,7 @@ function Settings() {
   }
 
   return (
-    <>
+    <div className="haven-route haven-route--settings">
       <PageHeader title="Settings" description="Name your workspace, back up your data and manage sample content." />
 
       <Notice tone="warning" className="mb-6">
@@ -139,7 +139,7 @@ function Settings() {
           onCancel={() => setConfirm(null)}
         />
       )}
-    </>
+    </div>
   )
 }
 

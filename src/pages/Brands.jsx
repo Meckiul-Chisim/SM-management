@@ -47,7 +47,7 @@ function Brands() {
   }
 
   return (
-    <>
+    <div className="haven-route haven-route--brands">
       <PageHeader
         title="Brands & accounts"
         description="Keep brand identities and social profile references organised in one place."
@@ -157,7 +157,7 @@ function Brands() {
           onCancel={() => setDeleting(null)}
         />
       )}
-    </>
+    </div>
   )
 }
 

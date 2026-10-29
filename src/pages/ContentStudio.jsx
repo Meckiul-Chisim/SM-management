@@ -124,7 +124,7 @@ function ContentStudio() {
   const newPost = () => setDialog({ initial: {} })
 
   return (
-    <>
+    <div className="haven-route haven-route--content">
       <PageHeader
         title="Content studio"
         description="Write, organise and prepare posts for each brand."
@@ -219,7 +219,7 @@ function ContentStudio() {
           onCancel={() => setDeleting(null)}
         />
       )}
-    </>
+    </div>
   )
 }
 

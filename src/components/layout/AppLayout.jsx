@@ -11,24 +11,29 @@ const SCENE_FADE = 'linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.85) 35%, rg
 function AppLayout() {
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false)
 
+  function closeMobileNavigation() {
+    setMobileNavigationOpen(false)
+  }
+
   return (
-    <div className="min-h-screen bg-canvas text-ink">
+    <div className="haven-app min-h-screen bg-canvas text-ink">
+      <a className="haven-skip-link" href="#main-content">Skip to content</a>
       <div
-        className="pointer-events-none fixed inset-y-0 right-0 left-0 z-0 overflow-hidden md:left-[15.5rem]"
+        className="pointer-events-none fixed inset-y-0 right-0 left-0 z-0 overflow-hidden md:left-[16.25rem]"
         style={{ maskImage: SCENE_FADE, WebkitMaskImage: SCENE_FADE }}
         aria-hidden="true"
       >
         <AmbientBackground />
       </div>
       <Sidebar />
-      <div className="relative z-[1] min-h-screen min-w-0 md:pl-[15.5rem]">
+      <div className="relative z-[1] min-h-screen min-w-0 md:pl-[16.25rem]">
         <Header
           onMenuClick={() => setMobileNavigationOpen((open) => !open)}
           menuExpanded={mobileNavigationOpen}
         />
         <MobileNavigation
           open={mobileNavigationOpen}
-          onNavigate={() => setMobileNavigationOpen(false)}
+          onNavigate={closeMobileNavigation}
         />
         <MainContent>
           <Outlet />
