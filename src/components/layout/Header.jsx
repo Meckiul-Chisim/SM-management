@@ -53,7 +53,7 @@ function Header({ onMenuClick, menuExpanded }) {
   )
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-line bg-panel/95 px-4 backdrop-blur sm:px-7 lg:px-9">
+    <header className="haven-header sticky top-0 z-10 flex h-[4.5rem] items-center gap-3 px-4 sm:px-7 xl:px-10">
       <IconButton
         label={menuExpanded ? 'Close navigation menu' : 'Open navigation menu'}
         onClick={onMenuClick}
