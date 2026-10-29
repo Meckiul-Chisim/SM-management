@@ -343,3 +343,39 @@ body { background-color: var(--haven-bg); }
 }
 .haven-skip-link:focus { transform: translateY(0); }
 #main-content:focus { outline: none; }
+
+
+/* Page-level layout rhythm: page wrappers keep each workspace view intentional. */
+.haven-route { min-width: 0; }
+.haven-page-heading { position: relative; }
+.haven-page-eyebrow {
+  color: var(--haven-muted);
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+}
+.haven-surface {
+  border-color: var(--haven-line);
+  background: var(--haven-panel);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--haven-shadow) 22%, transparent),
+              0 12px 30px -26px var(--haven-shadow);
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+.haven-surface--solid { box-shadow: none; }
+.haven-route--content .field,
+.haven-route--engagement .field,
+.haven-route--brands .field,
+.haven-route--settings .field { border-radius: 0.7rem; }
+.haven-route--calendar .haven-surface { overflow: hidden; }
+.haven-route--brands > .grid { align-items: stretch; }
+.haven-route--settings > .grid { align-items: start; }
+.haven-route--engagement [role="group"] { padding-bottom: 0.75rem; border-bottom: 1px solid var(--haven-line); }
+@media (hover: hover) and (pointer: fine) {
+  .haven-surface:hover { border-color: color-mix(in srgb, var(--haven-accent) 24%, var(--haven-line)); }
+}
+@media (max-width: 640px) {
+  .haven-page-heading { gap: 0.75rem; }
+  .haven-page-heading h1 { overflow-wrap: anywhere; }
+  .haven-route--settings > .grid { gap: 0.875rem; }
+}
