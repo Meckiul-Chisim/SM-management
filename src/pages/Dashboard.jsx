@@ -51,8 +51,8 @@ function Dashboard() {
     <>
       <div className="haven-dashboard-intro flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <PageHeader
-          title="Next 7 days"
-          description={`Posts planned from ${shortDate(week[0].date)} to ${shortDate(week[6].date)}.`}
+          title="Dashboard"
+          description={`Your next 7 days at a glance — ${shortDate(week[0].date)} to ${shortDate(week[6].date)}.`}
         />
         <Link
           to="/content"
