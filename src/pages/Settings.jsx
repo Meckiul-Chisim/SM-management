@@ -1,144 +1,144 @@
 import { useState } from 'react'
-import { Download, HardDrive, RotateCcw, Upload, WifiOff } from 'lucide-react'
+import BackupSection from '../components/settings/BackupSection.jsx'
 import Button from '../components/ui/Button.jsx'
 import Card from '../components/ui/Card.jsx'
+import ConfirmDialog from '../components/ui/ConfirmDialog.jsx'
+import { TextField } from '../components/ui/Field.jsx'
+import Notice from '../components/ui/Notice.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
-import { useWorkspace } from '../context/WorkspaceContext.jsx'
+import { validateWorkspaceName } from '../data/validators.js'
+import { countSampleRecords } from '../data/workspaceReducer.js'
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js'
+import { useToast } from '../hooks/useToast.js'
+import { useWorkspace } from '../hooks/useWorkspace.js'
+import { setAmbientEnabled, useAmbientEnabled } from '../utils/ambientPreference.js'
 
-function Settings() {
-  const { data, setWorkspaceName, replaceData, resetWorkspace } = useWorkspace()
-  const [name, setName] = useState(data.workspaceName || 'Haven')
-  const [saved, setSaved] = useState(false)
-  const [notice, setNotice] = useState('')
+const plural = (count, word) => `${count} ${word}${count === 1 ? '' : 's'}`
+
+// Remounted (via key) when the workspace name changes elsewhere, e.g. after an import.
+function WorkspaceNameForm({ name, onSave }) {
+  const [value, setValue] = useState(name)
   const [error, setError] = useState('')
 
-  function saveName(event) {
+  function submit(event) {
     event.preventDefault()
-    const trimmed = name.trim()
-    if (!trimmed) {
-      setError('Workspace name cannot be empty.')
-      return
+    const result = validateWorkspaceName(value)
+    setError(result.error)
+    if (!result.error) {
+      onSave(result.value)
+      setValue(result.value)
     }
-    setWorkspaceName(trimmed)
-    setName(trimmed)
-    setSaved(true)
-    setError('')
-    window.setTimeout(() => setSaved(false), 1800)
   }
 
-  function exportData() {
-    const file = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(file)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `haven-workspace-backup-${new Date().toISOString().slice(0, 10)}.json`
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
-    URL.revokeObjectURL(url)
-    setNotice('Workspace backup downloaded.')
-    setError('')
-  }
+  return (
+    <form onSubmit={submit} noValidate>
+      <TextField label="Workspace name" value={value} error={error} onChange={(event) => setValue(event.target.value)} hint="Shown in the sidebar and the browser tab." />
+      <Button type="submit" className="mt-4">Save name</Button>
+    </form>
+  )
+}
 
-  function importData(event) {
-    const file = event.target.files?.[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(String(reader.result))
-        if (!Array.isArray(parsed.brands) || !Array.isArray(parsed.posts) || !Array.isArray(parsed.interactions)) {
-          throw new Error('The file is not a recognised workspace backup.')
-        }
-        replaceData(parsed)
-        setName(parsed.workspaceName || 'Haven')
-        setNotice('Workspace backup restored in this browser.')
-        setError('')
-      } catch (importError) {
-        setError(importError.message || 'Could not import this backup.')
-        setNotice('')
-      } finally {
-        event.target.value = ''
-      }
-    }
-    reader.onerror = () => {
-      setError('The selected file could not be read.')
-      event.target.value = ''
-    }
-    reader.readAsText(file)
-  }
+function Settings() {
+  useDocumentTitle('Settings')
+  const { data, renameWorkspace, removeSampleData, resetToSample, clearWorkspace } = useWorkspace()
+  const toast = useToast()
+  const ambient = useAmbientEnabled()
+  const [confirm, setConfirm] = useState(null) // 'sample' | 'reset' | 'clear'
+  const sampleCount = countSampleRecords(data)
 
-  function reset() {
-    if (!window.confirm('Reset the workspace to the sample data? This replaces your current browser data. Export a backup first if needed.')) return
-    resetWorkspace()
-    setName('Haven')
-    setNotice('Workspace reset to sample data.')
-    setError('')
+  const actions = {
+    sample: {
+      title: 'Remove sample data?',
+      description: `This deletes the ${plural(sampleCount, 'sample record')}. Anything you created yourself is kept.`,
+      label: 'Remove sample data',
+      run: () => { removeSampleData(); toast.show('Sample data removed.') },
+    },
+    reset: {
+      title: 'Reset to sample data?',
+      description: 'Everything you have added in this browser will be replaced by the sample workspace. Export a backup first if you may need it.',
+      label: 'Reset workspace',
+      run: () => { resetToSample(); toast.show('Workspace reset to sample data.') },
+    },
+    clear: {
+      title: 'Delete all workspace data?',
+      description: 'All brands, posts and follow-ups in this browser will be deleted. The workspace name is kept. Export a backup first if you may need it.',
+      label: 'Delete everything',
+      run: () => { clearWorkspace(); toast.show('Workspace cleared.') },
+    },
   }
 
   return (
     <>
-      <PageHeader title="Settings" description="Personalise this workspace and keep a backup of the records stored in your browser." />
+      <PageHeader title="Settings" description="Name your workspace, back up your data and manage sample content." />
 
-      <div className="mb-5 notice notice-warning">
-        <WifiOff size={17} className="mr-2 inline" />
-        <strong>Local prototype:</strong> records are stored in this browser only. There is no sign-in, shared team sync, or live social account connection yet.
-      </div>
+      <Notice tone="warning" className="mb-6">
+        <strong>Local-only demo.</strong> Your data is saved in this browser only. There is no sign-in, cloud sync, team sharing or connection to social platforms.
+      </Notice>
 
       <div className="grid gap-5 xl:grid-cols-2">
         <Card className="p-5 sm:p-6">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-800"><HardDrive size={19} /></span>
-            <div>
-              <h2 className="font-semibold text-ink">Workspace profile</h2>
-              <p className="mt-1 text-xs text-muted">A name shown in the app navigation.</p>
-            </div>
-          </div>
-          <form onSubmit={saveName}>
-            <label className="field-label" htmlFor="workspace-name">Workspace name</label>
-            <input id="workspace-name" className="field" value={name} onChange={(event) => setName(event.target.value)} maxLength={60} />
-            {error && <p role="alert" className="mt-2 text-sm text-danger">{error}</p>}
-            <div className="mt-4 flex items-center gap-3">
-              <Button type="submit">Save workspace name</Button>
-              {saved && <span className="text-sm font-medium text-success">Saved</span>}
-            </div>
-          </form>
+          <h2 className="mb-4 font-semibold text-ink">Workspace</h2>
+          <WorkspaceNameForm key={data.workspaceName} name={data.workspaceName} onSave={(name) => { renameWorkspace(name); toast.show('Workspace name saved.') }} />
+          <p className="mt-4 text-xs text-muted">
+            {plural(data.brands.length, 'brand')} · {plural(data.posts.length, 'post')} · {plural(data.interactions.length, 'follow-up')}
+          </p>
+        </Card>
+
+        <BackupSection />
+
+        <Card className="p-5 sm:p-6">
+          <h2 className="font-semibold text-ink">Appearance</h2>
+          <label className="mt-3 flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={ambient}
+              onChange={(event) => setAmbientEnabled(event.target.checked)}
+              className="mt-1 size-4 accent-brand-700"
+            />
+            <span>
+              <span className="block text-sm font-medium text-ink">Animated background</span>
+              <span className="block text-sm leading-6 text-muted">The slow scene behind each page. Turn it off to save battery. It is already still if your device asks for reduced motion.</span>
+            </span>
+          </label>
         </Card>
 
         <Card className="p-5 sm:p-6">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-800"><Download size={19} /></span>
-            <div>
-              <h2 className="font-semibold text-ink">Backup & restore</h2>
-              <p className="mt-1 text-xs text-muted">Keep a portable copy of your local workspace data.</p>
-            </div>
+          <h2 className="font-semibold text-ink">Sample data</h2>
+          <p className="mt-1 text-sm leading-6 text-muted">
+            {sampleCount > 0
+              ? `This workspace contains ${plural(sampleCount, 'sample record')} (marked “Sample”), invented for demonstration.`
+              : 'There is no sample data in this workspace.'}
+          </p>
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <Button variant="secondary" disabled={sampleCount === 0} onClick={() => setConfirm('sample')}>Remove sample data</Button>
+            <Button variant="secondary" onClick={() => setConfirm('reset')}>Reset to sample data</Button>
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button onClick={exportData}><Download size={16} /> Export JSON</Button>
-            <label className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-line bg-panel-raised px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface">
-              <Upload size={16} /> Import backup
-              <input type="file" accept="application/json,.json" onChange={importData} className="sr-only" />
-            </label>
-          </div>
-          <p className="mt-4 text-xs leading-5 text-muted">Importing replaces the current workspace records. Only import a backup you trust.</p>
-          {notice && <p role="status" className="mt-3 notice notice-success">{notice}</p>}
-          {error && <p role="alert" className="mt-3 notice notice-danger">{error}</p>}
         </Card>
 
-        <Card className="p-5 xl:col-span-2 sm:p-6">
+        <Card className="border-danger p-5 sm:p-6 xl:col-span-2" glass={false}>
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h2 className="font-semibold text-ink">Reset sample workspace</h2>
-              <p className="mt-1 max-w-2xl text-sm leading-6 text-muted">Restore the illustrative example brands, posts, and follow-ups. This will replace your current local workspace data.</p>
+              <h2 className="font-semibold text-danger">Delete all data</h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-muted">Removes every brand, post and follow-up from this browser. This cannot be undone.</p>
             </div>
-            <Button variant="secondary" onClick={reset}><RotateCcw size={16} /> Reset workspace</Button>
+            <Button variant="danger" onClick={() => setConfirm('clear')}>Delete all data</Button>
           </div>
         </Card>
       </div>
 
-      <p className="mt-6 text-xs leading-5 text-muted">
-        Privacy note: the app does not send this prototype data to a backend. Anyone using the same browser profile may be able to access it. Do not store sensitive customer information until secure authentication and server-side access controls are implemented.
+      <p className="mt-6 max-w-3xl text-xs leading-5 text-muted">
+        Privacy: nothing you enter is sent to a server. Anyone using this browser profile may be able to read it. Do not store sensitive customer information in this demo.
       </p>
+
+      {confirm && (
+        <ConfirmDialog
+          title={actions[confirm].title}
+          description={actions[confirm].description}
+          confirmLabel={actions[confirm].label}
+          onConfirm={() => { actions[confirm].run(); setConfirm(null) }}
+          onCancel={() => setConfirm(null)}
+        />
+      )}
     </>
   )
 }

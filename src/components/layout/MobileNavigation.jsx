@@ -1,15 +1,24 @@
 import { NavLink } from 'react-router-dom'
 import { navigationItems } from '../../app/navigation.js'
 
+// Slide-down menu for screens below md. The layout closes it with Escape or when a link is chosen.
 function MobileNavigation({ open, onNavigate }) {
   return (
     <>
-      {open && <button type="button" aria-label="Close navigation overlay" onClick={onNavigate} className="fixed inset-0 top-16 z-20 bg-ink/30 md:hidden" />}
+      {open && (
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-label="Close navigation menu"
+          onClick={onNavigate}
+          className="fixed inset-0 top-16 z-20 bg-scrim md:hidden"
+        />
+      )}
       <nav
         id="mobile-navigation"
         aria-label="Mobile navigation"
         hidden={!open}
-        className="fixed inset-x-0 top-16 z-30 border-b border-line bg-canvas px-4 py-3 shadow-xl md:hidden"
+        className="fixed inset-x-0 top-16 z-30 max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-line bg-canvas px-4 py-3 shadow-xl md:hidden"
       >
         {navigationItems.map(({ label, to, icon: Icon }) => (
           <NavLink
@@ -18,9 +27,7 @@ function MobileNavigation({ open, onNavigate }) {
             onClick={onNavigate}
             className={({ isActive }) =>
               `mb-0.5 flex min-h-12 items-center gap-3 rounded-lg px-3 text-sm transition-colors ${
-                isActive
-                  ? 'bg-brand-50 font-semibold text-ink'
-                  : 'font-medium text-muted hover:bg-surface hover:text-ink'
+                isActive ? 'bg-brand-50 font-semibold text-ink' : 'font-medium text-muted hover:bg-surface hover:text-ink'
               }`
             }
           >

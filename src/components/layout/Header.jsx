@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import IconButton from '../ui/IconButton.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
-import { useWorkspace } from '../../context/WorkspaceContext.jsx'
+import { useWorkspace } from '../../hooks/useWorkspace.js'
 
 const pageNames = {
   '/dashboard': 'Dashboard',

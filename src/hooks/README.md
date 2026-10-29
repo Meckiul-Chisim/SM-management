@@ -1,4 +1,10 @@
 # Hooks
 
-Place reusable React hooks here when a real shared behavior needs one. The
-foundation currently has no custom hooks or business state.
+Small hooks shared across the app.
+
+| Hook | Purpose |
+| --- | --- |
+| `useWorkspace` | Reads the workspace (brands, posts, follow-ups) and the actions that change it. |
+| `useToast` | Shows a short confirmation message ("Post saved"). |
+| `useTheme` | Current theme (light/dark) and a function to switch it. |
+| `useDocumentTitle` | Sets the browser tab title for a page. |

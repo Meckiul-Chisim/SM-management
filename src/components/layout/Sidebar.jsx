@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { navigationItems } from '../../app/navigation.js'
-import { useWorkspace } from '../../context/WorkspaceContext.jsx'
+import { useWorkspace } from '../../hooks/useWorkspace.js'
 import Wordmark from './Wordmark.jsx'
 
 function Sidebar() {

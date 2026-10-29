@@ -3,7 +3,7 @@ import { CalendarDays, ClipboardPenLine, Inbox, Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Card from '../components/ui/Card.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
-import { useWorkspace } from '../context/WorkspaceContext.jsx'
+import { useWorkspace } from '../hooks/useWorkspace.js'
 import { DEFAULT_BRAND_COLOUR } from '../utils/colour.js'
 
 const pad = (value) => String(value).padStart(2, '0')

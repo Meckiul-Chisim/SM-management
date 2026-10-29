@@ -1,141 +1,174 @@
 import { useMemo, useState } from 'react'
-import { ChevronLeft, ChevronRight, Clock3, Plus } from 'lucide-react'
+import { CalendarDays, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Badge from '../components/ui/Badge.jsx'
 import Button from '../components/ui/Button.jsx'
+import ButtonLink from '../components/ui/ButtonLink.jsx'
 import Card from '../components/ui/Card.jsx'
+import Notice from '../components/ui/Notice.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
-import { useWorkspace } from '../context/WorkspaceContext.jsx'
+import StatusBadge from '../components/ui/StatusBadge.jsx'
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js'
+import { useWorkspace } from '../hooks/useWorkspace.js'
+import { getMonthGrid, getWeekdayLabels, getWeekStart, groupPostsByDate, shiftMonth } from '../utils/calendar.js'
 import { DEFAULT_BRAND_COLOUR } from '../utils/colour.js'
+import { formatTime, fromDateKey, isPast, toDateKey } from '../utils/dates.js'
 
-const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const pad = (value) => String(value).padStart(2, '0')
-const keyForDate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+const monthKey = ({ year, month }) => `${year}-${String(month + 1).padStart(2, '0')}`
 
 function MarketingCalendar() {
+  useDocumentTitle('Content calendar')
   const { data } = useWorkspace()
-  const [month, setMonth] = useState(() => {
-    const today = new Date()
-    return new Date(today.getFullYear(), today.getMonth(), 1)
+  const weekStart = useMemo(() => getWeekStart(), [])
+  const today = toDateKey(new Date())
+
+  const [view, setView] = useState(() => {
+    const now = new Date()
+    return { year: now.getFullYear(), month: now.getMonth() }
   })
-  const monthLabel = month.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+  const [selected, setSelected] = useState(today)
 
-  const days = useMemo(() => {
-    const first = new Date(month.getFullYear(), month.getMonth(), 1)
-    const start = new Date(first)
-    start.setDate(first.getDate() - first.getDay())
-    return Array.from({ length: 42 }, (_, index) => {
-      const day = new Date(start)
-      day.setDate(start.getDate() + index)
-      return day
-    })
-  }, [month])
+  const grid = useMemo(() => getMonthGrid(view.year, view.month, weekStart), [view, weekStart])
+  const weekdays = useMemo(() => getWeekdayLabels(weekStart), [weekStart])
+  const postsByDate = useMemo(() => groupPostsByDate(data.posts), [data.posts])
+  const brandColour = (id) => data.brands.find((brand) => brand.id === id)?.color || DEFAULT_BRAND_COLOUR
+  const brandName = (id) => data.brands.find((brand) => brand.id === id)?.name || 'General workspace'
 
-  const postsByDate = useMemo(() => {
-    const map = new Map()
-    for (const post of data.posts) {
-      if (!post.scheduledAt) continue
-      const dateKey = post.scheduledAt.slice(0, 10)
-      map.set(dateKey, [...(map.get(dateKey) || []), post])
-    }
-    return map
-  }, [data.posts])
-
-  const currentMonthPosts = data.posts
-    .filter((post) => post.scheduledAt && post.scheduledAt.slice(0, 7) === `${month.getFullYear()}-${pad(month.getMonth() + 1)}`)
+  const monthTitle = new Date(view.year, view.month, 1).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+  const monthPosts = data.posts
+    .filter((post) => post.scheduledAt.slice(0, 7) === monthKey(view))
     .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
+  const dayPosts = postsByDate[selected] || []
+
+  function goToMonth(next) {
+    setView(next)
+    // Keep the selection inside the visible month: today if it is there, otherwise the 1st.
+    const todayIsVisible = monthKey(next) === today.slice(0, 7)
+    setSelected(todayIsVisible ? today : `${monthKey(next)}-01`)
+  }
+
+  const selectedLabel = fromDateKey(selected)?.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
     <>
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <PageHeader title="Content calendar" description="See what is planned and keep your posting rhythm visible." />
-        <Link to="/content" className="mb-7 inline-flex min-h-10 items-center justify-center gap-2 self-start rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-on-brand transition-colors hover:bg-brand-800 sm:self-auto">
-          <Plus size={17} /> Plan a post
-        </Link>
-      </div>
+      <PageHeader
+        title="Content calendar"
+        description="See what you have planned and keep your posting rhythm visible."
+        actions={<ButtonLink to={`/content?new=1&date=${selected}`}><Plus size={17} aria-hidden="true" /> Plan a post</ButtonLink>}
+      />
 
-      <div className="mb-5 notice notice-info">
-        The calendar displays dates saved in your workspace. It does not mean a platform has accepted or scheduled the post.
-      </div>
+      <Notice tone="info" className="mb-5">
+        The calendar shows plans saved in this app. A platform has not accepted or scheduled these posts: copy the text and post it yourself.
+      </Notice>
 
       <Card className="overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-4 sm:px-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3 sm:px-5">
           <div>
-            <h2 className="font-semibold text-ink">{monthLabel}</h2>
-            <p className="mt-1 text-xs text-muted">{currentMonthPosts.length} planned item{currentMonthPosts.length === 1 ? '' : 's'} this month</p>
+            <h2 className="font-semibold text-ink" aria-live="polite">{monthTitle}</h2>
+            <p className="text-xs text-muted">{monthPosts.length} {monthPosts.length === 1 ? 'post' : 'posts'} with a date this month</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="secondary" className="min-h-9 px-3" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))} aria-label="Previous month"><ChevronLeft size={17} /></Button>
-            <Button variant="secondary" className="min-h-9 px-3" onClick={() => { const today = new Date(); setMonth(new Date(today.getFullYear(), today.getMonth(), 1)) }}>Today</Button>
-            <Button variant="secondary" className="min-h-9 px-3" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))} aria-label="Next month"><ChevronRight size={17} /></Button>
+            <Button variant="secondary" size="sm" aria-label="Previous month" onClick={() => goToMonth(shiftMonth(view, -1))}><ChevronLeft size={17} aria-hidden="true" /></Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => { const now = new Date(); setView({ year: now.getFullYear(), month: now.getMonth() }); setSelected(today) }}
+            >
+              Today
+            </Button>
+            <Button variant="secondary" size="sm" aria-label="Next month" onClick={() => goToMonth(shiftMonth(view, 1))}><ChevronRight size={17} aria-hidden="true" /></Button>
           </div>
         </div>
-        <div className="grid grid-cols-7 border-b border-line bg-surface/70">
-          {weekdayNames.map((day) => <div key={day} className="px-1 py-2 text-center text-xs font-medium text-muted sm:px-2">{day}</div>)}
-        </div>
-        <div className="grid grid-cols-7">
-          {days.map((day) => {
-            const key = keyForDate(day)
-            const inMonth = day.getMonth() === month.getMonth()
-            const isToday = key === keyForDate(new Date())
-            const dayPosts = postsByDate.get(key) || []
-            return (
-              <div key={key} className={`min-h-24 border-b border-r border-line p-1.5 sm:min-h-32 sm:p-2 ${inMonth ? 'bg-panel' : 'bg-surface/60'}`}>
-                <div className="mb-1 flex justify-center sm:justify-start">
-                  <span className={`flex size-6 items-center justify-center rounded-full text-xs ${isToday ? 'bg-brand-700 font-semibold text-on-brand' : inMonth ? 'text-ink' : 'text-faint'}`}>{day.getDate()}</span>
-                </div>
-                <div className="space-y-1">
-                  {dayPosts.slice(0, 2).map((post) => (
-                    <Link
-                      key={post.id}
-                      to="/content"
-                      title={post.title}
-                      style={{ '--spine-colour': data.brands.find((item) => item.id === post.brandId)?.color || DEFAULT_BRAND_COLOUR }}
-                      className={`spine block truncate rounded-r-md px-1.5 py-1 text-[10px] leading-4 sm:text-xs ${post.status === 'Published' ? 'bg-success-bg text-success' : 'bg-surface text-ink'}`}
-                    >
-                      {post.title || post.platform}
-                    </Link>
-                  ))}
-                  {dayPosts.length > 2 && <p className="px-1 text-[10px] text-muted">+{dayPosts.length - 2} more</p>}
-                </div>
-              </div>
-            )
-          })}
-        </div>
+
+        <table className="w-full table-fixed border-collapse">
+          <caption className="sr-only">Posts planned in {monthTitle}. Choose a day to see its posts.</caption>
+          <thead>
+            <tr className="border-b border-line bg-surface/70">
+              {weekdays.map((day) => <th key={day} scope="col" className="px-1 py-2 text-center text-xs font-medium text-muted">{day}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {grid.map((week) => (
+              <tr key={week[0].key}>
+                {week.map((cell) => {
+                  const posts = postsByDate[cell.key] || []
+                  const isSelected = cell.key === selected
+                  const isToday = cell.key === today
+                  const label = `${fromDateKey(cell.key).toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}${posts.length ? `, ${posts.length} ${posts.length === 1 ? 'post' : 'posts'}` : ''}`
+                  return (
+                    <td key={cell.key} className={`border-b border-r border-line p-0 align-top last:border-r-0 ${cell.inMonth ? 'bg-panel' : 'bg-surface/60'}`}>
+                      <button
+                        type="button"
+                        aria-label={label}
+                        aria-pressed={isSelected}
+                        aria-current={isToday ? 'date' : undefined}
+                        onClick={() => { setSelected(cell.key); if (!cell.inMonth) { const date = fromDateKey(cell.key); setView({ year: date.getFullYear(), month: date.getMonth() }) } }}
+                        className={`flex h-16 w-full flex-col items-center gap-1 p-1.5 text-left hover:bg-brand-50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-700 sm:h-28 sm:items-stretch sm:p-2 ${isSelected ? 'bg-brand-50' : ''}`}
+                      >
+                        <span
+                          className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs ${isToday ? 'bg-brand-700 font-semibold text-on-brand' : cell.inMonth ? 'text-ink' : 'text-muted'} ${isSelected && !isToday ? 'ring-1 ring-brand-700' : ''}`}
+                        >
+                          {cell.day}
+                        </span>
+                        {/* Small screens: coloured dots. Larger screens: the post titles. */}
+                        <span className="flex gap-0.5 sm:hidden" aria-hidden="true">
+                          {posts.slice(0, 3).map((post) => <span key={post.id} className="size-1.5 rounded-full" style={{ backgroundColor: brandColour(post.brandId) }} />)}
+                        </span>
+                        <span className="hidden min-w-0 flex-col gap-1 sm:flex" aria-hidden="true">
+                          {posts.slice(0, 2).map((post) => (
+                            <span
+                              key={post.id}
+                              className={`spine block truncate rounded-r-md px-1.5 py-0.5 text-xs leading-4 ${post.status === 'Published' ? 'bg-success-bg text-success' : 'bg-surface text-ink'}`}
+                              style={{ '--spine-colour': brandColour(post.brandId) }}
+                            >
+                              {post.title}
+                            </span>
+                          ))}
+                          {posts.length > 2 && <span className="px-1 text-xs text-muted">+{posts.length - 2} more</span>}
+                        </span>
+                      </button>
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </Card>
 
-      <div className="mb-3 mt-7 flex items-center justify-between gap-3">
-        <h2 className="text-base font-semibold text-ink">Planned this month</h2>
-        <Badge>{currentMonthPosts.length} posts</Badge>
-      </div>
-      {currentMonthPosts.length ? (
-        <div className="space-y-3">
-          {currentMonthPosts.map((post) => {
-            const brand = data.brands.find((item) => item.id === post.brandId)
-            return (
-              <Card key={post.id} className="spine flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:p-5" style={{ '--spine-colour': brand?.color || DEFAULT_BRAND_COLOUR }}>
-                <div className="sm:w-40">
-                  <div>
-                    <p className="font-display text-base font-semibold tracking-tight text-ink">{new Date(post.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</p>
-                    <p className="text-xs text-muted">{new Date(post.scheduledAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</p>
-                  </div>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-ink">{post.title || 'Untitled post'}</p>
-                  <p className="mt-1 truncate text-xs text-muted">{brand?.name || 'General workspace'} · {post.platform}</p>
-                </div>
-                <Badge>{post.status}</Badge>
-              </Card>
-            )
-          })}
+      <section aria-labelledby="day-heading" className="mt-6">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <h2 id="day-heading" className="text-base font-semibold text-ink">{selectedLabel}</h2>
+          <Link to={`/content?new=1&date=${selected}`} className="text-sm font-semibold text-brand-800 underline-offset-4 hover:underline">Plan a post for this day</Link>
         </div>
-      ) : (
-        <Card className="flex flex-col items-center px-6 py-8 text-center">
-          <Clock3 size={23} className="text-faint" />
-          <p className="mt-3 text-sm font-semibold text-ink">No posts planned for this month</p>
-          <p className="mt-1 text-sm text-muted">Create a post and give it a planned date to add it to this calendar.</p>
-        </Card>
-      )}
+        {dayPosts.length ? (
+          <ul className="space-y-2">
+            {dayPosts.map((post) => (
+              <li key={post.id}>
+                <Link
+                  to={`/content?post=${post.id}`}
+                  className="spine flex items-center gap-3 rounded-r-xl border border-l-0 border-line bg-panel p-4 transition-colors hover:bg-surface"
+                  style={{ '--spine-colour': brandColour(post.brandId) }}
+                >
+                  <span className="w-16 shrink-0 text-sm font-semibold text-ink">{formatTime(post.scheduledAt)}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-semibold text-ink">{post.title}</span>
+                    <span className="block truncate text-xs text-muted">{brandName(post.brandId)} · {post.platform}</span>
+                  </span>
+                  {post.status === 'Planned' && isPast(post.scheduledAt) && <Badge tone="warning">Date passed</Badge>}
+                  <StatusBadge status={post.status} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Card className="flex flex-col items-center px-6 py-8 text-center" glass={false}>
+            <CalendarDays size={22} className="text-muted" aria-hidden="true" />
+            <p className="mt-2 text-sm font-semibold text-ink">Nothing planned for this day</p>
+            <p className="mt-1 text-sm text-muted">Give a post a planned date and it appears here.</p>
+          </Card>
+        )}
+      </section>
     </>
   )
 }
