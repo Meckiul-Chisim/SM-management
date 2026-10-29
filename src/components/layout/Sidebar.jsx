@@ -8,8 +8,8 @@ function Sidebar() {
   const { data } = useWorkspace()
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-canvas px-4 py-6 md:flex">
-      <Link to="/dashboard" className="mb-8 block rounded-lg px-2 py-1" aria-label="Go to dashboard">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-[15.5rem] flex-col border-r border-line bg-panel px-3 py-5 md:flex">
+      <Link to="/dashboard" className="mb-7 block rounded-lg px-3 py-1" aria-label="Go to dashboard">
         <Wordmark name={data.workspaceName || 'Haven'} />
       </Link>
 
@@ -19,16 +19,18 @@ function Sidebar() {
             key={to}
             to={to}
             className={({ isActive }) =>
-              `flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm transition-colors duration-150 ${
+              `flex min-h-11 items-center gap-3 rounded-md px-3 text-sm transition-colors duration-150 ${
                 isActive
-                  ? 'bg-brand-50 font-semibold text-ink'
-                  : 'font-medium text-muted hover:bg-surface hover:text-ink'
+                  ? 'border-l-2 border-brand-700 bg-brand-50 font-semibold text-ink'
+                  : 'border-l-2 border-transparent font-medium text-muted hover:bg-surface hover:text-ink'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <Icon size={17} strokeWidth={1.75} aria-hidden="true" className={isActive ? 'text-brand-700' : ''} />
+                <span className={`flex size-6 items-center justify-center rounded-md ${isActive ? 'text-brand-700' : ''}`}>
+                  <Icon size={17} strokeWidth={1.75} aria-hidden="true" />
+                </span>
                 <span className="flex-1">{label}</span>
               </>
             )}

@@ -14,20 +14,20 @@
     on-brand                   text that sits on a brand-700 fill
 */
 @theme {
-  --color-canvas: #f6f7f3;
-  --color-surface: #eff2ec;
+  --color-canvas: #f5f6f8;
+  --color-surface: #eef1f5;
   --color-panel: #ffffff;
   --color-panel-raised: #ffffff;
-  --color-line: #e2e7e0;
-  --color-ink: #17231e;
-  --color-muted: #576a61;
-  --color-faint: #5f7167;
+  --color-line: #e3e6eb;
+  --color-ink: #17191d;
+  --color-muted: #69707a;
+  --color-faint: #9298a2;
 
-  --color-brand-50: #e3efe7;
-  --color-brand-100: #c3d9ca;
-  --color-brand-700: #2e6b4f;
-  --color-brand-800: #245640;
-  --color-brand-900: #17231e;
+  --color-brand-50: #edf4ff;
+  --color-brand-100: #d7e6fb;
+  --color-brand-700: #246bfe;
+  --color-brand-800: #1758d8;
+  --color-brand-900: #143a7a;
   --color-on-brand: #ffffff;
 
   --color-info-bg: #e4edf5;
@@ -46,21 +46,21 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-canvas: #0f1613;
-  --color-surface: #141d19;
-  --color-panel: #17211c;
-  --color-panel-raised: #1c2822;
-  --color-line: #26342d;
-  --color-ink: #eaf1ec;
-  --color-muted: #9db0a5;
-  --color-faint: #71857a;
+  --color-canvas: #101214;
+  --color-surface: #17191d;
+  --color-panel: #1a1d21;
+  --color-panel-raised: #21242a;
+  --color-line: #2b2f36;
+  --color-ink: #f4f5f7;
+  --color-muted: #a9aebb;
+  --color-faint: #777d88;
 
-  --color-brand-50: #1d3329;
-  --color-brand-100: #2c4a3c;
-  --color-brand-700: #7cc6a0;
-  --color-brand-800: #a6dbc0;
-  --color-brand-900: #eaf1ec;
-  --color-on-brand: #0f1613;
+  --color-brand-50: #1b293f;
+  --color-brand-100: #253b60;
+  --color-brand-700: #6e9cff;
+  --color-brand-800: #91b5ff;
+  --color-brand-900: #dbe8ff;
+  --color-on-brand: #0d1625;
 
   --color-info-bg: #172a39;
   --color-info: #a5d0ee;

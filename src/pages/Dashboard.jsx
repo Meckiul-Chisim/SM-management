@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Plus } from 'lucide-react'
+import { CalendarDays, ClipboardPenLine, Inbox, Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Card from '../components/ui/Card.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
@@ -60,6 +60,24 @@ function Dashboard() {
         >
           <Plus size={16} aria-hidden="true" /> New post
         </Link>
+      </div>
+
+      <div className="mb-5 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
+        {[
+          { label: 'Scheduled', value: data.posts.filter((post) => post.scheduledAt).length, icon: CalendarDays },
+          { label: 'Drafts & ready', value: drafts.length, icon: ClipboardPenLine },
+          { label: 'Follow-ups open', value: followUps.length, icon: Inbox },
+        ].map(({ label, value, icon: Icon }) => (
+          <div key={label} className="flex items-center gap-3 bg-panel px-4 py-3.5">
+            <span className="flex size-9 items-center justify-center rounded-md bg-surface text-brand-700">
+              <Icon size={17} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <span>
+              <strong className="block font-display text-xl leading-none text-ink">{value}</strong>
+              <span className="block mt-1 text-xs font-medium text-muted">{label}</span>
+            </span>
+          </div>
+        ))}
       </div>
 
       <Card className="divide-y divide-line overflow-hidden lg:grid lg:grid-cols-7 lg:divide-x lg:divide-y-0">

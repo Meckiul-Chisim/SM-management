@@ -7,7 +7,7 @@ function Card({ children, className = '', tone = 'default', ...props }) {
 
   return (
     <section
-      className={`rounded-xl border ${toneClass} ${className}`}
+      className={`rounded-lg border ${toneClass} ${className}`}
       {...props}
     >
       {children}

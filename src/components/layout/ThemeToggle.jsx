@@ -9,9 +9,24 @@ function ThemeToggle() {
   const isDark = theme === 'dark'
 
   return (
-    <IconButton label={isDark ? 'Switch to light theme' : 'Switch to dark theme'} onClick={toggleTheme}>
-      {isDark ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
-    </IconButton>
+    <div className="flex items-center rounded-lg border border-line bg-surface p-1" role="group" aria-label="Theme">
+      <IconButton
+        label="Use light theme"
+        aria-pressed={!isDark}
+        onClick={() => !isDark || toggleTheme()}
+        className={`!size-7 !rounded-md ${!isDark ? '!bg-panel !shadow-sm !text-brand-800' : '!border-transparent !text-faint'}`}
+      >
+        <Sun size={15} aria-hidden="true" />
+      </IconButton>
+      <IconButton
+        label="Use dark theme"
+        aria-pressed={isDark}
+        onClick={() => isDark || toggleTheme()}
+        className={`!size-7 !rounded-md ${isDark ? '!bg-panel !shadow-sm !text-brand-800' : '!border-transparent !text-faint'}`}
+      >
+        <Moon size={15} aria-hidden="true" />
+      </IconButton>
+    </div>
   )
 }
 
