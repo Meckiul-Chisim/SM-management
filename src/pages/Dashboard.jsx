@@ -49,7 +49,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div className="haven-dashboard-intro flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <PageHeader
           title="Next 7 days"
           description={`Posts planned from ${shortDate(week[0].date)} to ${shortDate(week[6].date)}.`}
@@ -62,7 +62,7 @@ function Dashboard() {
         </Link>
       </div>
 
-      <div className="mb-5 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
+      <div className="haven-metrics mb-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
         {[
           { label: 'Scheduled', value: data.posts.filter((post) => post.scheduledAt).length, icon: CalendarDays },
           { label: 'Drafts & ready', value: drafts.length, icon: ClipboardPenLine },
@@ -80,7 +80,7 @@ function Dashboard() {
         ))}
       </div>
 
-      <Card className="divide-y divide-line overflow-hidden lg:grid lg:grid-cols-7 lg:divide-x lg:divide-y-0">
+      <Card className="haven-week-card divide-y divide-line overflow-hidden lg:grid lg:grid-cols-7 lg:divide-x lg:divide-y-0">
         {week.map(({ date, key }, index) => {
           const posts = postsByDay.get(key) || []
           const isToday = index === 0
@@ -123,7 +123,7 @@ function Dashboard() {
         })}
       </Card>
 
-      <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
+      <div className="haven-secondary-grid mt-10 grid gap-8 lg:grid-cols-2 lg:gap-8">
         <section aria-labelledby="drafts-heading">
           <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-line pb-3">
             <h2 id="drafts-heading" className="text-lg font-semibold text-ink">
