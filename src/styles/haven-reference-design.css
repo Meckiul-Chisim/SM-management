@@ -323,3 +323,23 @@ body { background-color: var(--haven-bg); }
   .haven-page-content .rounded-xl,
   .haven-page-content .rounded-2xl { border-radius: var(--haven-radius-md); }
 }
+
+
+/* Workspace shell alignment and keyboard accessibility. */
+.haven-skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-180%);
+  border: 1px solid var(--haven-line);
+  border-radius: 0.65rem;
+  background: var(--haven-panel-solid);
+  color: var(--haven-ink);
+  padding: 0.7rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 650;
+  box-shadow: 0 12px 32px -16px var(--haven-shadow);
+}
+.haven-skip-link:focus { transform: translateY(0); }
+#main-content:focus { outline: none; }
