@@ -6,7 +6,6 @@ import MainContent from './MainContent.jsx'
 import MobileNavigation from './MobileNavigation.jsx'
 import Sidebar from './Sidebar.jsx'
 
-const SIDEBAR_WIDTH = '16.25rem'
 const SCENE_FADE = 'linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.18) 75%, rgba(0,0,0,0) 100%)'
 
 function AppLayout() {
