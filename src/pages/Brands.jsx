@@ -62,13 +62,14 @@ function Brands() {
         <ul className="grid gap-4 lg:grid-cols-2">
           {data.brands.map((brand) => {
             const counts = countBrandRecords(data, brand.id)
+            const brandColour = brand.color || DEFAULT_BRAND_COLOUR
             return (
               <li key={brand.id}>
-                <Card as="article" className="h-full overflow-hidden" aria-labelledby={`brand-${brand.id}`}>
+                <Card as="article" className="flex h-full flex-col overflow-hidden" aria-labelledby={`brand-${brand.id}`}>
                   <div className="flex items-start gap-4 p-5">
                     <span
                       className="flex size-11 shrink-0 items-center justify-center rounded-lg font-display text-lg font-semibold"
-                      style={{ backgroundColor: brand.color || DEFAULT_BRAND_COLOUR, color: readableTextColour(brand.color) }}
+                      style={{ backgroundColor: brandColour, color: readableTextColour(brandColour) }}
                       aria-hidden="true"
                     >
                       {brand.name.trim().slice(0, 1).toUpperCase()}
@@ -110,7 +111,7 @@ function Brands() {
                       </button>
                     </div>
                   </div>
-                  <div className="border-t border-line bg-surface/60 p-4">
+                  <div className="flex-1 border-t border-line bg-surface/60 p-4">
                     {brand.accounts.length ? (
                       <ul className="space-y-2">
                         {brand.accounts.map((account) => (
