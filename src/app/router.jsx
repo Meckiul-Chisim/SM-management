@@ -7,6 +7,8 @@ import Engagement from '../pages/Engagement.jsx'
 import NotFound from '../pages/NotFound.jsx'
 import Brands from '../pages/Brands.jsx'
 import Settings from '../pages/Settings.jsx'
+import Insights from '../pages/Insights.jsx'
+import Roadmap from '../pages/Roadmap.jsx'
 import RouteError from '../pages/RouteError.jsx'
 
 // Old addresses from earlier versions still work and redirect to the current pages.
@@ -24,6 +26,8 @@ export const routes = [
       { path: 'calendar', element: <Calendar /> },
       { path: 'engagement', element: <Engagement /> },
       { path: 'inquiries', element: <Navigate to="/engagement" replace /> },
+      { path: 'insights', element: <Insights /> },
+      { path: 'roadmap', element: <Roadmap /> },
       { path: 'settings', element: <Settings /> },
       { path: '*', element: <NotFound /> },
     ],

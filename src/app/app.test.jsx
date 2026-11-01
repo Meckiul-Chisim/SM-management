@@ -257,3 +257,73 @@ describe('settings: import and persistence', () => {
     expect(saved().workspaceName).toBe('Studio One')
   })
 })
+
+describe('upgrade: new pages and quick actions', () => {
+  it('opens the new Insights and Roadmap pages from the sidebar', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    const nav = screen.getByRole('navigation', { name: 'Main navigation' })
+    await user.click(within(nav).getByRole('link', { name: 'Insights' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Insights' })).toBeInTheDocument()
+    expect(screen.getByText(/not social platform analytics/i)).toBeInTheDocument()
+    await user.click(within(nav).getByRole('link', { name: 'Roadmap' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Roadmap' })).toBeInTheDocument()
+    // Honest: every roadmap item says it is not built, and none offers a fake button.
+    expect(screen.getAllByText('Not built yet')).toHaveLength(8)
+    expect(within(screen.getByRole('main')).queryByRole('button')).toBeNull()
+  })
+
+  it('opens quick actions with Ctrl+K and navigates with the keyboard', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await user.keyboard('{Control>}k{/Control}')
+    const box = await screen.findByRole('combobox', { name: /search actions/i })
+    expect(box).toHaveFocus()
+    await user.type(box, 'engage')
+    await user.keyboard('{Enter}')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Engagement' })).toBeInTheDocument()
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
+
+  it('finds a post from quick actions', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await user.keyboard('{Control>}k{/Control}')
+    await user.type(await screen.findByRole('combobox'), 'weekend')
+    await user.click(await screen.findByRole('option', { name: /Weekend edit/ }))
+    expect(await screen.findByRole('dialog', { name: /edit post/i })).toBeInTheDocument()
+  })
+})
+
+describe('upgrade: content studio', () => {
+  it('shows the pipeline board and moves a post forward a stage', async () => {
+    const user = userEvent.setup()
+    renderApp('/content?view=board')
+    const draftColumn = screen.getByRole('region', { name: /Draft/ })
+    expect(within(draftColumn).getByText('A little introduction')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /Move A little introduction forward to Ready/ }))
+    expect(within(screen.getByRole('region', { name: /Ready/ })).getByText('A little introduction')).toBeInTheDocument()
+    expect(saved().posts.find((post) => post.id === 'post-welcome').status).toBe('Ready')
+  })
+
+  it('duplicates a post as a new draft with no date', async () => {
+    const user = userEvent.setup()
+    renderApp('/content')
+    await user.click(screen.getAllByRole('button', { name: /Duplicate/ })[0])
+    const copies = saved().posts.filter((post) => post.title.endsWith('(copy)'))
+    expect(copies).toHaveLength(1)
+    expect(copies[0]).toMatchObject({ status: 'Draft', scheduledAt: '', isSample: false })
+  })
+
+  it('undoes a deleted post', async () => {
+    const user = userEvent.setup()
+    renderApp('/content')
+    const before = saved().posts.length
+    await user.click(screen.getByRole('button', { name: 'Delete Weekend edit' }))
+    await user.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Delete' }))
+    expect(saved().posts).toHaveLength(before - 1)
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(saved().posts).toHaveLength(before)
+    expect(saved().posts.some((post) => post.id === 'post-weekend')).toBe(true)
+  })
+})

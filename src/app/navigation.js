@@ -1,5 +1,7 @@
 import {
+  BarChart3,
   CalendarDays,
+  Compass,
   LayoutDashboard,
   MessageSquareText,
   Settings2,
@@ -18,5 +20,7 @@ export const navigationItems = [
   { label: 'Content studio', to: '/content', icon: Sparkles },
   { label: 'Content calendar', to: '/calendar', icon: CalendarDays },
   { label: 'Engagement', to: '/engagement', icon: MessageSquareText },
-  { label: 'Settings', to: '/settings', icon: Settings2 },
+  { label: 'Insights', to: '/insights', icon: BarChart3 },
+  { label: 'Roadmap', to: '/roadmap', icon: Compass, secondary: true },
+  { label: 'Settings', to: '/settings', icon: Settings2, secondary: true },
 ]

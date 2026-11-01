@@ -2,21 +2,31 @@ import { useEffect, useState } from 'react'
 import { Outlet, ScrollRestoration } from 'react-router-dom'
 import Notice from '../ui/Notice.jsx'
 import { useWorkspace } from '../../hooks/useWorkspace.js'
-import AmbientBackground from '../ui/AmbientBackground.jsx'
+import VideoBackground from '../ui/VideoBackground.jsx'
+import CommandPalette from './CommandPalette.jsx'
 import Header from './Header.jsx'
 import MainContent from './MainContent.jsx'
 import MobileNavigation from './MobileNavigation.jsx'
 import Sidebar from './Sidebar.jsx'
 import { useAmbientEnabled } from '../../utils/ambientPreference.js'
 
-// Strong at the top, where the page is mostly empty, and soft further down,
-// where lists and forms need to stay easy to read.
-const SCENE_FADE = 'linear-gradient(to bottom, #000 0%, #000 25%, rgba(0,0,0,0.22) 60%, rgba(0,0,0,0.1) 100%)'
-
 function AppLayout() {
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false)
+  const [paletteOpen, setPaletteOpen] = useState(false)
   const { notice, dismissNotice, saveFailed } = useWorkspace()
   const ambientEnabled = useAmbientEnabled()
+
+  // Ctrl/Cmd+K opens quick actions from anywhere.
+  useEffect(() => {
+    function onKeyDown(event) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setPaletteOpen((open) => !open)
+      }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [])
 
   // Escape closes the mobile menu and puts focus back on the button that opened it.
   useEffect(() => {
@@ -43,15 +53,18 @@ function AppLayout() {
         right of the sidebar on desktop, and everything else is raised above it.
       */}
       <div
-        className="pointer-events-none fixed inset-y-0 right-0 left-0 z-0 overflow-hidden md:left-60"
-        style={{ maskImage: SCENE_FADE, WebkitMaskImage: SCENE_FADE }}
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
         aria-hidden="true"
       >
-        {ambientEnabled && <AmbientBackground />}
+        {ambientEnabled && <VideoBackground />}
+        {/* A soft veil keeps text comfortable to read over moving light. */}
+        <div className="absolute inset-0 bg-gradient-to-b from-canvas/10 via-canvas/40 to-canvas/70" />
       </div>
+      {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
       <Sidebar />
       <div className="relative z-[1] min-h-screen min-w-0 md:pl-60">
         <Header
+          onQuickActions={() => setPaletteOpen(true)}
           onMenuClick={() => setMobileNavigationOpen((open) => !open)}
           menuExpanded={mobileNavigationOpen}
         />

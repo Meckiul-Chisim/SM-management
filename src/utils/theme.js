@@ -10,7 +10,7 @@
 export const THEME_STORAGE_KEY = 'haven-theme'
 
 // Browser UI colour on phones (the address bar), per theme.
-const THEME_COLOURS = { light: '#f6f7f3', dark: '#0f1613' }
+const THEME_COLOURS = { light: '#faf6ee', dark: '#12100d' }
 
 // The theme the person chose, or null if they have not chosen one yet.
 export function getStoredTheme() {

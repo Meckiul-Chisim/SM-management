@@ -1,4 +1,4 @@
-import { Check, Copy, Layers, Pencil, Trash2 } from 'lucide-react'
+import { Check, Copy, CopyPlus, Layers, Pencil, Trash2 } from 'lucide-react'
 import Button from '../ui/Button.jsx'
 import Card from '../ui/Card.jsx'
 import Badge from '../ui/Badge.jsx'
@@ -8,18 +8,18 @@ import { formatDateTime } from '../../utils/dates.js'
 
 // One post. The status can be changed right here; moving to Planned without a date
 // opens the editor so a date can be chosen (a plan always needs a date).
-function PostCard({ post, brand, copied, highlighted, onCopy, onEdit, onRepurpose, onDelete, onStatusChange }) {
+function PostCard({ post, brand, copied, highlighted, onCopy, onEdit, onRepurpose, onDuplicate, onDelete, onStatusChange }) {
   return (
     <Card
       as="article"
       id={`post-${post.id}`}
       aria-labelledby={`post-title-${post.id}`}
-      className={`spine flex min-w-0 flex-col p-5 ${highlighted ? 'ring-2 ring-brand-700' : ''}`}
+      className={`spine lift flex min-w-0 flex-col p-5 ${highlighted ? 'ring-2 ring-brand-700' : ''}`}
       style={{ '--spine-colour': brand?.color || DEFAULT_BRAND_COLOUR }}
     >
       <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
-          <h2 id={`post-title-${post.id}`} className="break-words font-semibold text-ink">{post.title}</h2>
+          <h2 id={`post-title-${post.id}`} className="break-words font-sans text-base font-semibold tracking-normal text-ink">{post.title}</h2>
           <p className="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-muted">
             <span className="truncate">{brand?.name || 'General workspace'}</span>
             <span aria-hidden="true">·</span>
@@ -55,6 +55,7 @@ function PostCard({ post, brand, copied, highlighted, onCopy, onEdit, onRepurpos
           </Button>
           <Button variant="ghost" size="sm" onClick={onEdit}><Pencil size={15} aria-hidden="true" /> Edit</Button>
           <Button variant="ghost" size="sm" onClick={onRepurpose}><Layers size={15} aria-hidden="true" /> Repurpose</Button>
+          <Button variant="ghost" size="sm" onClick={onDuplicate}><CopyPlus size={15} aria-hidden="true" /> Duplicate</Button>
           <button
             type="button"
             aria-label={`Delete ${post.title}`}

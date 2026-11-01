@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Pencil, Plus, Trash2, UsersRound } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import BrandFormModal from '../components/brands/BrandFormModal.jsx'
 import DeleteBrandDialog from '../components/brands/DeleteBrandDialog.jsx'
 import Badge from '../components/ui/Badge.jsx'
@@ -21,6 +21,16 @@ function Brands() {
   const toast = useToast()
   // null = closed, 'new' = creating, a brand = editing it.
   const [editing, setEditing] = useState(null)
+  const [params, setParams] = useSearchParams()
+
+  // ?new=1 (from the quick-actions palette) opens the new brand form once.
+  useEffect(() => {
+    if (params.get('new') !== '1') return
+    setEditing('new')
+    const next = new URLSearchParams(params)
+    next.delete('new')
+    setParams(next, { replace: true })
+  }, [params, setParams])
   const [deleting, setDeleting] = useState(null)
 
   function save(values) {

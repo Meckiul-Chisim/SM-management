@@ -91,3 +91,31 @@ describe('follow-ups', () => {
     expect(countFollowUps(items, today)).toEqual({ open: 4, overdue: 1, dueToday: 1, done: 1 })
   })
 })
+
+import { countBy, countByStatus, longestGap, overduePlans, upcomingLoad } from './insights.js'
+
+describe('insights', () => {
+  const now = new Date(2026, 9, 31, 10, 0)
+  const posts = [
+    { id: 1, status: 'Draft', platform: 'Instagram', brandId: 'a', scheduledAt: '' },
+    { id: 2, status: 'Planned', platform: 'Instagram', brandId: '', scheduledAt: '2026-11-02T10:00' },
+    { id: 3, status: 'Planned', platform: 'X', brandId: 'a', scheduledAt: '2026-11-02T15:00' },
+    { id: 4, status: 'Planned', platform: 'X', brandId: 'a', scheduledAt: '2026-10-30T09:00' },
+  ]
+  it('counts every status, including empty ones', () => {
+    expect(countByStatus(posts)).toEqual({ Draft: 1, Ready: 0, Planned: 3, Published: 0 })
+  })
+  it('groups and sorts by label, naming brandless posts', () => {
+    expect(countBy(posts, (p) => p.platform)).toEqual([{ label: 'Instagram', count: 2 }, { label: 'X', count: 2 }])
+    expect(countBy(posts, (p) => p.brandId)[1].label).toBe('General workspace')
+  })
+  it('lists the next days and finds the longest quiet stretch', () => {
+    const load = upcomingLoad(posts, now, 10)
+    expect(load).toHaveLength(10)
+    expect(load.find((day) => day.key === '2026-11-02').count).toBe(2)
+    expect(longestGap(load)).toBe(7) // 3 to 9 Nov is the longest quiet stretch
+  })
+  it('finds plans that are already in the past', () => {
+    expect(overduePlans(posts, now).map((p) => p.id)).toEqual([4])
+  })
+})

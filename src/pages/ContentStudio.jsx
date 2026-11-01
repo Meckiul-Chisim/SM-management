@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Plus, Search, Sparkles } from 'lucide-react'
+import { Columns3, LayoutList, Plus, Search, Sparkles } from 'lucide-react'
 import DraftHelper from '../components/content/DraftHelper.jsx'
+import BoardCard from '../components/content/BoardCard.jsx'
 import PostCard from '../components/content/PostCard.jsx'
 import PostFormModal from '../components/content/PostFormModal.jsx'
 import Button from '../components/ui/Button.jsx'
@@ -22,7 +23,7 @@ import { ALL, NO_BRAND, filterPosts, sortPosts } from '../utils/filters.js'
 // can be bookmarked, and links from other pages (dashboard, brands) land on it.
 function ContentStudio() {
   useDocumentTitle('Content studio')
-  const { data, addPost, updatePost, deletePost } = useWorkspace()
+  const { data, addPost, updatePost, deletePost, restorePost, duplicatePost } = useWorkspace()
   const toast = useToast()
   const [params, setParams] = useSearchParams()
   // null = closed. { post } edits a post; { initial } starts a new one with some fields filled in.
@@ -36,6 +37,8 @@ function ContentStudio() {
     platform: params.get('platform') || ALL,
     status: params.get('status') || ALL,
   }
+  // ?view=board shows the pipeline board; anything else is the list.
+  const view = params.get('view') === 'board' ? 'board' : 'list'
   const filtersActive = Object.entries(filters).some(([key, value]) => value !== (key === 'search' ? '' : ALL))
 
   function setFilter(name, value) {
@@ -116,9 +119,23 @@ function ContentStudio() {
   }
 
   function confirmDelete() {
-    deletePost(deleting.id)
-    toast.show(`“${deleting.title}” deleted.`)
+    const removed = deleting
+    deletePost(removed.id)
+    // Undo puts the post back exactly as it was.
+    toast.show(`“${removed.title}” deleted.`, 'success', { label: 'Undo', onAction: () => { restorePost(removed); toast.show('Post restored.') } })
     setDeleting(null)
+  }
+
+  function duplicate(post) {
+    duplicatePost(post)
+    toast.show('Duplicated as a new draft.')
+  }
+
+  function setView(next) {
+    const copy = new URLSearchParams(params)
+    if (next === 'board') copy.set('view', 'board')
+    else copy.delete('view')
+    setParams(copy, { replace: true })
   }
 
   const newPost = () => setDialog({ initial: {} })
@@ -166,13 +183,58 @@ function ContentStudio() {
 
       <div className="mb-4 flex min-h-8 items-center justify-between gap-3 text-sm text-muted" aria-live="polite">
         <p>{posts.length} {posts.length === 1 ? 'post' : 'posts'}{filtersActive ? ` of ${data.posts.length}` : ''}</p>
-        {filtersActive && (
-          <Button variant="ghost" size="sm" onClick={() => setParams({}, { replace: true })}>Clear filters</Button>
-        )}
+        <div className="flex items-center gap-2">
+          {filtersActive && (
+            <Button variant="ghost" size="sm" onClick={() => { const next = new URLSearchParams(); if (view === 'board') next.set('view', 'board'); setParams(next, { replace: true }) }}>Clear filters</Button>
+          )}
+          <div role="group" aria-label="Layout" className="inline-flex rounded-full border border-line bg-surface p-0.5">
+            {[['list', 'List', LayoutList], ['board', 'Board', Columns3]].map(([value, label, Icon]) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={view === value}
+                onClick={() => setView(value)}
+                className={`inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-colors sm:min-h-8 ${view === value ? 'bg-panel text-ink shadow-sm' : 'text-muted hover:text-ink'}`}
+              >
+                <Icon size={14} aria-hidden="true" /> {label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
-      {posts.length ? (
-        <ul className="grid gap-4 lg:grid-cols-2">
+      {posts.length && view === 'board' ? (
+        <div className="stagger grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {POST_STATUSES.map((status) => {
+            const column = posts.filter((post) => post.status === status)
+            return (
+              <section key={status} aria-labelledby={`col-${status}`} className="min-w-0 rounded-2xl border border-line bg-surface/50 p-3">
+                <h2 id={`col-${status}`} className="mb-3 flex items-center justify-between px-1 font-sans text-sm font-semibold tracking-normal text-ink">
+                  {status}
+                  <span className="rounded-full bg-panel px-2 py-0.5 text-xs font-medium text-muted">{column.length}</span>
+                </h2>
+                {column.length ? (
+                  <ul className="space-y-3">
+                    {column.map((post) => (
+                      <li key={post.id}>
+                        <BoardCard
+                          post={post}
+                          brand={data.brands.find((item) => item.id === post.brandId)}
+                          onEdit={() => setDialog({ post })}
+                          onStatusChange={(next) => changeStatus(post, next)}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="px-1 py-6 text-center text-xs text-muted">Nothing here</p>
+                )}
+              </section>
+            )
+          })}
+        </div>
+      ) : posts.length ? (
+        <ul className="stagger grid gap-4 lg:grid-cols-2">
           {posts.map((post) => (
             <li key={post.id} className="min-w-0">
               <PostCard
@@ -182,6 +244,7 @@ function ContentStudio() {
                 onCopy={() => copy(post)}
                 onEdit={() => setDialog({ post })}
                 onRepurpose={() => repurpose(post)}
+                onDuplicate={() => duplicate(post)}
                 onDelete={() => setDeleting(post)}
                 onStatusChange={(status) => changeStatus(post, status)}
               />
@@ -214,7 +277,7 @@ function ContentStudio() {
       {deleting && (
         <ConfirmDialog
           title={`Delete “${deleting.title}”?`}
-          description="This removes the post from this browser. It cannot be undone."
+          description="This removes the post from this browser. You can undo it straight after."
           onConfirm={confirmDelete}
           onCancel={() => setDeleting(null)}
         />

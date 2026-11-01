@@ -61,6 +61,17 @@ export function WorkspaceProvider({ children }) {
     },
     updatePost: (id, changes) => dispatch({ type: 'post/update', id, changes, updatedAt: new Date().toISOString() }),
     deletePost: (id) => dispatch({ type: 'post/delete', id }),
+    // Puts back a record that was just deleted (the Undo button), with its original id.
+    restorePost: (post) => dispatch({ type: 'post/add', post }),
+    duplicatePost(post) {
+      const id = createId()
+      const now = new Date().toISOString()
+      dispatch({
+        type: 'post/add',
+        post: { ...post, id, title: `${post.title} (copy)`, status: 'Draft', scheduledAt: '', createdAt: now, updatedAt: now, isSample: false },
+      })
+      return id
+    },
 
     addInteraction(values) {
       const id = createId()
@@ -69,6 +80,7 @@ export function WorkspaceProvider({ children }) {
     },
     updateInteraction: (id, changes) => dispatch({ type: 'interaction/update', id, changes }),
     deleteInteraction: (id) => dispatch({ type: 'interaction/delete', id }),
+    restoreInteraction: (interaction) => dispatch({ type: 'interaction/add', interaction }),
   }), [])
 
   const dismissNotice = useCallback(() => setNotice(null), [])

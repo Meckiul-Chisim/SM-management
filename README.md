@@ -8,11 +8,15 @@ Haven helps a freelancer, creator or small agency plan social content in one pla
 
 - **Dashboard** – counts and lists calculated from your own records: the next 7 days, drafts, follow-ups, overdue items.
 - **Brands & accounts** – create, edit and delete brands. Handles are saved as notes only. Deleting a brand tells you how many posts and follow-ups it has and lets you keep them (moved to "General workspace") or delete them with it.
-- **Content studio** – create, edit, delete, search and filter posts by brand, platform and status; change status in place; copy text; repurpose a post for another platform. A starter-text helper fills built-in **templates** (it is not AI and makes no network calls).
+- **Content studio** – create, edit, delete, search and filter posts by brand, platform and status; change status in place; copy text; duplicate or repurpose a post; switch between a list and a **pipeline board** (Draft, Ready, Planned, Published); undo a deletion right after it happens. A starter-text helper fills built-in **templates** (it is not AI and makes no network calls).
 - **Content calendar** – month view of posts that have a planned date, with a day panel. Entries are plans inside the app.
 - **Engagement** – a manual follow-up list with due dates, overdue highlighting, mark done / reopen, edit and filters. Nothing is imported from social platforms.
+- **Insights** – planning insights worked out from your own posts: pipeline, platform and brand mix, the next 28 days. These are not social platform analytics.
+- **Roadmap** – an honest list of what this demo does not do yet and what each item would need. Nothing on it is clickable because none of it exists.
+- **Quick actions** – press Ctrl+K (Cmd+K on Mac) to jump to a page, create something or find a post.
 - **Settings** – rename the workspace, export a JSON backup, import a backup (validated and previewed before it replaces anything), remove or reset sample data, delete all data, turn the animated background off.
-- Light and dark themes, keyboard-accessible dialogs, reduced-motion support.
+- A warm light and dark theme with an animated background: two short looping videos rendered for this app (`public/media`, about 30 KB and 65 KB). With reduced motion or data saver on, a still image is shown and the video is never downloaded. The background can be switched off in Settings.
+- Keyboard-accessible dialogs and reduced-motion support.
 
 ### What a post status means
 

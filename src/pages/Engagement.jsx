@@ -51,11 +51,16 @@ function Engagement() {
   // ?item=<id> (from the dashboard) opens that follow-up for editing, once.
   useEffect(() => {
     const id = params.get('item')
-    if (!id) return
-    const item = data.interactions.find((entry) => entry.id === id)
-    if (item) setDialog(item)
+    const wantsNew = params.get('new') === '1' // from the quick-actions palette
+    if (!id && !wantsNew) return
+    if (wantsNew) setDialog('new')
+    else {
+      const item = data.interactions.find((entry) => entry.id === id)
+      if (item) setDialog(item)
+    }
     const next = new URLSearchParams(params)
     next.delete('item')
+    next.delete('new')
     setParams(next, { replace: true })
   }, [params, setParams, data.interactions])
 

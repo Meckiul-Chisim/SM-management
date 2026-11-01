@@ -1,4 +1,4 @@
-import { Menu, Search, X } from 'lucide-react'
+import { Command, Menu, Search, X } from 'lucide-react'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import IconButton from '../ui/IconButton.jsx'
@@ -6,7 +6,7 @@ import ThemeToggle from './ThemeToggle.jsx'
 import { useWorkspace } from '../../hooks/useWorkspace.js'
 import { navigationItems, PRODUCT_NAME } from '../../app/navigation.js'
 
-function Header({ onMenuClick, menuExpanded }) {
+function Header({ onMenuClick, menuExpanded, onQuickActions }) {
   const { data } = useWorkspace()
   const location = useLocation()
   const navigate = useNavigate()
@@ -43,7 +43,7 @@ function Header({ onMenuClick, menuExpanded }) {
   )
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-line bg-canvas/85 px-4 backdrop-blur-md sm:px-6 lg:px-10">
+    <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-line bg-canvas/70 px-4 backdrop-blur-xl sm:px-6 lg:px-10">
       <IconButton
         id="menu-button"
         label={menuExpanded ? 'Close navigation menu' : 'Open navigation menu'}
@@ -76,6 +76,7 @@ function Header({ onMenuClick, menuExpanded }) {
             <Search size={18} aria-hidden="true" />
           </IconButton>
         )}
+        <IconButton label="Quick actions (Ctrl+K)" onClick={onQuickActions}><Command size={18} aria-hidden="true" /></IconButton>
         <ThemeToggle />
         <button
           type="button"

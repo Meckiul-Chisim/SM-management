@@ -5,6 +5,7 @@ import Badge from '../components/ui/Badge.jsx'
 import ButtonLink from '../components/ui/ButtonLink.jsx'
 import Card from '../components/ui/Card.jsx'
 import Notice from '../components/ui/Notice.jsx'
+import CountUp from '../components/ui/CountUp.jsx'
 import PageHeader from '../components/ui/PageHeader.jsx'
 import StatusBadge from '../components/ui/StatusBadge.jsx'
 import { countSampleRecords } from '../data/workspaceReducer.js'
@@ -14,6 +15,14 @@ import { DEFAULT_BRAND_COLOUR } from '../utils/colour.js'
 import { addDays, dateKeyOf, formatDay, formatTime, toDateKey } from '../utils/dates.js'
 import { countFollowUps, isOverdue, isOpen, sortFollowUps } from '../utils/followUps.js'
 import { groupPostsByDate } from '../utils/calendar.js'
+
+// "Good morning", "Good afternoon" or "Good evening" from the person's own clock.
+function greeting(date) {
+  const hour = date.getHours()
+  if (hour < 12) return 'Good morning'
+  if (hour < 18) return 'Good afternoon'
+  return 'Good evening'
+}
 
 function Dashboard() {
   useDocumentTitle('Dashboard')
@@ -50,6 +59,7 @@ function Dashboard() {
     .filter((post) => post.status === 'Draft' || post.status === 'Ready')
     .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))
   const sampleCount = countSampleRecords(data)
+  const todayPlanned = (postsByDay[today] || []).filter((post) => post.status === 'Planned').length
 
   const tiles = [
     { label: 'Planned this week', value: counts.plannedThisWeek, to: '/calendar' },
@@ -61,11 +71,13 @@ function Dashboard() {
   return (
     <>
       <PageHeader
+        eyebrow={`${greeting(now)} · ${data.workspaceName}`}
         title="Dashboard"
         description="A plan of your own content. Nothing here is published automatically."
         actions={<ButtonLink to="/content?new=1"><Plus size={16} aria-hidden="true" /> New post</ButtonLink>}
       />
 
+      <div className="stagger">
       {sampleCount > 0 && (
         <Notice tone="info" className="mb-4">
           This workspace includes sample data so you can explore. Remove it any time in <Link to="/settings" className="font-semibold underline underline-offset-2">Settings</Link>.
@@ -78,12 +90,27 @@ function Dashboard() {
         </Notice>
       )}
 
+      <Card as="div" className="mb-6 flex flex-wrap items-center gap-x-8 gap-y-2 px-5 py-4">
+        <p className="eyebrow">Today</p>
+        {todayPlanned === 0 && followUpCounts.dueToday === 0 && followUpCounts.overdue === 0 ? (
+          <p className="text-sm text-muted">A clear day. Nothing is planned or due.</p>
+        ) : (
+          <>
+            <Link to="/calendar" className="text-sm text-ink hover:underline"><strong className="font-semibold">{todayPlanned}</strong> {todayPlanned === 1 ? 'post' : 'posts'} planned</Link>
+            <Link to="/engagement" className="text-sm text-ink hover:underline"><strong className="font-semibold">{followUpCounts.dueToday}</strong> {followUpCounts.dueToday === 1 ? 'follow-up' : 'follow-ups'} due</Link>
+            {followUpCounts.overdue > 0 && (
+              <Link to="/engagement" className="text-sm font-semibold text-danger hover:underline">{followUpCounts.overdue} overdue</Link>
+            )}
+          </>
+        )}
+      </Card>
+
       <ul className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         {tiles.map((tile) => (
           <li key={tile.label}>
             <Link to={tile.to} className="block h-full">
-              <Card as="div" className="h-full p-4 transition-colors hover:border-brand-100">
-                <p className="font-display text-3xl font-semibold leading-none tracking-tight text-ink">{tile.value}</p>
+              <Card as="div" className="lift h-full p-4">
+                <CountUp value={tile.value} className="block font-display text-3xl font-medium leading-none tracking-tight text-ink" />
                 <p className="mt-2 text-xs font-medium text-muted">{tile.label}</p>
               </Card>
             </Link>
@@ -199,6 +226,7 @@ function Dashboard() {
             <p className="py-4 text-sm text-muted">Nothing waiting for a reply.</p>
           )}
         </section>
+      </div>
       </div>
     </>
   )

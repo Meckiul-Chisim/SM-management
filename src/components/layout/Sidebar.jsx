@@ -8,27 +8,29 @@ function Sidebar() {
   const { data } = useWorkspace()
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-canvas px-4 py-6 md:flex">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-canvas/60 px-4 backdrop-blur-xl py-6 md:flex">
       <Link to="/dashboard" className="mb-8 block rounded-lg px-2 py-1" aria-label="Go to dashboard">
         <Wordmark name={data.workspaceName || PRODUCT_NAME} />
       </Link>
 
-      <nav aria-label="Main navigation" className="space-y-0.5">
-        {navigationItems.map(({ label, to, icon: Icon }) => (
+      <nav aria-label="Main navigation" className="flex flex-col gap-0.5">
+        {navigationItems.map(({ label, to, icon: Icon, secondary }, index) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
-              `flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm transition-colors duration-150 ${
+              `relative flex min-h-10 items-center gap-3 rounded-full px-3.5 text-sm transition-all duration-300 ${
+                secondary && !navigationItems[index - 1]?.secondary ? 'mt-4' : ''
+              } ${
                 isActive
-                  ? 'bg-brand-50 font-semibold text-ink'
-                  : 'font-medium text-muted hover:bg-surface hover:text-ink'
+                  ? 'bg-brand-50 font-semibold text-ink shadow-[inset_0_0_0_1px_var(--color-gold-soft-line)]'
+                  : 'font-medium text-muted hover:translate-x-0.5 hover:bg-surface hover:text-ink'
               }`
             }
           >
             {({ isActive }) => (
               <>
-                <Icon size={17} strokeWidth={1.75} aria-hidden="true" className={isActive ? 'text-brand-700' : ''} />
+                <Icon size={17} strokeWidth={1.75} aria-hidden="true" className={isActive ? 'text-gold-ink' : ''} />
                 <span className="flex-1">{label}</span>
               </>
             )}
