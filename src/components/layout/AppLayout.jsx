@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Outlet, ScrollRestoration } from 'react-router-dom'
 import Notice from '../ui/Notice.jsx'
-import { useWorkspace } from '../../hooks/useWorkspace.js'
 import VideoBackground from '../ui/VideoBackground.jsx'
+import { useWorkspace } from '../../hooks/useWorkspace.js'
+import { useAmbientEnabled } from '../../utils/ambientPreference.js'
 import CommandPalette from './CommandPalette.jsx'
 import Header from './Header.jsx'
 import MainContent from './MainContent.jsx'
 import MobileNavigation from './MobileNavigation.jsx'
 import Sidebar from './Sidebar.jsx'
-import { useAmbientEnabled } from '../../utils/ambientPreference.js'
 
 function AppLayout() {
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false)
@@ -41,28 +41,20 @@ function AppLayout() {
   }, [mobileNavigationOpen])
 
   return (
-    <div className="min-h-screen bg-canvas text-ink">
-      <a
-        href="#main"
-        className="sr-only z-[70] rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-on-brand focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
-      >
-        Skip to main content
-      </a>
+    <div className="haven-app min-h-screen bg-canvas text-ink">
+      <a className="haven-skip-link" href="#main-content">Skip to content</a>
       {/*
-        The ambient scene is fixed behind the whole app (z-0). It sits to the
-        right of the sidebar on desktop, and everything else is raised above it.
+        The background video is fixed behind the whole app (z-0). The sidebar and
+        header are frosted glass above it, so it shows through softly.
       */}
-      <div
-        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
-        aria-hidden="true"
-      >
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
         {ambientEnabled && <VideoBackground />}
         {/* A soft veil keeps text comfortable to read over moving light. */}
         <div className="absolute inset-0 bg-gradient-to-b from-canvas/10 via-canvas/40 to-canvas/70" />
       </div>
       {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
       <Sidebar />
-      <div className="relative z-[1] min-h-screen min-w-0 md:pl-60">
+      <div className="relative z-[1] min-h-screen min-w-0 md:pl-[16.25rem]">
         <Header
           onQuickActions={() => setPaletteOpen(true)}
           onMenuClick={() => setMobileNavigationOpen((open) => !open)}

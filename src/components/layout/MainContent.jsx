@@ -1,12 +1,11 @@
-// tabIndex={-1} lets the skip link (and route changes) move focus here.
 function MainContent({ children }) {
   return (
     <main
-      id="main"
+      id="main-content"
       tabIndex={-1}
-      className="mx-auto min-h-[calc(100vh-4rem)] w-full max-w-[1240px] px-4 py-6 outline-none sm:px-6 sm:py-8 lg:px-10 lg:py-10"
+      className="haven-main mx-auto min-h-[calc(100vh-4rem)] w-full max-w-[1480px] px-4 py-6 outline-none sm:px-7 sm:py-8 xl:px-10"
     >
-      {children}
+      <div className="haven-page-content workspace-enter">{children}</div>
     </main>
   )
 }

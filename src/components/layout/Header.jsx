@@ -4,7 +4,17 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import IconButton from '../ui/IconButton.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 import { useWorkspace } from '../../hooks/useWorkspace.js'
-import { navigationItems, PRODUCT_NAME } from '../../app/navigation.js'
+
+const pageNames = {
+  '/dashboard': 'Dashboard',
+  '/brands': 'Brands & accounts',
+  '/properties': 'Brands & accounts',
+  '/content': 'Content studio',
+  '/calendar': 'Content calendar',
+  '/engagement': 'Engagement',
+  '/inquiries': 'Engagement',
+  '/settings': 'Settings',
+}
 
 function Header({ onMenuClick, menuExpanded, onQuickActions }) {
   const { data } = useWorkspace()
@@ -43,47 +53,45 @@ function Header({ onMenuClick, menuExpanded, onQuickActions }) {
   )
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-3 border-b border-line bg-canvas/70 px-4 backdrop-blur-xl sm:px-6 lg:px-10">
+    <header className="haven-header sticky top-0 z-10 flex h-[4.5rem] items-center gap-3 px-4 sm:px-7 xl:px-10">
       <IconButton
-        id="menu-button"
         label={menuExpanded ? 'Close navigation menu' : 'Open navigation menu'}
         onClick={onMenuClick}
         aria-expanded={menuExpanded}
         aria-controls="mobile-navigation"
         className="md:hidden"
       >
-        {menuExpanded ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+        {menuExpanded ? <X size={20} /> : <Menu size={20} />}
       </IconButton>
 
       {mobileSearchOpen ? (
-        <form role="search" onSubmit={submitSearch} className="flex flex-1 items-center gap-2 sm:hidden">
+        <form onSubmit={submitSearch} className="flex flex-1 items-center gap-2 sm:hidden">
           {searchField}
-          <IconButton label="Close search" onClick={closeSearch}><X size={18} aria-hidden="true" /></IconButton>
+          <IconButton label="Close search" onClick={closeSearch}><X size={18} /></IconButton>
         </form>
       ) : (
         <span className="font-display text-base font-semibold tracking-tight text-ink sm:hidden">
-          {navigationItems.find((item) => location.pathname.startsWith(item.to))?.label || PRODUCT_NAME}
+          {pageNames[location.pathname] || 'Haven'}
         </span>
       )}
 
-      <form role="search" onSubmit={submitSearch} className="hidden w-full max-w-sm sm:block">
+      <form onSubmit={submitSearch} className="hidden w-full max-w-sm sm:block">
         {searchField}
       </form>
 
       <div className="ml-auto flex items-center gap-2">
         {!mobileSearchOpen && (
           <IconButton label="Search posts" onClick={() => setMobileSearchOpen(true)} className="sm:hidden">
-            <Search size={18} aria-hidden="true" />
+            <Search size={18} />
           </IconButton>
         )}
-        <IconButton label="Quick actions (Ctrl+K)" onClick={onQuickActions}><Command size={18} aria-hidden="true" /></IconButton>
+        <IconButton label="Quick actions (Ctrl+K)" onClick={onQuickActions} className="hidden sm:inline-flex"><Command size={18} aria-hidden="true" /></IconButton>
         <ThemeToggle />
         <button
           type="button"
           onClick={() => navigate('/settings')}
           aria-label="Workspace settings"
-          title="Workspace settings"
-          className="flex size-11 items-center justify-center rounded-full sm:size-9 bg-brand-50 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-100"
+          className="flex size-9 items-center justify-center rounded-full bg-brand-50 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-100"
         >
           {initial}
         </button>

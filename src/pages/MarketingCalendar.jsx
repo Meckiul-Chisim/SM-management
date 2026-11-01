@@ -50,7 +50,7 @@ function MarketingCalendar() {
   const selectedLabel = fromDateKey(selected)?.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
-    <>
+    <div className="haven-route haven-route--calendar">
       <PageHeader
         title="Content calendar"
         description="See what you have planned and keep your posting rhythm visible."
@@ -169,7 +169,7 @@ function MarketingCalendar() {
           </Card>
         )}
       </section>
-    </>
+    </div>
   )
 }
 
