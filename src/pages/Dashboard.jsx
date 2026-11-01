@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Plus } from 'lucide-react'
+import { CalendarDays, ClipboardPenLine, FileCheck2, Plus, Send } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Badge from '../components/ui/Badge.jsx'
 import ButtonLink from '../components/ui/ButtonLink.jsx'
@@ -62,10 +62,10 @@ function Dashboard() {
   const todayPlanned = (postsByDay[today] || []).filter((post) => post.status === 'Planned').length
 
   const tiles = [
-    { label: 'Planned this week', value: counts.plannedThisWeek, to: '/calendar' },
-    { label: 'Drafts', value: counts.drafts, to: '/content?status=Draft' },
-    { label: 'Ready for review', value: counts.ready, to: '/content?status=Ready' },
-    { label: 'Marked published', value: counts.published, to: '/content?status=Published' },
+    { label: 'Planned this week', value: counts.plannedThisWeek, to: '/calendar', icon: CalendarDays },
+    { label: 'Drafts', value: counts.drafts, to: '/content?status=Draft', icon: ClipboardPenLine },
+    { label: 'Ready for review', value: counts.ready, to: '/content?status=Ready', icon: FileCheck2 },
+    { label: 'Marked published', value: counts.published, to: '/content?status=Published', icon: Send },
   ]
 
   return (
@@ -105,14 +105,18 @@ function Dashboard() {
         )}
       </Card>
 
-      <ul className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {tiles.map((tile) => (
-          <li key={tile.label}>
-            <Link to={tile.to} className="block h-full">
-              <Card as="div" className="lift h-full p-4">
-                <CountUp value={tile.value} className="block font-display text-3xl font-medium leading-none tracking-tight text-ink" />
-                <p className="mt-2 text-xs font-medium text-muted">{tile.label}</p>
-              </Card>
+      {/* One joined strip of four counts. Each one links to the matching list. */}
+      <ul className="haven-metrics mb-6 grid grid-cols-2 lg:grid-cols-4">
+        {tiles.map(({ label, value, to, icon: Icon }) => (
+          <li key={label} className="contents">
+            <Link to={to} className="lift flex items-center gap-3">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl">
+                <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
+              </span>
+              <span>
+                <CountUp value={value} className="block font-display text-2xl font-medium leading-none tracking-tight text-ink" />
+                <span className="mt-1.5 block text-xs font-medium text-muted">{label}</span>
+              </span>
             </Link>
           </li>
         ))}
@@ -122,7 +126,7 @@ function Dashboard() {
         <h2 id="week-heading" className="mb-3 text-lg font-semibold text-ink">
           Next 7 days <span className="ml-1 font-sans text-sm font-medium text-muted">{formatDay(week[0].key)} to {formatDay(week[6].key)}</span>
         </h2>
-        <Card className="divide-y divide-line overflow-hidden lg:grid lg:grid-cols-7 lg:divide-x lg:divide-y-0">
+        <Card className="haven-week-card divide-y divide-line overflow-hidden lg:grid lg:grid-cols-7 lg:divide-x lg:divide-y-0">
           {week.map(({ date, key }, index) => {
             const posts = postsByDay[key] || []
             return (
@@ -161,7 +165,7 @@ function Dashboard() {
         </Card>
       </section>
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
+      <div className="haven-secondary-grid grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-8">
         <section aria-labelledby="drafts-heading">
           <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-line pb-3">
             <h2 id="drafts-heading" className="text-lg font-semibold text-ink">

@@ -1,12 +1,18 @@
-// A frosted-glass surface (see .glass in styles/index.css): a soft border, light
-// inner edge and gentle blur. Cards only exist where content needs a container.
-// Pass glass={false} for a flat, opaque surface (e.g. inside lists).
-function Card({ as: Tag = 'section', children, className = '', tone = 'default', glass = true, ...props }) {
-  const toneClass = tone === 'brand' ? 'border-brand-100 bg-brand-50 text-ink' : glass ? 'glass' : 'border-line bg-panel'
+// Shared surface primitive. Keep the DOM element semantic while giving every page
+// the same radius, border, and light/dark theme behavior.
+function Card({ children, className = '', tone = 'default', as: Element = 'section', glass = true, ...props }) {
+  const toneClass = tone === 'brand'
+    ? 'border-brand-100 bg-brand-50 text-ink'
+    : 'border-line bg-panel'
+  const surfaceClass = glass ? 'haven-surface' : 'haven-surface haven-surface--solid'
+
   return (
-    <Tag className={`rounded-2xl border ${toneClass} ${className}`} {...props}>
+    <Element
+      className={`rounded-xl border ${toneClass} ${surfaceClass} ${className}`}
+      {...props}
+    >
       {children}
-    </Tag>
+    </Element>
   )
 }
 

@@ -14,21 +14,21 @@
     on-brand                   text that sits on a brand-700 fill
 */
 @theme {
-  --color-canvas: #faf6ee;
-  --color-surface: #f3ece0;
-  --color-panel: #fffdf9;
-  --color-panel-raised: #fffefb;
-  --color-line: #e8dfcf;
-  --color-ink: #221c14;
-  --color-muted: #645847;
-  --color-faint: #6f6252;
+  --color-canvas: #f5f6f8;
+  --color-surface: #eef1f5;
+  --color-panel: #ffffff;
+  --color-panel-raised: #ffffff;
+  --color-line: #e3e6eb;
+  --color-ink: #17191d;
+  --color-muted: #69707a;
+  --color-faint: #9298a2;
 
-  --color-brand-50: #e7eee2;
-  --color-brand-100: #cddbc6;
-  --color-brand-700: #2f6347;
-  --color-brand-800: #244f38;
-  --color-brand-900: #1c2a22;
-  --color-on-brand: #fffaf0;
+  --color-brand-50: #edf4ff;
+  --color-brand-100: #d7e6fb;
+  --color-brand-700: #246bfe;
+  --color-brand-800: #1758d8;
+  --color-brand-900: #143a7a;
+  --color-on-brand: #ffffff;
 
   --color-info-bg: #e6ecef;
   --color-info: #2a5670;
@@ -50,28 +50,27 @@
   --glass-shadow: rgb(23 35 30 / 0.16);
 
   --font-sans: "Instrument Sans Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces Variable", "Bricolage Grotesque Variable", Georgia, serif;
-  --font-ui-display: "Bricolage Grotesque Variable", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-canvas: #12100d;
-  --color-surface: #181510;
-  --color-panel: #1c1914;
-  --color-panel-raised: #221e18;
-  --color-line: #2f2a21;
-  --color-ink: #f3ecdf;
-  --color-muted: #b3a794;
-  --color-faint: #8c8170;
+  --color-canvas: #101214;
+  --color-surface: #17191d;
+  --color-panel: #1a1d21;
+  --color-panel-raised: #21242a;
+  --color-line: #2b2f36;
+  --color-ink: #f4f5f7;
+  --color-muted: #a9aebb;
+  --color-faint: #777d88;
 
-  --color-brand-50: #1f3028;
-  --color-brand-100: #2f4a3c;
-  --color-brand-700: #8fd0ae;
-  --color-brand-800: #b3e2c9;
-  --color-brand-900: #f3ecdf;
-  --color-on-brand: #12100d;
+  --color-brand-50: #1b293f;
+  --color-brand-100: #253b60;
+  --color-brand-700: #6e9cff;
+  --color-brand-800: #91b5ff;
+  --color-brand-900: #dbe8ff;
+  --color-on-brand: #0d1625;
 
   --color-info-bg: #1a2a33;
   --color-info: #a9cfe6;

@@ -2,10 +2,10 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 // Self-hosted fonts (bundled by Vite, no third-party requests).
 import '@fontsource-variable/bricolage-grotesque'
-import '@fontsource-variable/fraunces'
 import '@fontsource-variable/instrument-sans'
 import App from './app/App.jsx'
 import './styles/index.css'
+import './styles/haven-reference-design.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
