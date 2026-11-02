@@ -7,7 +7,7 @@ import Wordmark from './Wordmark.jsx'
 function Sidebar() {
   const { data } = useWorkspace()
   return (
-    <aside className="haven-sidebar fixed inset-y-0 left-0 z-30 hidden w-[16.25rem] flex-col md:flex">
+    <aside className="haven-sidebar fixed inset-y-0 left-0 z-30 hidden w-65 flex-col md:flex">
       <Link to="/dashboard" className="haven-brand mb-8 block" aria-label="Go to dashboard">
         <Wordmark name={data.workspaceName || PRODUCT_NAME} />
         <span className="haven-brand-caption">SOCIAL WORKSPACE</span>

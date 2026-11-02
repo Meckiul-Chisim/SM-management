@@ -8,7 +8,7 @@ function Card({ children, className = '', tone = 'default', as: Element = 'secti
 
   return (
     <Element
-      className={`rounded-xl border ${toneClass} ${surfaceClass} ${className}`}
+      className={`rounded-[10px] border ${toneClass} ${surfaceClass} ${className}`}
       {...props}
     >
       {children}

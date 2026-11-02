@@ -26,13 +26,13 @@ function MobileNavigation({ open, onNavigate }) {
             to={to}
             onClick={onNavigate}
             className={({ isActive }) =>
-              `mb-0.5 flex min-h-12 items-center gap-3 rounded-lg px-3 text-sm transition-colors ${
-                isActive ? 'bg-brand-50 font-semibold text-ink' : 'font-medium text-muted hover:bg-surface hover:text-ink'
+              `haven-mobile-nav-link mb-1 flex min-h-12 items-center gap-3 rounded-xl px-3 text-sm transition-colors ${
+                isActive ? 'is-active bg-brand-50 font-semibold text-ink' : 'font-medium text-muted hover:bg-surface hover:text-ink'
               }`
             }
           >
             <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
-            {label}
+            <span className="flex-1">{label}</span>
           </NavLink>
         ))}
       </nav>

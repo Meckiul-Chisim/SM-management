@@ -70,15 +70,20 @@ function Brands() {
 
       {data.brands.length ? (
         <ul className="grid gap-4 lg:grid-cols-2">
-          {data.brands.map((brand) => {
+          {data.brands.map((brand, index) => {
             const counts = countBrandRecords(data, brand.id)
             const brandColour = brand.color || DEFAULT_BRAND_COLOUR
             return (
               <li key={brand.id}>
-                <Card as="article" className="flex h-full flex-col overflow-hidden" aria-labelledby={`brand-${brand.id}`}>
+                <Card
+                  as="article"
+                  className="brand-card flex h-full flex-col overflow-hidden"
+                  style={{ '--brand-card-delay': `${Math.min(index * 70, 350)}ms` }}
+                  aria-labelledby={`brand-${brand.id}`}
+                >
                   <div className="flex items-start gap-4 p-5">
                     <span
-                      className="flex size-11 shrink-0 items-center justify-center rounded-lg font-display text-lg font-semibold"
+                      className="brand-mark flex size-11 shrink-0 items-center justify-center rounded-lg font-display text-lg font-semibold"
                       style={{ backgroundColor: brandColour, color: readableTextColour(brandColour) }}
                       aria-hidden="true"
                     >
@@ -124,8 +129,12 @@ function Brands() {
                   <div className="flex-1 border-t border-line bg-surface/60 p-4">
                     {brand.accounts.length ? (
                       <ul className="space-y-2">
-                        {brand.accounts.map((account) => (
-                          <li key={account.platform} className="flex items-center gap-3 rounded-lg bg-panel px-3 py-2.5">
+                        {brand.accounts.map((account, accountIndex) => (
+                          <li
+                            key={account.platform}
+                            className="brand-account flex items-center gap-3 rounded-lg bg-panel px-3 py-2.5"
+                            style={{ '--brand-account-delay': `${accountIndex * 55}ms` }}
+                          >
                             <div className="min-w-0 flex-1">
                               <p className="text-sm font-medium text-ink">{account.platform}</p>
                               <p className="truncate text-xs text-muted">{account.handle || 'No handle added'}</p>

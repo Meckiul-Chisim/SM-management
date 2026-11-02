@@ -9,7 +9,7 @@ const tones = {
 
 function Badge({ children, className = '', tone = 'default' }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${tones[tone] || tones.default} ${className}`}>
+    <span className={`inline-flex items-center rounded-md border border-current/10 px-2 py-0.5 text-[0.6875rem] font-semibold leading-5 ${tones[tone] || tones.default} ${className}`}>
       {children}
     </span>
   )
