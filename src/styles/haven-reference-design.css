@@ -21,14 +21,14 @@
   --haven-ease: cubic-bezier(.2,.7,.2,1);
 }
 :root[data-theme="dark"] {
-  --haven-bg: #08130e;
-  --haven-panel: rgba(15, 33, 26, .86);
-  --haven-panel-solid: #0f211a;
-  --haven-text: #eef6f1;
-  --haven-muted: #a3b8ac;
-  --haven-line: rgba(210,255,235,.12);
-  --haven-accent: #3fcf9b;
-  --haven-accent-soft: rgba(63,207,155,.16);
+  --haven-bg: #0a1315;
+  --haven-panel: rgba(255, 255, 255, .07);
+  --haven-panel-solid: #122326;
+  --haven-text: #f2f8f6;
+  --haven-muted: #a9bdbb;
+  --haven-line: rgba(255,255,255,.12);
+  --haven-accent: #34d3a0;
+  --haven-accent-soft: rgba(52,211,160,.16);
   --haven-coral: #e0bd72;
   --haven-shadow: rgba(0,0,0,.38);
   --haven-glass-edge: rgba(255,255,255,.08);
@@ -524,10 +524,10 @@ body { background-color: var(--haven-bg); }
   --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 30px 70px -40px rgba(8, 70, 50, .5);
 }
 :root[data-theme="dark"] {
-  --haven-panel: rgba(12, 32, 24, .52);
+  --haven-panel: rgba(255, 255, 255, .075);
   --haven-gold-line: linear-gradient(90deg, transparent, rgba(224, 189, 114, .7), transparent);
-  --haven-glass-border: rgba(210, 255, 235, .14);
-  --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.07) inset, 0 34px 80px -40px rgba(0, 0, 0, .75);
+  --haven-glass-border: rgba(255, 255, 255, .17);
+  --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.14) inset, 0 30px 70px -38px rgba(0, 0, 0, .7);
 }
 
 /* Shared glass material for every raised surface. */
@@ -611,7 +611,7 @@ body { background-color: var(--haven-bg); }
 /* Browsers without backdrop-filter get a near-solid panel so text stays readable. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   :root { --haven-panel: rgba(255, 255, 255, .94); }
-  :root[data-theme="dark"] { --haven-panel: rgba(12, 32, 24, .94); }
+  :root[data-theme="dark"] { --haven-panel: rgba(18, 35, 38, .94); }
 }
 
 /* ======================================================================
@@ -670,3 +670,9 @@ input[type="checkbox"]:hover, input[type="radio"]:hover { filter: brightness(1.1
 @media (prefers-reduced-motion: reduce) {
   button:hover, .haven-nav-link:hover, .haven-nav-link:hover .haven-nav-icon { transform: none !important; }
 }
+
+/* Single theme button: a round glass chip that turns a little on hover. */
+.haven-theme-toggle { border-radius: 999px !important; }
+.haven-theme-toggle svg { transition: transform .4s var(--haven-ease); }
+.haven-theme-toggle:hover svg { transform: rotate(25deg) scale(1.08); }
+@media (prefers-reduced-motion: reduce) { .haven-theme-toggle:hover svg { transform: none; } }

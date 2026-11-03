@@ -64,10 +64,10 @@ describe('theme', () => {
     const user = userEvent.setup()
     document.documentElement.dataset.theme = 'light'
     renderApp()
-    await user.click(screen.getByRole('button', { name: 'Use dark theme' }))
+    await user.click(screen.getByRole('button', { name: 'Switch to dark theme' }))
     expect(document.documentElement.dataset.theme).toBe('dark')
     expect(window.localStorage.getItem('haven-theme')).toBe('dark')
-    await user.click(screen.getByRole('button', { name: 'Use light theme' }))
+    await user.click(screen.getByRole('button', { name: 'Switch to light theme' }))
     expect(document.documentElement.dataset.theme).toBe('light')
   })
 })

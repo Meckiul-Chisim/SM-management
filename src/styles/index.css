@@ -56,18 +56,18 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-canvas: #08130e;
-  --color-surface: #0d1c15;
-  --color-panel: #0f211a;
-  --color-panel-raised: #14291f;
-  --color-line: #1f372b;
-  --color-ink: #eef6f1;
-  --color-muted: #a3b8ac;
-  --color-faint: #70887b;
+  --color-canvas: #0a1315;
+  --color-surface: #102022;
+  --color-panel: #122326;
+  --color-panel-raised: #172c30;
+  --color-line: #25393c;
+  --color-ink: #f2f8f6;
+  --color-muted: #a9bdbb;
+  --color-faint: #76908d;
 
   --color-brand-50: #12301f;
   --color-brand-100: #1a4630;
-  --color-brand-700: #3fcf9b;
+  --color-brand-700: #34d3a0;
   --color-brand-800: #6fe0b8;
   --color-brand-900: #d5f7e8;
   --color-on-brand: #04180f;
@@ -84,7 +84,7 @@
   --color-gold-ink: #e8cc94;
   --color-gold-soft: #3a2f1a;
   --color-scrim: rgb(0 0 0 / 0.6);
-  --color-glass: rgb(12 30 22 / 0.60);
+  --color-glass: rgb(255 255 255 / 0.07);
   --color-glass-line: rgb(255 255 255 / 0.07);
   --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 16px 36px -16px rgb(0 0 0 / 0.55);
   --glass-highlight: rgb(255 255 255 / 0.06);

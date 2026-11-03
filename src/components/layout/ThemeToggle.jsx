@@ -2,31 +2,22 @@ import { Moon, Sun } from 'lucide-react'
 import IconButton from '../ui/IconButton.jsx'
 import { useTheme } from '../../hooks/useTheme.js'
 
-// Header button that switches between the light and dark theme.
-// The label names the action (what will happen), which is what screen readers need.
+// One header button that flips between light and dark.
+// It shows the icon of the theme you would switch TO (moon in light mode, sun in dark),
+// and its label names that action, which is what screen readers need.
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme()
   const isDark = theme === 'dark'
+  const Icon = isDark ? Sun : Moon
 
   return (
-    <div className="flex items-center rounded-lg border border-line bg-surface p-1" role="group" aria-label="Theme">
-      <IconButton
-        label="Use light theme"
-        aria-pressed={!isDark}
-        onClick={() => !isDark || toggleTheme()}
-        className={`!size-7 !rounded-md ${!isDark ? '!bg-panel !shadow-sm !text-brand-800' : '!border-transparent !text-faint'}`}
-      >
-        <Sun size={15} aria-hidden="true" />
-      </IconButton>
-      <IconButton
-        label="Use dark theme"
-        aria-pressed={isDark}
-        onClick={() => isDark || toggleTheme()}
-        className={`!size-7 !rounded-md ${isDark ? '!bg-panel !shadow-sm !text-brand-800' : '!border-transparent !text-faint'}`}
-      >
-        <Moon size={15} aria-hidden="true" />
-      </IconButton>
-    </div>
+    <IconButton
+      label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+      onClick={toggleTheme}
+      className="haven-theme-toggle"
+    >
+      <Icon size={18} aria-hidden="true" />
+    </IconButton>
   )
 }
 
