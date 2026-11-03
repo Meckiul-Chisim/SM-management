@@ -507,3 +507,109 @@ body { background-color: var(--haven-bg); }
 .haven-header { background: color-mix(in srgb, var(--haven-bg) 60%, transparent); }
 /* Each navigation row is icon + label on one line. */
 .haven-nav-link { display: flex; align-items: center; gap: .75rem; }
+
+/* ======================================================================
+   Glass house theme
+   ----------------------------------------------------------------------
+   Idea: floor-to-ceiling glass in a modern villa. Panels are frosted
+   glass over the moving background, edges catch a thin gold light, and
+   the active states glow like warm interior lighting. Everything here
+   only changes surfaces (colour, blur, border, shadow), not layout.
+   ====================================================================== */
+:root {
+  --haven-panel: rgba(255, 255, 255, .56);
+  --haven-glass-blur: blur(26px) saturate(165%);
+  --haven-gold-line: linear-gradient(90deg, transparent, rgba(184, 146, 63, .75), transparent);
+  --haven-glass-border: rgba(255, 255, 255, .75);
+  --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 30px 70px -40px rgba(8, 70, 50, .5);
+}
+:root[data-theme="dark"] {
+  --haven-panel: rgba(12, 32, 24, .52);
+  --haven-gold-line: linear-gradient(90deg, transparent, rgba(224, 189, 114, .7), transparent);
+  --haven-glass-border: rgba(210, 255, 235, .14);
+  --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.07) inset, 0 34px 80px -40px rgba(0, 0, 0, .75);
+}
+
+/* Shared glass material for every raised surface. */
+.haven-week-card,
+.haven-surface:not(.haven-surface--solid),
+.haven-page-content section.rounded-lg.border,
+.haven-page-content article.rounded-lg.border,
+.haven-page-content .rounded-lg.border.bg-panel,
+.haven-page-content .rounded-lg.border.bg-panel-raised,
+.haven-metrics > li > a,
+.haven-metrics > div {
+  position: relative;
+  background: var(--haven-panel) !important;
+  border-color: var(--haven-glass-border) !important;
+  -webkit-backdrop-filter: var(--haven-glass-blur);
+  backdrop-filter: var(--haven-glass-blur);
+  box-shadow: var(--haven-glass-shadow) !important;
+  border-radius: 24px !important;
+}
+/* A thin gold light along the top edge, like light on a window frame. */
+.haven-week-card::before,
+.haven-surface:not(.haven-surface--solid)::before {
+  content: '';
+  position: absolute; top: 0; left: 12%; right: 12%; height: 1px;
+  background: var(--haven-gold-line);
+  pointer-events: none;
+}
+.haven-metrics { background: transparent !important; box-shadow: none !important; gap: 14px !important; }
+.haven-metrics > li > a, .haven-metrics > div { border: 1px solid var(--haven-glass-border) !important; border-radius: 22px !important; }
+
+/* Cards lift slightly, like a pane catching more light. */
+.haven-surface:not(.haven-surface--solid), .haven-metrics > li > a { transition: transform .35s var(--haven-ease), box-shadow .35s ease; }
+.haven-surface:not(.haven-surface--solid):hover, .haven-metrics > li > a:hover { transform: translateY(-3px); }
+
+/* Sidebar and header: tall glass panes with a gold hairline on the inner edge. */
+.haven-sidebar {
+  background: color-mix(in srgb, var(--haven-panel-solid) 38%, transparent);
+  -webkit-backdrop-filter: blur(30px) saturate(170%);
+  backdrop-filter: blur(30px) saturate(170%);
+  border-right: 1px solid var(--haven-glass-border);
+  box-shadow: 1px 0 0 rgba(184, 146, 63, .28), 30px 0 60px -50px rgba(8, 70, 50, .5);
+}
+.haven-header {
+  background: color-mix(in srgb, var(--haven-panel-solid) 30%, transparent);
+  border-bottom: 1px solid var(--haven-glass-border);
+  box-shadow: 0 1px 0 rgba(184, 146, 63, .22);
+}
+.haven-nav-link { border-radius: 16px; }
+.haven-nav-link.is-active {
+  background: color-mix(in srgb, var(--haven-panel-solid) 55%, transparent);
+  border: 1px solid var(--haven-glass-border);
+  box-shadow: 0 10px 24px -16px rgba(8, 90, 62, .6), inset 3px 0 0 #b8923f;
+}
+
+/* Primary actions: emerald glass with a warm inner light. */
+.haven-create-button, .haven-dashboard-intro a {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--haven-accent) 92%, #fff), var(--haven-accent)) !important;
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--haven-accent) 80%, transparent), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -1px 0 rgba(184, 146, 63, .5) !important;
+  border-radius: 999px !important;
+}
+
+/* Headlines: lighter weight, tighter tracking, a more architectural feel. */
+.haven-page-heading h1, .haven-dashboard-intro h1 { font-weight: 500; letter-spacing: -.035em; }
+.haven-page-eyebrow { color: #a07b2f; letter-spacing: .22em; }
+:root[data-theme="dark"] .haven-page-eyebrow { color: #e0bd72; }
+
+/* Veil behind content is lighter now, so the villa reads through the glass. */
+/* Soft veil: clear at the top (sky), calmer in the middle so text never fights the
+   villa lines, and light again at the bottom where the pool sits. */
+.haven-veil {
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--haven-bg) 10%, transparent) 0%,
+    color-mix(in srgb, var(--haven-bg) 62%, transparent) 38%,
+    color-mix(in srgb, var(--haven-bg) 62%, transparent) 70%,
+    color-mix(in srgb, var(--haven-bg) 30%, transparent) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .haven-surface, .haven-metrics > li > a { transition: none; transform: none !important; }
+}
+/* Browsers without backdrop-filter get a near-solid panel so text stays readable. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --haven-panel: rgba(255, 255, 255, .94); }
+  :root[data-theme="dark"] { --haven-panel: rgba(12, 32, 24, .94); }
+}

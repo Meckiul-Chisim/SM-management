@@ -50,7 +50,7 @@ function AppLayout() {
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
         {ambientEnabled && <VideoBackground />}
         {/* A soft veil keeps text comfortable to read over moving light. */}
-        <div className="absolute inset-0 bg-gradient-to-b from-canvas/10 via-canvas/40 to-canvas/70" />
+        <div className="haven-veil absolute inset-0" />
       </div>
       {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
       <Sidebar />
