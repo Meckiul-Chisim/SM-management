@@ -1,43 +1,45 @@
 /*
- * Haven visual system — aligned with the App Update System.
- * Warm editorial canvas, indigo actions, restrained coral details, translucent
- * glass surfaces, generous type, and the same quiet light/night theme language.
+ * Haven luxury house theme: "Obsidian & Champagne".
+ * A modern, future-forward villa: travertine and glass by day, obsidian and warm
+ * interior light by night. Graphite and champagne-gold accents, large serif
+ * headlines, frosted-glass panels with a thin metal edge light.
  */
 :root {
-  --haven-bg: #f6faf7;
-  --haven-panel: rgba(255, 255, 253, .84);
-  --haven-panel-solid: #ffffff;
-  --haven-text: #10231b;
-  --haven-muted: #587065;
-  --haven-line: rgba(16, 70, 50, .12);
-  --haven-accent: #0b7a57;
-  --haven-accent-soft: rgba(11, 122, 87, .12);
-  --haven-coral: #b8923f;
-  --haven-shadow: rgba(10, 60, 42, .13);
-  --haven-glass-edge: rgba(255,255,255,.9);
-  --haven-radius-sm: 12px;
-  --haven-radius-md: 20px;
-  --haven-radius-lg: 28px;
   --haven-ease: cubic-bezier(.2,.7,.2,1);
+  --haven-radius-sm: 12px;
+  --haven-radius-md: 22px;
+  --haven-radius-lg: 30px;
+  --haven-bg: #f3efe8;                      /* travertine */
+  --haven-panel: rgba(255, 255, 255, .60);
+  --haven-panel-solid: #fffdf9;
+  --haven-text: #17130e;
+  --haven-muted: #6d645a;
+  --haven-line: rgba(60, 44, 20, .13);
+  --haven-accent: #1c1a17;                  /* graphite steel */
+  --haven-accent-soft: rgba(176, 138, 66, .14);
+  --haven-coral: #b08a42;                   /* champagne gold (kept name for older rules) */
+  --haven-gold: #b08a42;
+  --haven-shadow: rgba(52, 36, 12, .20);
+  --haven-glass-edge: rgba(255, 255, 255, .85);
 }
 :root[data-theme="dark"] {
-  --haven-bg: #0a1315;
-  --haven-panel: rgba(255, 255, 255, .07);
-  --haven-panel-solid: #122326;
-  --haven-text: #f2f8f6;
-  --haven-muted: #a9bdbb;
-  --haven-line: rgba(255,255,255,.12);
-  --haven-accent: #34d3a0;
-  --haven-accent-soft: rgba(52,211,160,.16);
-  --haven-coral: #e0bd72;
-  --haven-shadow: rgba(0,0,0,.38);
-  --haven-glass-edge: rgba(255,255,255,.08);
+  --haven-bg: #0b0a09;                      /* obsidian */
+  --haven-panel: rgba(255, 248, 235, .065);
+  --haven-panel-solid: #16130f;
+  --haven-text: #f6f1e8;
+  --haven-muted: #b4aa99;
+  --haven-line: rgba(255, 238, 210, .13);
+  --haven-accent: #dcbd78;                  /* champagne */
+  --haven-accent-soft: rgba(220, 189, 120, .15);
+  --haven-coral: #e8cf94;
+  --haven-gold: #dcbd78;
+  --haven-shadow: rgba(0, 0, 0, .55);
+  --haven-glass-edge: rgba(255, 245, 225, .10);
 }
 html { background: var(--haven-bg); }
 body {
   background:
-    radial-gradient(ellipse 35rem 28rem at 96% -8%, rgba(245,139,90,.15), transparent 72%),
-    radial-gradient(ellipse 34rem 30rem at 0% 100%, rgba(113,142,222,.13), transparent 72%),
+    radial-gradient(ellipse 40rem 28rem at 96% -8%, rgba(214,178,104,.18), transparent 72%),
     var(--haven-bg);
   color: var(--haven-text);
   font-family: "Instrument Sans Variable", "Inter", system-ui, sans-serif;
@@ -46,15 +48,18 @@ body {
 }
 :root[data-theme="dark"] body {
   background:
-    radial-gradient(ellipse 35rem 28rem at 96% -8%, rgba(181,68,38,.13), transparent 72%),
-    radial-gradient(ellipse 34rem 30rem at 0% 100%, rgba(50,72,152,.15), transparent 72%),
+    radial-gradient(ellipse 40rem 28rem at 96% -8%, rgba(200,160,80,.12), transparent 72%),
     var(--haven-bg);
 }
 h1,h2,h3,h4,.font-display {
-  font-family: "Bricolage Grotesque Variable", "Instrument Sans Variable", system-ui, sans-serif;
-  letter-spacing: -.035em;
+  font-family: "Instrument Sans Variable", "Inter", system-ui, sans-serif;
+  letter-spacing: -.02em;
 }
-h1 { font-size: clamp(2rem, 3vw, 2.7rem); line-height: 1.06; font-weight: 500; }
+/* Large editorial serif for page titles and section headings. */
+h1, h2 { font-family: "Instrument Serif", "Iowan Old Style", Georgia, serif; font-weight: 400; letter-spacing: -.015em; }
+h1 { font-size: clamp(2.4rem, 4.2vw, 3.7rem); line-height: 1.02; }
+h2 { font-size: 1.55em; }
+h3 { font-weight: 600; }
 h2 { line-height: 1.16; }
 ::selection { background: var(--haven-accent-soft); color: var(--haven-text); }
 :focus-visible { outline-color: var(--haven-accent); }
@@ -111,14 +116,14 @@ body,
   filter: drop-shadow(0 7px 9px color-mix(in srgb, var(--haven-accent) 18%, transparent));
   transition: transform 220ms var(--haven-ease), filter 220ms ease;
 }
-.haven-logo-frame { fill: var(--haven-accent); }
+.haven-logo-frame { fill: var(--haven-gold); }
 .haven-logo-window { fill: var(--haven-panel-solid); }
-.haven-logo-line { fill: none; stroke: var(--haven-accent); stroke-width: 2.2; stroke-linecap: round; }
+.haven-logo-line { fill: none; stroke: var(--haven-gold); stroke-width: 2.2; stroke-linecap: round; }
 .haven-brand:hover .haven-logo {
   transform: rotate(-5deg) scale(1.06);
   filter: drop-shadow(0 10px 11px color-mix(in srgb, var(--haven-accent) 28%, transparent));
 }
-.haven-brand:hover .haven-logo-frame { fill: var(--haven-coral); }
+.haven-brand:hover .haven-logo-frame { fill: var(--haven-text); }
 .haven-brand-caption {
   margin: .6rem 0 0 2.6rem;
   color: var(--haven-muted);
@@ -189,10 +194,10 @@ body,
   box-shadow: 0 10px 25px -14px var(--haven-accent);
   transition: transform .2s var(--haven-ease), box-shadow .2s ease;
 }
-:root[data-theme="dark"] .haven-create-button { color: #211713; }
+:root[data-theme="dark"] .haven-create-button { color: #17120a; }
 .haven-create-button:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -13px var(--haven-accent); }
 .haven-local-note { display: flex; align-items: center; gap: .45rem; margin: .85rem .3rem 0; color: var(--haven-muted); font-size: .67rem; line-height: 1.4; }
-.haven-status-dot { width: 6px; height: 6px; flex: 0 0 6px; border-radius: 50%; background: #3e9b71; }
+.haven-status-dot { width: 6px; height: 6px; flex: 0 0 6px; border-radius: 50%; background: var(--haven-gold); }
 
 /* Header and content column echo the updater's calm, editorial page rhythm. */
 .haven-header {
@@ -316,12 +321,12 @@ body,
   --color-brand-700: var(--haven-accent);
   --color-brand-800: color-mix(in srgb, var(--haven-accent) 84%, #111827);
   --color-brand-900: var(--haven-accent);
-  --color-on-brand: #fffaf5;
+  --color-on-brand: #fbf7ee;
   --shadow-soft: 0 1px 2px var(--haven-shadow), 0 18px 42px -26px var(--haven-shadow);
   --glass-highlight: var(--haven-glass-edge);
   --glass-shadow: var(--haven-shadow);
 }
-:root[data-theme="dark"] { --color-on-brand: #211713; }
+:root[data-theme="dark"] { --color-on-brand: #17120a; }
 
 body { background-color: var(--haven-bg); }
 #root { min-height: 100vh; }
@@ -517,15 +522,13 @@ body { background-color: var(--haven-bg); }
    only changes surfaces (colour, blur, border, shadow), not layout.
    ====================================================================== */
 :root {
-  --haven-panel: rgba(255, 255, 255, .56);
-  --haven-glass-blur: blur(26px) saturate(165%);
-  --haven-gold-line: linear-gradient(90deg, transparent, rgba(184, 146, 63, .75), transparent);
+  --haven-glass-blur: blur(28px) saturate(150%);
+  --haven-gold-line: linear-gradient(90deg, transparent, rgba(176, 138, 66, .8), transparent);
   --haven-glass-border: rgba(255, 255, 255, .75);
-  --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 30px 70px -40px rgba(8, 70, 50, .5);
+  --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.85) inset, 0 34px 70px -42px rgba(52, 36, 12, .38);
 }
 :root[data-theme="dark"] {
-  --haven-panel: rgba(255, 255, 255, .075);
-  --haven-gold-line: linear-gradient(90deg, transparent, rgba(224, 189, 114, .7), transparent);
+  --haven-gold-line: linear-gradient(90deg, transparent, rgba(220, 189, 120, .75), transparent);
   --haven-glass-border: rgba(255, 255, 255, .17);
   --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.14) inset, 0 30px 70px -38px rgba(0, 0, 0, .7);
 }
@@ -568,31 +571,31 @@ body { background-color: var(--haven-bg); }
   -webkit-backdrop-filter: blur(30px) saturate(170%);
   backdrop-filter: blur(30px) saturate(170%);
   border-right: 1px solid var(--haven-glass-border);
-  box-shadow: 1px 0 0 rgba(184, 146, 63, .28), 30px 0 60px -50px rgba(8, 70, 50, .5);
+  box-shadow: 1px 0 0 rgba(176, 138, 66, .28), 30px 0 60px -50px rgba(52, 36, 12, .30);
 }
 .haven-header {
   background: color-mix(in srgb, var(--haven-panel-solid) 30%, transparent);
   border-bottom: 1px solid var(--haven-glass-border);
-  box-shadow: 0 1px 0 rgba(184, 146, 63, .22);
+  box-shadow: 0 1px 0 rgba(176, 138, 66, .22);
 }
 .haven-nav-link { border-radius: 16px; }
 .haven-nav-link.is-active {
   background: color-mix(in srgb, var(--haven-panel-solid) 55%, transparent);
   border: 1px solid var(--haven-glass-border);
-  box-shadow: 0 10px 24px -16px rgba(8, 90, 62, .6), inset 3px 0 0 #b8923f;
+  box-shadow: 0 10px 24px -16px rgba(52, 36, 12, .35), inset 3px 0 0 var(--haven-gold);
 }
 
-/* Primary actions: emerald glass with a warm inner light. */
+/* Primary actions: graphite (light) or champagne (dark) with a warm inner light. */
 .haven-create-button, .haven-dashboard-intro a {
   background: linear-gradient(180deg, color-mix(in srgb, var(--haven-accent) 92%, #fff), var(--haven-accent)) !important;
-  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--haven-accent) 80%, transparent), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -1px 0 rgba(184, 146, 63, .5) !important;
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--haven-accent) 80%, transparent), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -1px 0 rgba(176, 138, 66, .5) !important;
   border-radius: 999px !important;
 }
 
 /* Headlines: lighter weight, tighter tracking, a more architectural feel. */
-.haven-page-heading h1, .haven-dashboard-intro h1 { font-weight: 500; letter-spacing: -.035em; }
-.haven-page-eyebrow { color: #a07b2f; letter-spacing: .22em; }
-:root[data-theme="dark"] .haven-page-eyebrow { color: #e0bd72; }
+.haven-page-heading h1, .haven-dashboard-intro h1 { font-weight: 400; letter-spacing: -.02em; }
+.haven-page-eyebrow { color: #96742f; letter-spacing: .24em; }
+:root[data-theme="dark"] .haven-page-eyebrow { color: #dcbd78; }
 
 /* Veil behind content is lighter now, so the villa reads through the glass. */
 /* Soft veil: clear at the top (sky), calmer in the middle so text never fights the
@@ -624,7 +627,7 @@ label[for], .cursor-pointer { cursor: pointer; }
 button:disabled, [aria-disabled="true"], select:disabled, input:disabled { cursor: not-allowed; }
 input[type="text"], input[type="search"], input:not([type]), textarea { cursor: text; }
 
-/* Buttons and links: a small lift with a soft emerald glow. */
+/* Buttons and links: a small lift with a soft gold glow. */
 button:not(:disabled):not(.haven-nav-link), a.haven-create-button, .haven-dashboard-intro a,
 [role="button"]:not([aria-disabled="true"]) {
   transition: transform .22s var(--haven-ease), box-shadow .22s ease, background-color .22s ease, border-color .22s ease, filter .22s ease;
@@ -637,26 +640,26 @@ button:not(:disabled):active, .haven-dashboard-intro a:active { transform: trans
 .haven-create-button:hover, .haven-dashboard-intro a:hover {
   box-shadow: 0 18px 36px -14px color-mix(in srgb, var(--haven-accent) 85%, transparent),
               0 0 0 4px color-mix(in srgb, var(--haven-accent) 16%, transparent),
-              inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(184,146,63,.6) !important;
+              inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(176,138,66,.6) !important;
 }
 
 /* Secondary buttons and icon buttons gain a glass highlight and gold edge on hover. */
-button:not(:disabled):not(.haven-create-button):hover { border-color: color-mix(in srgb, #b8923f 60%, var(--haven-line)); }
+button:not(:disabled):not(.haven-create-button):hover { border-color: color-mix(in srgb, var(--haven-gold) 60%, var(--haven-line)); }
 button:not(:disabled):not(.haven-create-button):not(.haven-nav-link):hover { background-color: color-mix(in srgb, var(--haven-accent) 10%, transparent); }
 
 /* Navigation: the row slides a little and the icon warms up. */
 .haven-nav-link { transition: transform .22s var(--haven-ease), background-color .22s ease, color .22s ease; }
 .haven-nav-link:hover { transform: translateX(4px); }
-.haven-nav-link:hover .haven-nav-icon { color: #b8923f; transform: scale(1.08); }
+.haven-nav-link:hover .haven-nav-icon { color: var(--haven-gold); transform: scale(1.08); }
 .haven-nav-icon { transition: transform .22s var(--haven-ease), color .22s ease; }
 
 /* Links inside text: underline slides in. */
 .haven-page-content a:not([class*="rounded"]):not(.haven-nav-link) { text-underline-offset: 3px; transition: color .2s ease, text-decoration-color .2s ease; }
-.haven-page-content a:not([class*="rounded"]):not(.haven-nav-link):hover { text-decoration: underline; text-decoration-color: #b8923f; }
+.haven-page-content a:not([class*="rounded"]):not(.haven-nav-link):hover { text-decoration: underline; text-decoration-color: var(--haven-gold); }
 
 /* Clickable cards (links that wrap a card, calendar posts, list rows). */
 a.haven-surface:hover, .haven-week-card a:hover, [role="button"].haven-surface:hover {
-  box-shadow: var(--haven-glass-shadow), 0 0 0 1px color-mix(in srgb, #b8923f 55%, transparent) !important;
+  box-shadow: var(--haven-glass-shadow), 0 0 0 1px color-mix(in srgb, var(--haven-gold) 55%, transparent) !important;
 }
 /* Form controls: a soft glow when hovered so it is clear they are interactive. */
 select:not(:disabled):hover, input:not(:disabled):not([type="checkbox"]):not([type="radio"]):hover, textarea:hover {

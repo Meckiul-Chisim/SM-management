@@ -10,27 +10,27 @@
   Naming is by role, not by colour:
     canvas / surface / panel   page, quiet fills, raised surfaces
     ink / muted / faint        text, from strongest to weakest
-    brand-*                    the moss green used for actions and selection
+    brand-*                    the graphite and champagne used for actions and selection
     on-brand                   text that sits on a brand-700 fill
 */
 @theme {
-  --color-canvas: #f6faf7;
-  --color-surface: #eaf3ee;
+  --color-canvas: #f3efe8;
+  --color-surface: #ece6db;
   --color-panel: #ffffff;
   --color-panel-raised: #ffffff;
-  --color-line: #dde9e2;
-  --color-ink: #10231b;
-  --color-muted: #587065;
-  --color-faint: #8ca096;
+  --color-line: #e3dccf;
+  --color-ink: #17130e;
+  --color-muted: #6d645a;
+  --color-faint: #9a9184;
 
-  --color-brand-50: #e9f6ef;
-  --color-brand-100: #cdebdb;
-  --color-brand-700: #0b7a57;
-  --color-brand-800: #08654a;
-  --color-brand-900: #0a3f2e;
-  --color-on-brand: #ffffff;
+  --color-brand-50: #f6eedc;
+  --color-brand-100: #ecdcb8;
+  --color-brand-700: #1c1a17;
+  --color-brand-800: #2b2824;
+  --color-brand-900: #3a352e;
+  --color-on-brand: #fbf7ee;
 
-  --color-info-bg: #e4eef0;
+  --color-info-bg: #e8ecee;
   --color-info: #2a5670;
   --color-success-bg: #e0ecd9;
   --color-success: #2a6a41;
@@ -42,12 +42,12 @@
   --color-gold-ink: #7d5a1c;
   --color-gold-soft: #f2e5c9;
   --color-gold-soft-line: #e3d0a4;
-  --color-scrim: rgb(8 28 20 / 0.45);
+  --color-scrim: rgb(14 10 4 / 0.5);
   --color-glass: rgb(255 255 253 / 0.70);
   --color-glass-line: rgb(255 255 255 / 0.9);
-  --shadow-soft: 0 1px 2px rgb(10 50 36 / 0.05), 0 14px 34px -14px rgb(10 70 50 / 0.18);
+  --shadow-soft: 0 1px 2px rgb(52 36 12 / 0.06), 0 14px 34px -14px rgb(52 36 12 / 0.22);
   --glass-highlight: rgb(255 255 255 / 0.7);
-  --glass-shadow: rgb(10 50 36 / 0.16);
+  --glass-shadow: rgb(52 36 12 / 0.16);
 
   --font-sans: "Instrument Sans Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque Variable", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
@@ -56,23 +56,23 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-canvas: #0a1315;
-  --color-surface: #102022;
-  --color-panel: #122326;
-  --color-panel-raised: #172c30;
-  --color-line: #25393c;
-  --color-ink: #f2f8f6;
-  --color-muted: #a9bdbb;
-  --color-faint: #76908d;
+  --color-canvas: #0b0a09;
+  --color-surface: #13110e;
+  --color-panel: #16130f;
+  --color-panel-raised: #1c1913;
+  --color-line: #2c261d;
+  --color-ink: #f6f1e8;
+  --color-muted: #b4aa99;
+  --color-faint: #857b6a;
 
-  --color-brand-50: #12301f;
-  --color-brand-100: #1a4630;
-  --color-brand-700: #34d3a0;
-  --color-brand-800: #6fe0b8;
-  --color-brand-900: #d5f7e8;
-  --color-on-brand: #04180f;
+  --color-brand-50: #2a2214;
+  --color-brand-100: #3b2f1a;
+  --color-brand-700: #dcbd78;
+  --color-brand-800: #e8cf94;
+  --color-brand-900: #f5e6bd;
+  --color-on-brand: #17120a;
 
-  --color-info-bg: #1a2a33;
+  --color-info-bg: #1f2528;
   --color-info: #a9cfe6;
   --color-success-bg: #1d3226;
   --color-success: #a4dcb8;
@@ -311,7 +311,7 @@ html.theme-transition *::after {
 .lift:hover {
   transform: translateY(-3px);
   border-color: var(--color-gold-soft-line);
-  box-shadow: 0 1px 2px rgb(10 50 36 / 0.05), 0 22px 44px -18px rgb(10 70 50 / 0.28);
+  box-shadow: 0 1px 2px rgb(52 36 12 / 0.06), 0 22px 44px -18px rgb(52 36 12 / 0.3);
 }
 
 button:not(:disabled):active, a.press:active { transform: scale(0.985); }
