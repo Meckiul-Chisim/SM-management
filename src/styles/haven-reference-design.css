@@ -4,16 +4,16 @@
  * glass surfaces, generous type, and the same quiet light/night theme language.
  */
 :root {
-  --haven-bg: #f4f1ea;
-  --haven-panel: rgba(255, 253, 248, .82);
-  --haven-panel-solid: #fffdf8;
-  --haven-text: #18202b;
-  --haven-muted: #647080;
-  --haven-line: rgba(50, 39, 29, .12);
-  --haven-accent: #436572;
-  --haven-accent-soft: rgba(49, 87, 213, .12);
-  --haven-coral: #a9341d;
-  --haven-shadow: rgba(64, 42, 26, .13);
+  --haven-bg: #f6faf7;
+  --haven-panel: rgba(255, 255, 253, .84);
+  --haven-panel-solid: #ffffff;
+  --haven-text: #10231b;
+  --haven-muted: #587065;
+  --haven-line: rgba(16, 70, 50, .12);
+  --haven-accent: #0b7a57;
+  --haven-accent-soft: rgba(11, 122, 87, .12);
+  --haven-coral: #b8923f;
+  --haven-shadow: rgba(10, 60, 42, .13);
   --haven-glass-edge: rgba(255,255,255,.9);
   --haven-radius-sm: 12px;
   --haven-radius-md: 20px;
@@ -21,15 +21,15 @@
   --haven-ease: cubic-bezier(.2,.7,.2,1);
 }
 :root[data-theme="dark"] {
-  --haven-bg: #17191d;
-  --haven-panel: rgba(38, 35, 32, .84);
-  --haven-panel-solid: #202329;
-  --haven-text: #f4f2ed;
-  --haven-muted: #b6aca0;
-  --haven-line: rgba(255,244,230,.12);
-  --haven-accent: #ff7653;
-  --haven-accent-soft: rgba(255,118,83,.16);
-  --haven-coral: #ff9a7f;
+  --haven-bg: #08130e;
+  --haven-panel: rgba(15, 33, 26, .86);
+  --haven-panel-solid: #0f211a;
+  --haven-text: #eef6f1;
+  --haven-muted: #a3b8ac;
+  --haven-line: rgba(210,255,235,.12);
+  --haven-accent: #3fcf9b;
+  --haven-accent-soft: rgba(63,207,155,.16);
+  --haven-coral: #e0bd72;
   --haven-shadow: rgba(0,0,0,.38);
   --haven-glass-edge: rgba(255,255,255,.08);
 }

@@ -14,23 +14,23 @@
     on-brand                   text that sits on a brand-700 fill
 */
 @theme {
-  --color-canvas: #f5f6f8;
-  --color-surface: #eef1f5;
+  --color-canvas: #f6faf7;
+  --color-surface: #eaf3ee;
   --color-panel: #ffffff;
   --color-panel-raised: #ffffff;
-  --color-line: #e3e6eb;
-  --color-ink: #17191d;
-  --color-muted: #69707a;
-  --color-faint: #9298a2;
+  --color-line: #dde9e2;
+  --color-ink: #10231b;
+  --color-muted: #587065;
+  --color-faint: #8ca096;
 
-  --color-brand-50: #edf4ff;
-  --color-brand-100: #d7e6fb;
-  --color-brand-700: #246bfe;
-  --color-brand-800: #1758d8;
-  --color-brand-900: #143a7a;
+  --color-brand-50: #e9f6ef;
+  --color-brand-100: #cdebdb;
+  --color-brand-700: #0b7a57;
+  --color-brand-800: #08654a;
+  --color-brand-900: #0a3f2e;
   --color-on-brand: #ffffff;
 
-  --color-info-bg: #e6ecef;
+  --color-info-bg: #e4eef0;
   --color-info: #2a5670;
   --color-success-bg: #e0ecd9;
   --color-success: #2a6a41;
@@ -42,12 +42,12 @@
   --color-gold-ink: #7d5a1c;
   --color-gold-soft: #f2e5c9;
   --color-gold-soft-line: #e3d0a4;
-  --color-scrim: rgb(34 28 20 / 0.45);
-  --color-glass: rgb(255 252 246 / 0.66);
+  --color-scrim: rgb(8 28 20 / 0.45);
+  --color-glass: rgb(255 255 253 / 0.70);
   --color-glass-line: rgb(255 255 255 / 0.9);
-  --shadow-soft: 0 1px 2px rgb(60 40 10 / 0.05), 0 14px 34px -14px rgb(90 60 20 / 0.18);
+  --shadow-soft: 0 1px 2px rgb(10 50 36 / 0.05), 0 14px 34px -14px rgb(10 70 50 / 0.18);
   --glass-highlight: rgb(255 255 255 / 0.7);
-  --glass-shadow: rgb(23 35 30 / 0.16);
+  --glass-shadow: rgb(10 50 36 / 0.16);
 
   --font-sans: "Instrument Sans Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque Variable", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
@@ -56,21 +56,21 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-canvas: #101214;
-  --color-surface: #17191d;
-  --color-panel: #1a1d21;
-  --color-panel-raised: #21242a;
-  --color-line: #2b2f36;
-  --color-ink: #f4f5f7;
-  --color-muted: #a9aebb;
-  --color-faint: #777d88;
+  --color-canvas: #08130e;
+  --color-surface: #0d1c15;
+  --color-panel: #0f211a;
+  --color-panel-raised: #14291f;
+  --color-line: #1f372b;
+  --color-ink: #eef6f1;
+  --color-muted: #a3b8ac;
+  --color-faint: #70887b;
 
-  --color-brand-50: #1b293f;
-  --color-brand-100: #253b60;
-  --color-brand-700: #6e9cff;
-  --color-brand-800: #91b5ff;
-  --color-brand-900: #dbe8ff;
-  --color-on-brand: #0d1625;
+  --color-brand-50: #12301f;
+  --color-brand-100: #1a4630;
+  --color-brand-700: #3fcf9b;
+  --color-brand-800: #6fe0b8;
+  --color-brand-900: #d5f7e8;
+  --color-on-brand: #04180f;
 
   --color-info-bg: #1a2a33;
   --color-info: #a9cfe6;
@@ -84,7 +84,7 @@
   --color-gold-ink: #e8cc94;
   --color-gold-soft: #3a2f1a;
   --color-scrim: rgb(0 0 0 / 0.6);
-  --color-glass: rgb(28 25 20 / 0.58);
+  --color-glass: rgb(12 30 22 / 0.60);
   --color-glass-line: rgb(255 255 255 / 0.07);
   --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 16px 36px -16px rgb(0 0 0 / 0.55);
   --glass-highlight: rgb(255 255 255 / 0.06);
@@ -311,7 +311,7 @@ html.theme-transition *::after {
 .lift:hover {
   transform: translateY(-3px);
   border-color: var(--color-gold-soft-line);
-  box-shadow: 0 1px 2px rgb(60 40 10 / 0.05), 0 22px 44px -18px rgb(90 60 20 / 0.28);
+  box-shadow: 0 1px 2px rgb(10 50 36 / 0.05), 0 22px 44px -18px rgb(10 70 50 / 0.28);
 }
 
 button:not(:disabled):active, a.press:active { transform: scale(0.985); }
