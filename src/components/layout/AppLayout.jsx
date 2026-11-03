@@ -54,7 +54,7 @@ function AppLayout() {
       </div>
       {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
       <Sidebar />
-      <div className="relative z-1 min-h-screen min-w-0 pt-[4.1rem] sm:pt-18 md:pl-65">
+      <div className="relative z-1 min-h-screen min-w-0 pt-[4.1rem] md:pt-18 md:pl-65">
         <Header
           onQuickActions={() => setPaletteOpen(true)}
           onMenuClick={() => setMobileNavigationOpen((open) => !open)}

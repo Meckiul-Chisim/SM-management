@@ -11,14 +11,14 @@ function MobileNavigation({ open, onNavigate }) {
           tabIndex={-1}
           aria-label="Close navigation menu"
           onClick={onNavigate}
-          className="fixed inset-0 top-16 z-20 bg-scrim md:hidden"
+          className="fixed inset-0 top-[4.1rem] z-20 bg-scrim md:hidden"
         />
       )}
       <nav
         id="mobile-navigation"
         aria-label="Mobile navigation"
         hidden={!open}
-        className="fixed inset-x-0 top-16 z-30 max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-line bg-canvas px-4 py-3 shadow-xl md:hidden"
+        className="fixed inset-x-0 top-[4.1rem] z-30 max-h-[calc(100dvh-4.1rem)] overflow-y-auto border-b border-line bg-canvas px-4 py-3 shadow-xl md:hidden"
       >
         {navigationItems.map(({ label, to, icon: Icon }) => (
           <NavLink

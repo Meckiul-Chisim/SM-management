@@ -53,7 +53,7 @@ function Header({ onMenuClick, menuExpanded, onQuickActions }) {
   )
 
   return (
-    <header className="haven-header fixed inset-x-0 top-0 z-10 flex h-18 items-center gap-3 px-4 md:left-65 sm:px-7 xl:px-10">
+    <header className="haven-header fixed left-0 right-0 top-0 z-10 flex h-18 items-center gap-3 px-4 md:left-65 sm:px-7 xl:px-10">
       <IconButton
         label={menuExpanded ? 'Close navigation menu' : 'Open navigation menu'}
         onClick={onMenuClick}
