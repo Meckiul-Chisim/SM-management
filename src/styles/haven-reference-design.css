@@ -613,3 +613,60 @@ body { background-color: var(--haven-bg); }
   :root { --haven-panel: rgba(255, 255, 255, .94); }
   :root[data-theme="dark"] { --haven-panel: rgba(12, 32, 24, .94); }
 }
+
+/* ======================================================================
+   Interactive states: every clickable gets a pointer cursor and a hover
+   response. Disabled controls get a "not-allowed" cursor and no effects.
+   ====================================================================== */
+a[href], button, summary, select, [role="button"], [role="tab"], [role="option"], [role="menuitem"],
+input[type="checkbox"], input[type="radio"], input[type="file"], input[type="date"], input[type="datetime-local"],
+label[for], .cursor-pointer { cursor: pointer; }
+button:disabled, [aria-disabled="true"], select:disabled, input:disabled { cursor: not-allowed; }
+input[type="text"], input[type="search"], input:not([type]), textarea { cursor: text; }
+
+/* Buttons and links: a small lift with a soft emerald glow. */
+button:not(:disabled):not(.haven-nav-link), a.haven-create-button, .haven-dashboard-intro a,
+[role="button"]:not([aria-disabled="true"]) {
+  transition: transform .22s var(--haven-ease), box-shadow .22s ease, background-color .22s ease, border-color .22s ease, filter .22s ease;
+}
+button:not(:disabled):hover, .haven-dashboard-intro a:hover, a.haven-create-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+button:not(:disabled):active, .haven-dashboard-intro a:active { transform: translateY(0) scale(.98); }
+.haven-create-button:hover, .haven-dashboard-intro a:hover {
+  box-shadow: 0 18px 36px -14px color-mix(in srgb, var(--haven-accent) 85%, transparent),
+              0 0 0 4px color-mix(in srgb, var(--haven-accent) 16%, transparent),
+              inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(184,146,63,.6) !important;
+}
+
+/* Secondary buttons and icon buttons gain a glass highlight and gold edge on hover. */
+button:not(:disabled):not(.haven-create-button):hover { border-color: color-mix(in srgb, #b8923f 60%, var(--haven-line)); }
+button:not(:disabled):not(.haven-create-button):not(.haven-nav-link):hover { background-color: color-mix(in srgb, var(--haven-accent) 10%, transparent); }
+
+/* Navigation: the row slides a little and the icon warms up. */
+.haven-nav-link { transition: transform .22s var(--haven-ease), background-color .22s ease, color .22s ease; }
+.haven-nav-link:hover { transform: translateX(4px); }
+.haven-nav-link:hover .haven-nav-icon { color: #b8923f; transform: scale(1.08); }
+.haven-nav-icon { transition: transform .22s var(--haven-ease), color .22s ease; }
+
+/* Links inside text: underline slides in. */
+.haven-page-content a:not([class*="rounded"]):not(.haven-nav-link) { text-underline-offset: 3px; transition: color .2s ease, text-decoration-color .2s ease; }
+.haven-page-content a:not([class*="rounded"]):not(.haven-nav-link):hover { text-decoration: underline; text-decoration-color: #b8923f; }
+
+/* Clickable cards (links that wrap a card, calendar posts, list rows). */
+a.haven-surface:hover, .haven-week-card a:hover, [role="button"].haven-surface:hover {
+  box-shadow: var(--haven-glass-shadow), 0 0 0 1px color-mix(in srgb, #b8923f 55%, transparent) !important;
+}
+/* Form controls: a soft glow when hovered so it is clear they are interactive. */
+select:not(:disabled):hover, input:not(:disabled):not([type="checkbox"]):not([type="radio"]):hover, textarea:hover {
+  border-color: color-mix(in srgb, var(--haven-accent) 55%, var(--haven-line));
+}
+input[type="checkbox"]:hover, input[type="radio"]:hover { filter: brightness(1.1); }
+
+@media (hover: none) { /* touch screens: skip the hover movement */
+  button:hover, .haven-nav-link:hover, .haven-dashboard-intro a:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  button:hover, .haven-nav-link:hover, .haven-nav-link:hover .haven-nav-icon { transform: none !important; }
+}
