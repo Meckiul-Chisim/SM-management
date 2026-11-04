@@ -603,8 +603,8 @@ body { background-color: var(--haven-bg); }
 .haven-veil {
   background: linear-gradient(to bottom,
     color-mix(in srgb, var(--haven-bg) 10%, transparent) 0%,
-    color-mix(in srgb, var(--haven-bg) 62%, transparent) 38%,
-    color-mix(in srgb, var(--haven-bg) 62%, transparent) 70%,
+    color-mix(in srgb, var(--haven-bg) 52%, transparent) 38%,
+    color-mix(in srgb, var(--haven-bg) 52%, transparent) 70%,
     color-mix(in srgb, var(--haven-bg) 30%, transparent) 100%);
 }
 
@@ -683,5 +683,14 @@ input[type="checkbox"]:hover, input[type="radio"]:hover { filter: brightness(1.1
 /* Light mode: a brighter veil keeps the whole page milk-white and clean. */
 :root:not([data-theme="dark"]) .haven-veil {
   background: linear-gradient(to bottom,
-    rgba(255,255,255,.35) 0%, rgba(253,252,249,.72) 38%, rgba(253,252,249,.72) 70%, rgba(253,252,249,.45) 100%);
+    rgba(255,255,255,.12) 0%, rgba(253,252,249,.46) 40%, rgba(253,252,249,.50) 72%, rgba(253,252,249,.20) 100%);
 }
+
+/* Info notices sit on frosted glass so the background never runs through their text. */
+.notice-info {
+  background: var(--haven-panel) !important;
+  -webkit-backdrop-filter: var(--haven-glass-blur);
+  backdrop-filter: var(--haven-glass-blur);
+  border-radius: 16px !important;
+}
+:root:not([data-theme="dark"]) .notice-info { background: rgba(255, 255, 255, .78) !important; }
