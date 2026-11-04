@@ -10,13 +10,13 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle.js'
 // because none of these exist. Update this list as real features are built.
 const ITEMS = [
   { icon: Cable, title: 'Connect social accounts', needs: 'A backend and an approved developer app with each platform (OAuth sign-in).' },
-  { icon: Send, title: 'Schedule and publish automatically', needs: 'Platform publishing APIs plus a server that runs jobs at the planned time.' },
+  { icon: Send, title: 'Schedule and publish automatically', needs: 'Platform publishing APIs plus a server that runs jobs at the planned time. YouTube upload on demand already works; Instagram, scheduling and the other platforms are not built.' },
   { icon: MessageCircle, title: 'Live comments and messages', needs: 'Connected accounts and platform inbox APIs, plus background syncing.' },
   { icon: LineChart, title: 'Real analytics', needs: 'Connected accounts and platform analytics APIs. Insights today are planning insights only.' },
   { icon: Users, title: 'Teams, roles and approvals', needs: 'User accounts, permissions and a shared database.' },
   { icon: Cloud, title: 'Accounts and cloud sync', needs: 'Authentication and hosted storage, so a workspace follows you across devices.' },
   { icon: Sparkles, title: 'AI-assisted writing', needs: 'A language model API and a server to keep its key private. The draft helper today is template-based.' },
-  { icon: ImagePlus, title: 'Media library and uploads', needs: 'File storage. Posts are text-only today.' },
+  { icon: ImagePlus, title: 'Media library and uploads', needs: 'Shared file storage. Each post can carry one video or image today, kept in this browser only; there is no media library or cloud storage.' },
 ]
 
 function Roadmap() {

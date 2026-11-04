@@ -81,6 +81,8 @@ export function validatePost(input) {
       platform: input.platform,
       status: input.status,
       scheduledAt,
+      // Only included when the form touched the attachment (null removes it).
+      ...(input.media !== undefined ? { media: input.media } : {}),
     },
   }
 }

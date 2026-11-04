@@ -12,6 +12,7 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle.js'
 import { useToast } from '../hooks/useToast.js'
 import { useWorkspace } from '../hooks/useWorkspace.js'
 import { setAmbientEnabled, useAmbientEnabled } from '../utils/ambientPreference.js'
+import { getGoogleClientId, isValidGoogleClientId, setGoogleClientId } from '../services/connections.js'
 
 const plural = (count, word) => `${count} ${word}${count === 1 ? '' : 's'}`
 
@@ -35,6 +36,55 @@ function WorkspaceNameForm({ name, onSave }) {
       <TextField label="Workspace name" value={value} error={error} onChange={(event) => setValue(event.target.value)} hint="Shown in the sidebar and the browser tab." />
       <Button type="submit" className="mt-4">Save name</Button>
     </form>
+  )
+}
+
+// Where the Google client ID for YouTube uploads is entered. It is a public value (not a
+// secret) and is saved in this browser only. Nothing is uploaded from this form.
+function YouTubeConnection() {
+  const toast = useToast()
+  const [value, setValue] = useState(() => getGoogleClientId())
+  const [saved, setSaved] = useState(() => getGoogleClientId())
+  const [error, setError] = useState('')
+
+  function submit(event) {
+    event.preventDefault()
+    if (value.trim() && !isValidGoogleClientId(value)) {
+      setError('This does not look like a Google client ID. It ends with .apps.googleusercontent.com')
+      return
+    }
+    setError('')
+    if (setGoogleClientId(value)) {
+      setSaved(value.trim())
+      toast.show(value.trim() ? 'YouTube connection saved.' : 'YouTube connection removed.')
+    } else {
+      setError('This browser could not save it.')
+    }
+  }
+
+  return (
+    <Card className="p-5 sm:p-6 xl:col-span-2">
+      <h2 className="font-semibold text-ink">YouTube uploads</h2>
+      <p className="mt-1 max-w-3xl text-sm leading-6 text-muted">
+        Upload a post’s video to your own channel. You create a Google client ID once (the setup guide in <code>docs/youtube-upload-setup.md</code> has the steps). You sign in with Google each time you upload; no password or token is ever saved.
+      </p>
+      <form onSubmit={submit} noValidate className="mt-4 max-w-2xl">
+        <TextField
+          label="Google client ID"
+          value={value}
+          error={error}
+          onChange={(event) => setValue(event.target.value)}
+          placeholder="1234567890-abc123.apps.googleusercontent.com"
+          hint={saved ? 'Connected. Open a YouTube post in Content studio and choose Upload to YouTube.' : 'Not connected yet.'}
+          autoComplete="off"
+          spellCheck="false"
+        />
+        <Button type="submit" className="mt-4">{saved && !value.trim() ? 'Remove connection' : 'Save connection'}</Button>
+      </form>
+      <p className="mt-4 max-w-3xl text-xs leading-5 text-muted">
+        Good to know: until Google verifies your project, videos uploaded this way may be locked as private, and only accounts listed as test users can sign in. Uploaded videos can be made public in YouTube Studio.
+      </p>
+    </Card>
   )
 }
 
@@ -72,7 +122,7 @@ function Settings() {
       <PageHeader title="Settings" description="Name your workspace, back up your data and manage sample content." />
 
       <Notice tone="warning" className="mb-6">
-        <strong>Local-only demo.</strong> Your data is saved in this browser only. There is no sign-in, cloud sync, team sharing or connection to social platforms.
+        <strong>Local-only demo.</strong> Your data is saved in this browser only. There is no sign-in, cloud sync or team sharing. The only optional connection is YouTube uploads, which you set up below; every other platform is copy-and-post.
       </Notice>
 
       <div className="grid gap-5 xl:grid-cols-2">
@@ -85,6 +135,8 @@ function Settings() {
         </Card>
 
         <BackupSection />
+
+        <YouTubeConnection />
 
         <Card className="p-5 sm:p-6">
           <h2 className="font-semibold text-ink">Appearance</h2>
@@ -127,7 +179,7 @@ function Settings() {
       </div>
 
       <p className="mt-6 max-w-3xl text-xs leading-5 text-muted">
-        Privacy: nothing you enter is sent to a server. Anyone using this browser profile may be able to read it. Do not store sensitive customer information in this demo.
+        Privacy: nothing you enter is sent to a server of ours. If you upload to YouTube, the video, title and text go directly from your browser to Google. Attached files stay in this browser and are not included in backups. Anyone using this browser profile may be able to read it. Do not store sensitive customer information in this demo.
       </p>
 
       {confirm && (

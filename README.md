@@ -14,7 +14,8 @@ Haven helps a freelancer, creator or small agency plan social content in one pla
 - **Insights** – planning insights worked out from your own posts: pipeline, platform and brand mix, the next 28 days. These are not social platform analytics.
 - **Roadmap** – an honest list of what this demo does not do yet and what each item would need. Nothing on it is clickable because none of it exists.
 - **Quick actions** – press Ctrl+K (Cmd+K on Mac) to jump to a page, create something or find a post.
-- **Settings** – rename the workspace, export a JSON backup, import a backup (validated and previewed before it replaces anything), remove or reset sample data, delete all data, turn the animated background off.
+- **YouTube upload (real)** – attach a video to a YouTube post and upload it to your own channel straight from the browser (Google sign-in, no server). It is private by default and you confirm each upload. It needs a one-time Google client ID: see [docs/youtube-upload-setup.md](docs/youtube-upload-setup.md). Attached files are kept in this browser (IndexedDB) and are not part of backups.
+- **Settings** – rename the workspace, connect YouTube, export a JSON backup, import a backup (validated and previewed before it replaces anything), remove or reset sample data, delete all data, turn the animated background off.
 - A warm light and dark theme with an animated background: two short looping videos rendered for this app (`public/media`, about 30 KB and 65 KB). With reduced motion or data saver on, a still image is shown and the video is never downloaded. The background can be switched off in Settings.
 - Keyboard-accessible dialogs and reduced-motion support.
 
@@ -29,7 +30,7 @@ Haven helps a freelancer, creator or small agency plan social content in one pla
 
 ## Not included
 
-Haven has **no** sign-in, cloud sync, team collaboration, real social account connections, automatic publishing, live comments/messages, live analytics or AI generation. The brands, posts and people in the sample data are invented and labelled "Sample".
+Haven has **no** sign-in, cloud sync, team collaboration, Instagram or other platform publishing, scheduled publishing, live comments/messages, live analytics or AI generation. YouTube upload works on demand but could not be tested against the real YouTube in the build environment; it is covered by unit tests with a mocked network, so try one private upload first. The brands, posts and people in the sample data are invented and labelled "Sample".
 
 ## Run it locally
 

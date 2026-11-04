@@ -5,6 +5,7 @@ import DraftHelper from '../components/content/DraftHelper.jsx'
 import BoardCard from '../components/content/BoardCard.jsx'
 import PostCard from '../components/content/PostCard.jsx'
 import PostFormModal from '../components/content/PostFormModal.jsx'
+import YouTubeUploadModal from '../components/content/YouTubeUploadModal.jsx'
 import Button from '../components/ui/Button.jsx'
 import ConfirmDialog from '../components/ui/ConfirmDialog.jsx'
 import EmptyState from '../components/ui/EmptyState.jsx'
@@ -16,7 +17,7 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle.js'
 import { useToast } from '../hooks/useToast.js'
 import { useWorkspace } from '../hooks/useWorkspace.js'
 import { copyText } from '../utils/clipboard.js'
-import { isValidDateKey } from '../utils/dates.js'
+import { isValidDateKey, toDateTimeValue } from '../utils/dates.js'
 import { ALL, NO_BRAND, filterPosts, sortPosts } from '../utils/filters.js'
 
 // Filters live in the address (?search=&brand=&platform=&status=) so a filtered view
@@ -29,6 +30,7 @@ function ContentStudio() {
   // null = closed. { post } edits a post; { initial } starts a new one with some fields filled in.
   const [dialog, setDialog] = useState(null)
   const [deleting, setDeleting] = useState(null)
+  const [uploading, setUploading] = useState(null) // the post being uploaded to YouTube
   const [copiedId, setCopiedId] = useState('')
 
   const filters = {
@@ -126,6 +128,16 @@ function ContentStudio() {
     setDeleting(null)
   }
 
+  // Called after a real YouTube upload finished: the post becomes Published and keeps the video link.
+  function markUploaded(post, { videoId, privacy }) {
+    updatePost(post.id, {
+      status: 'Published',
+      scheduledAt: toDateTimeValue(new Date()),
+      youtube: { videoId, url: `https://www.youtube.com/watch?v=${videoId}`, privacy, uploadedAt: new Date().toISOString() },
+    })
+    toast.show('Uploaded to YouTube.')
+  }
+
   function duplicate(post) {
     duplicatePost(post)
     toast.show('Duplicated as a new draft.')
@@ -151,7 +163,7 @@ function ContentStudio() {
       <DraftHelper brands={data.brands} onUseDraft={(initial) => setDialog({ initial })} />
 
       <Notice tone="info" className="mb-5">
-        Posts are stored in this browser. This app does not publish to social platforms: copy the text and post it yourself, then mark the post as Published.
+        Posts are stored in this browser. YouTube videos can be uploaded from here once you connect Google in Settings. For every other platform, copy the text and post it yourself, then mark the post as Published.
       </Notice>
 
       <form role="search" onSubmit={(event) => event.preventDefault()} className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_11rem_10rem_10rem]">
@@ -247,6 +259,7 @@ function ContentStudio() {
                 onDuplicate={() => duplicate(post)}
                 onDelete={() => setDeleting(post)}
                 onStatusChange={(status) => changeStatus(post, status)}
+                onUpload={() => setUploading(post)}
               />
             </li>
           ))}
@@ -272,6 +285,13 @@ function ContentStudio() {
           brands={data.brands}
           onSave={save}
           onClose={() => setDialog(null)}
+        />
+      )}
+      {uploading && (
+        <YouTubeUploadModal
+          post={uploading}
+          onUploaded={(info) => markUploaded(uploading, info)}
+          onClose={() => setUploading(null)}
         />
       )}
       {deleting && (

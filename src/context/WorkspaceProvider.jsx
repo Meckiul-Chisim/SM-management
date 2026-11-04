@@ -68,7 +68,8 @@ export function WorkspaceProvider({ children }) {
       const now = new Date().toISOString()
       dispatch({
         type: 'post/add',
-        post: { ...post, id, title: `${post.title} (copy)`, status: 'Draft', scheduledAt: '', createdAt: now, updatedAt: now, isSample: false },
+        // A copy never shares the original's attached file or YouTube result.
+        post: { ...post, id, title: `${post.title} (copy)`, status: 'Draft', scheduledAt: '', media: undefined, youtube: undefined, createdAt: now, updatedAt: now, isSample: false },
       })
       return id
     },

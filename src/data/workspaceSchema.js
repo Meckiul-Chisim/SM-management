@@ -113,6 +113,35 @@ function readBrandId(input, label, brandIds, context) {
   return ''
 }
 
+// An attached video or image. Only the description is saved here; the file itself
+// lives in this browser's file storage (see services/mediaStore.js).
+function readMedia(value) {
+  if (!isPlainObject(value)) return null
+  const id = text(value.id)
+  const name = text(value.name)
+  if (!id || id.length > LIMITS.id || !name) return null
+  const size = Number(value.size)
+  return {
+    id,
+    name: name.slice(0, 200),
+    type: text(value.type).slice(0, 100),
+    size: Number.isFinite(size) && size >= 0 ? size : 0,
+  }
+}
+
+// The result of a real YouTube upload.
+const YOUTUBE_VIDEO_ID = /^[A-Za-z0-9_-]{6,20}$/
+function readYouTube(value) {
+  if (!isPlainObject(value) || !YOUTUBE_VIDEO_ID.test(text(value.videoId))) return null
+  const videoId = text(value.videoId)
+  return {
+    videoId,
+    url: `https://www.youtube.com/watch?v=${videoId}`,
+    privacy: ['private', 'unlisted', 'public'].includes(value.privacy) ? value.privacy : 'private',
+    uploadedAt: isIsoDate(value.uploadedAt) ? value.uploadedAt : '',
+  }
+}
+
 function normalizePost(input, index, seenIds, brandIds, context) {
   const title = isPlainObject(input) ? text(input.title) : ''
   const label = `Post ${index + 1}${title ? ` ("${title.slice(0, 40)}")` : ''}`
@@ -152,6 +181,9 @@ function normalizePost(input, index, seenIds, brandIds, context) {
     status = 'Draft'
   }
 
+  const media = readMedia(input.media)
+  const youtube = readYouTube(input.youtube)
+
   return {
     id,
     title,
@@ -160,6 +192,8 @@ function normalizePost(input, index, seenIds, brandIds, context) {
     platform: input.platform,
     status,
     scheduledAt,
+    ...(media ? { media } : {}),
+    ...(youtube ? { youtube } : {}),
     createdAt: isIsoDate(input.createdAt) ? input.createdAt : context.nowIso,
     updatedAt: isIsoDate(input.updatedAt) ? input.updatedAt : context.nowIso,
     isSample: input.isSample === true || LEGACY_SAMPLE_ID_SET.has(id),
