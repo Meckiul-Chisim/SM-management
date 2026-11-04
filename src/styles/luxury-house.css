@@ -9,17 +9,17 @@
   --haven-radius-sm: 12px;
   --haven-radius-md: 22px;
   --haven-radius-lg: 30px;
-  --haven-bg: #f3efe8;                      /* travertine */
-  --haven-panel: rgba(255, 255, 255, .60);
-  --haven-panel-solid: #fffdf9;
+  --haven-bg: #fbfaf7;                      /* milk white */
+  --haven-panel: rgba(255, 255, 255, .72);
+  --haven-panel-solid: #ffffff;
   --haven-text: #17130e;
   --haven-muted: #6d645a;
-  --haven-line: rgba(60, 44, 20, .13);
+  --haven-line: rgba(60, 44, 20, .09);
   --haven-accent: #1c1a17;                  /* graphite steel */
   --haven-accent-soft: rgba(176, 138, 66, .14);
   --haven-coral: #b08a42;                   /* champagne gold (kept name for older rules) */
   --haven-gold: #b08a42;
-  --haven-shadow: rgba(52, 36, 12, .20);
+  --haven-shadow: rgba(52, 36, 12, .13);
   --haven-glass-edge: rgba(255, 255, 255, .85);
 }
 :root[data-theme="dark"] {
@@ -39,7 +39,7 @@
 html { background: var(--haven-bg); }
 body {
   background:
-    radial-gradient(ellipse 40rem 28rem at 96% -8%, rgba(214,178,104,.18), transparent 72%),
+    radial-gradient(ellipse 40rem 28rem at 96% -8%, rgba(214,178,104,.08), transparent 72%),
     var(--haven-bg);
   color: var(--haven-text);
   font-family: "Instrument Sans Variable", "Inter", system-ui, sans-serif;
@@ -525,7 +525,7 @@ body { background-color: var(--haven-bg); }
   --haven-glass-blur: blur(28px) saturate(150%);
   --haven-gold-line: linear-gradient(90deg, transparent, rgba(176, 138, 66, .8), transparent);
   --haven-glass-border: rgba(255, 255, 255, .75);
-  --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.85) inset, 0 34px 70px -42px rgba(52, 36, 12, .38);
+  --haven-glass-shadow: 0 1px 0 rgba(255,255,255,.85) inset, 0 30px 64px -44px rgba(52, 36, 12, .26);
 }
 :root[data-theme="dark"] {
   --haven-gold-line: linear-gradient(90deg, transparent, rgba(220, 189, 120, .75), transparent);
@@ -679,3 +679,9 @@ input[type="checkbox"]:hover, input[type="radio"]:hover { filter: brightness(1.1
 .haven-theme-toggle svg { transition: transform .4s var(--haven-ease); }
 .haven-theme-toggle:hover svg { transform: rotate(25deg) scale(1.08); }
 @media (prefers-reduced-motion: reduce) { .haven-theme-toggle:hover svg { transform: none; } }
+
+/* Light mode: a brighter veil keeps the whole page milk-white and clean. */
+:root:not([data-theme="dark"]) .haven-veil {
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,.35) 0%, rgba(253,252,249,.72) 38%, rgba(253,252,249,.72) 70%, rgba(253,252,249,.45) 100%);
+}

@@ -14,17 +14,17 @@
     on-brand                   text that sits on a brand-700 fill
 */
 @theme {
-  --color-canvas: #f3efe8;
-  --color-surface: #ece6db;
+  --color-canvas: #fbfaf7;
+  --color-surface: #f4f1eb;
   --color-panel: #ffffff;
   --color-panel-raised: #ffffff;
-  --color-line: #e3dccf;
+  --color-line: #ebe6dc;
   --color-ink: #17130e;
   --color-muted: #6d645a;
   --color-faint: #9a9184;
 
-  --color-brand-50: #f6eedc;
-  --color-brand-100: #ecdcb8;
+  --color-brand-50: #f8f2e4;
+  --color-brand-100: #efe3c6;
   --color-brand-700: #1c1a17;
   --color-brand-800: #2b2824;
   --color-brand-900: #3a352e;
