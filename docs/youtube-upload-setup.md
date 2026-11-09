@@ -27,7 +27,14 @@ Haven can upload a post's video to **your own** YouTube channel straight from yo
 4. Create it and copy the **Client ID** (it ends with `.apps.googleusercontent.com`). You do **not** need the client secret; never paste it anywhere.
 
 ## 5. Connect it in Haven
-1. Open **Settings → YouTube uploads**, paste the client ID and press **Save connection**.
+Choose one of these two ways (the second one wins if you use both):
+
+- **In the project (recommended for your own deployment):** copy `.env.example` to `.env`, set `VITE_GOOGLE_CLIENT_ID=your-id`, and restart `npm run dev`. On Vercel add the same name under **Project Settings → Environment Variables** and redeploy. It then works on every address with no per-browser setup. The `.env` file is ignored by git. Only put public values in it: anything starting with `VITE_` is visible to anyone who opens your site.
+- **In the app:** open **Settings → YouTube uploads**, paste the client ID and press **Save connection**. It is saved in that browser only.
+
+Then:
+
+1.  Check **Settings → YouTube uploads** says Connected.
 2. In **Content studio**, create a post with platform **YouTube** and attach a video file.
 3. Press **Upload to YouTube**, choose who can watch it (the default is private), answer the "made for kids" question, tick the confirmation and upload. A Google sign-in window opens the first time.
 
@@ -35,7 +42,7 @@ Haven can upload a post's video to **your own** YouTube channel straight from yo
 - **Videos may be locked private.** Google restricts uploads from API projects that have not passed its compliance audit: they can be locked as private. You can still change the video to public in YouTube Studio, or apply for the audit with Google.
 - **Daily limit.** Every Google project has a daily quota (10,000 units by default). An upload costs a large share of it, so expect only a handful of uploads per day. Check the Quotas page in the console for the current numbers.
 - **Test users.** Until you publish and verify the consent screen, only the accounts you list as test users can sign in.
-- **Privacy.** The video, title and text go directly from your browser to Google. Haven stores only the public client ID and your attached files, in this browser. No token is saved: Google signs you in for each upload.
+- **Privacy.** The video, title and text go directly from your browser to Google. Haven stores only the public client ID (in the build or this browser) and your attached files (in this browser). No token is saved: Google signs you in for each upload.
 - **Large files.** Keep the tab open until the upload finishes. If the connection drops, start the upload again.
 
 ## If something goes wrong

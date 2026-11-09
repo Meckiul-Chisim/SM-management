@@ -12,7 +12,7 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle.js'
 import { useToast } from '../hooks/useToast.js'
 import { useWorkspace } from '../hooks/useWorkspace.js'
 import { setAmbientEnabled, useAmbientEnabled } from '../utils/ambientPreference.js'
-import { getGoogleClientId, isValidGoogleClientId, setGoogleClientId } from '../services/connections.js'
+import { getBuildGoogleClientId, getSavedGoogleClientId, isValidGoogleClientId, setGoogleClientId } from '../services/connections.js'
 
 const plural = (count, word) => `${count} ${word}${count === 1 ? '' : 's'}`
 
@@ -43,8 +43,9 @@ function WorkspaceNameForm({ name, onSave }) {
 // secret) and is saved in this browser only. Nothing is uploaded from this form.
 function YouTubeConnection() {
   const toast = useToast()
-  const [value, setValue] = useState(() => getGoogleClientId())
-  const [saved, setSaved] = useState(() => getGoogleClientId())
+  const fromBuild = getBuildGoogleClientId()
+  const [value, setValue] = useState(() => getSavedGoogleClientId())
+  const [saved, setSaved] = useState(() => getSavedGoogleClientId())
   const [error, setError] = useState('')
 
   function submit(event) {
@@ -75,7 +76,7 @@ function YouTubeConnection() {
           error={error}
           onChange={(event) => setValue(event.target.value)}
           placeholder="1234567890-abc123.apps.googleusercontent.com"
-          hint={saved ? 'Connected. Open a YouTube post in Content studio and choose Upload to YouTube.' : 'Not connected yet.'}
+          hint={saved ? 'Connected (saved in this browser). Open a YouTube post in Content studio and choose Upload to YouTube.' : fromBuild ? 'Connected through the VITE_GOOGLE_CLIENT_ID setting of this build. Enter an ID here only to override it.' : 'Not connected yet. You can also set VITE_GOOGLE_CLIENT_ID in a .env file.'}
           autoComplete="off"
           spellCheck="false"
         />

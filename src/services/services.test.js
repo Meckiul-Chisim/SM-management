@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { getGoogleClientId, isValidGoogleClientId, setGoogleClientId } from './connections.js'
+import { getBuildGoogleClientId, getGoogleClientId, getSavedGoogleClientId, isValidGoogleClientId, setGoogleClientId } from './connections.js'
 import { buildMetadata, checkVideoFile, explainFailure, sendFile, startUpload, uploadVideo } from './youtube.js'
 import { normalizeWorkspace } from '../data/workspaceSchema.js'
 
@@ -140,5 +140,26 @@ describe('post attachments in saved data', () => {
     expect(errors).toEqual([])
     expect(data.posts[0].media).toBeUndefined()
     expect(data.posts[0].youtube).toBeUndefined()
+  })
+})
+
+describe('client ID from the build (.env)', () => {
+  it('uses VITE_GOOGLE_CLIENT_ID when nothing is saved, and Settings wins over it', () => {
+    vi.stubEnv('VITE_GOOGLE_CLIENT_ID', '999-env.apps.googleusercontent.com')
+    window.localStorage.clear()
+    expect(getBuildGoogleClientId()).toBe('999-env.apps.googleusercontent.com')
+    expect(getGoogleClientId()).toBe('999-env.apps.googleusercontent.com')
+    expect(getSavedGoogleClientId()).toBe('')
+    setGoogleClientId('123-saved.apps.googleusercontent.com')
+    expect(getGoogleClientId()).toBe('123-saved.apps.googleusercontent.com')
+    window.localStorage.clear()
+    vi.unstubAllEnvs()
+  })
+
+  it('ignores a build value that does not look like a client ID', () => {
+    vi.stubEnv('VITE_GOOGLE_CLIENT_ID', 'GOCSPX-this-is-a-secret')
+    window.localStorage.clear()
+    expect(getBuildGoogleClientId()).toBe('')
+    vi.unstubAllEnvs()
   })
 })

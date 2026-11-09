@@ -19,9 +19,23 @@ function read() {
   }
 }
 
+// A client ID can also come from the build: VITE_GOOGLE_CLIENT_ID in a .env file (or in the
+// hosting project's environment variables). Vite copies VITE_ values into the page, so only
+// ever put PUBLIC values there. A value saved in Settings wins over the build value.
+export function getBuildGoogleClientId() {
+  const value = import.meta.env?.VITE_GOOGLE_CLIENT_ID
+  return isValidGoogleClientId(value) ? String(value).trim() : ''
+}
+
 export function getGoogleClientId() {
-  const value = read().googleClientId
-  return isValidGoogleClientId(value) ? value : ''
+  const saved = read().googleClientId
+  return isValidGoogleClientId(saved) ? saved : getBuildGoogleClientId()
+}
+
+// The ID saved in this browser through Settings (without the build value).
+export function getSavedGoogleClientId() {
+  const saved = read().googleClientId
+  return isValidGoogleClientId(saved) ? saved : ''
 }
 
 // Returns true if the value was saved. An empty value removes the saved ID.
